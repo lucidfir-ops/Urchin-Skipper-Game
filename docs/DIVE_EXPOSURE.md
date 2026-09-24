@@ -1,5 +1,7 @@
 # Dive exposure — game abstraction
 
+Historical technical rationale. Current approved exposure rules and calibration are consolidated in [Bible §9](../bible.md#9-bag-timing-air-exposure-and-surface-behavior). References to amendments and supersession below describe the implementation history; this document is not a separate design authority.
+
 September 14 designer amendment; Bible §9. This module is **not a dive computer, US Navy table implementation, medical prediction or real dive-planning tool**. It intentionally uses fictional accelerated game budgets. Do not use its numbers to plan a dive or infer fitness to dive.
 
 The qualitative premise—depth/time exposure, repetitive and consecutive-day diving, surface intervals and individual variation—is informed by the [CDC diving-injury overview](https://www.cdc.gov/yellow-book/hcp/environmental-hazards-risks/scuba-diving-decompression-illness-and-other-dive-related-injuries.html) and [DAN overview](https://dan.org/health-medicine/health-resources/diseases-conditions/decompression-illness-what-is-it-and-what-is-the-treatment/). These sources do **not** validate the fictional calibration below. The latest request for simplified tables supersedes the Bible's initial accurate-US-Navy-model suggestion.

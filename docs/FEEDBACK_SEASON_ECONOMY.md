@@ -1,5 +1,7 @@
 # Nine-day season and coastal progression
 
+> Historical amendment/implementation record. The current approved design is consolidated in [bible.md](../bible.md). This record preserves provenance; it is not an independent authority or fallback specification.
+
 This note records the September 19, 2026 designer amendment for season/economy progression. The Definitive v2 Bible remains authoritative for the general fishery, stock, rival, injury and career systems; it does not assign numeric season, area-access or diver-contact values. The explicit request therefore supplies the nine-day structure, and the values below are reversible balance tuning.
 
 ## Player-facing progression

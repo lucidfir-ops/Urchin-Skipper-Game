@@ -1,5 +1,7 @@
 # Video / raw-transcript implementation — 2026-09-11
 
+> Historical amendment/implementation record. The current approved design is consolidated in [bible.md](../bible.md). This record preserves provenance; it is not an independent authority or fallback specification.
+
 Historical implementation record only, not active design authority or a fallback specification; see the [current design authority](../PROJECT_STATUS.md#design-authority). Sources: [video faults](history/2026-09-11-video-playtest/FAULTS.md) and [transcript intake](history/2026-09-11-transcript-review/NOTES.md). Preserve both original source files. Pre-edit checkpoint: `pre-video-transcript-feedback-20260911T095823Z.tar.gz`, restoration verified.
 
 ## Decisions

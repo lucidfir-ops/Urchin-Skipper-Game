@@ -1,6 +1,6 @@
 # Urchin Skipper
 
-Read [PROJECT_STATUS.md](PROJECT_STATUS.md) for the current playable build and outstanding work. The definitive design is [Urchin_Skipper_Bible_Definitive_v2.docx](Urchin_Skipper_Bible_Definitive_v2.docx), with subsequent designer amendments linked from the status document.
+Read [PROJECT_STATUS.md](PROJECT_STATUS.md) for the current playable build and outstanding work. The definitive design is the living [bible.md](bible.md), with current approved decisions consolidated in place and images under [design references](docs/reference/bible/). The original [DOCX](archive/design/2026-09-23/Urchin_Skipper_Bible_Definitive_v2.docx) is preserved as historical provenance. Feedback ledgers and proposals do not form a second specification.
 
 ## Local development
 
@@ -39,6 +39,6 @@ The regular unit suite uses synthetic fixtures. An additional migration regressi
 
 ## Minimal source checkout
 
-The public backup selection includes game code, generated maps, canonical runtime artwork, tests, build tools, the definitive DOCX and essential notes. Unique reference artwork, historical screenshots, feedback and exports remain in the author's full workspace; documentation links into those excluded folders will not resolve in a minimal checkout. The artwork integrity test uses the included `assets/asset-integrity.json`, without duplicate source images.
+The public backup selection includes game code, generated maps, canonical runtime artwork, tests, build tools, the living Bible, its design references, the preserved former DOCX and essential notes. Other unique reference artwork, historical screenshots, feedback and exports remain in the author's full workspace; documentation links into those excluded folders will not resolve in a minimal checkout. The artwork integrity test uses the included `assets/asset-integrity.json`, without duplicate source images.
 
-`npm ci`, `npm test` and `npm run build` work from this selection. For lint, formatting, unit tests and the production build together, run `npm run verify -- --unit-only`. Launcher tests need permission to open a local HTTP server. Browser suites additionally need Playwright browser installations; some historical scenarios require excluded private inputs. `scripts/extract-boat-sheets.js` needs the original supplied sheets, and reference-document editing scripts need local historical inputs. These authoring operations are not prerequisites for building or playing the backed-up game.
+`npm ci`, `npm test` and `npm run build` work from this selection. For lint, formatting, unit tests and the production build together, run `npm run verify -- --unit-only`. Launcher tests need permission to open a local HTTP server. Browser suites additionally need Playwright browser installations; some historical scenarios require excluded private inputs. `scripts/extract-boat-sheets.js` needs the original supplied sheets. Former DOCX editing recipes are historical only; never run them against the archived original. These authoring operations are not prerequisites for building or playing the backed-up game.

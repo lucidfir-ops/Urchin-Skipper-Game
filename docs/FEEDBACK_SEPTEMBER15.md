@@ -1,6 +1,8 @@
 # September 15 designer feedback
 
-Authority: explicit designer amendments to the [Definitive v2 Bible](../Urchin_Skipper_Bible_Definitive_v2.docx), supplied with [September 14 playtest photo](../feedback/9-14.jpg). The conflict with §16’s time-only inspections was reported before implementation. Originals are preserved.
+> Historical amendment/implementation record. The current approved design is consolidated in [bible.md](../bible.md). This record preserves provenance; it is not an independent authority or fallback specification.
+
+Authority: explicit designer amendments to the [Definitive v2 Bible](../archive/design/2026-09-23/Urchin_Skipper_Bible_Definitive_v2.docx), supplied with [September 14 playtest photo](../feedback/9-14.jpg). The conflict with §16’s time-only inspections was reported before implementation. Originals are preserved.
 
 ## Decisions
 

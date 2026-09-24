@@ -1,5 +1,7 @@
 # September 16 — harbour, shops and Frank’s scouting advice
 
+> Historical amendment/implementation record. The current approved design is consolidated in [bible.md](../bible.md). This record preserves provenance; it is not an independent authority or fallback specification.
+
 Designer amendment: keep a patch’s grey information label immediately above its ground; add depth guidance and a one-minute eastward hint in lesson step 8; add chartplotter and habitat advice in step 9. Inspecting boats/equipment must show information in the shop, with a separate Buy at the selected card’s right edge and permanent purchase controls. Restore the scenic harbour and place its buttons beside their dock destinations. At sea, Difficulty / assists goes third after Resume and Reveal every urchin. Produce both TEMP editions. Reference photo: [9-16.jpg](../feedback/9-16.jpg).
 
 The designer explicitly clarified that the highlighted **Your boat** button belongs at the top of **Boatyard and Chandlery**. It opens the current setup, including fuel, condition, fitted equipment and owned-boat controls.

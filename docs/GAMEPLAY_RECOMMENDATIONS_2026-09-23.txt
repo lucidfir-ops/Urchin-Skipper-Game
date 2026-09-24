@@ -1,0 +1,162 @@
+URCHIN SKIPPER — MAKING THE EXISTING GAME MORE FUN
+23 September 2026 · Proposals for the designer to choose from
+
+My recommendation: spend the next pass on the satisfaction and variety of a
+working day. The game already has plenty of boats, maps, hazards, crew stats and
+economics. More systems will not necessarily make a normal ten-minute session
+more enjoyable. The strongest part is already here: anticipate a float's drift,
+bring the port side alongside, bring aboard a bag, and decide what to do next.
+
+These proposals follow the DOCX's skipper-skill and believable-working-boat
+vision. None of the gameplay proposals below was implemented in this TEMP.
+The September 23 touch/portrait/audio work is a separate delivered change.
+Priorities are design judgments from the current code, feedback and recordings;
+they are not evidence from a large player study or a completed season audit.
+
+START WITH THESE THREE
+
+1. Make a good pickup feel unmistakably good.
+   Existing: port-side approach, relative-speed limits, distinct bag/boarding
+   actions, hook timing, deck bags, audio, contextual prompts and diver whistles.
+   Improve their timing and clarity as one event. A float becomes reachable,
+   the hook catches, the bag lands with weight, the visible deck gains a bag,
+   and a short crew acknowledgment closes the sequence. In Easy, explain a
+   failed attempt with one current reason: too fast relative to the float,
+   wrong side, too far, or operation already underway. Avoid rapid message
+   switching between two nearby divers. Keep Realistic's information limits.
+   Small first pass: presentation and cue audit of ten ordinary pickups, with
+   no change to handling, recovery distances or simulation timing.
+   Success: a player can explain why the last pickup worked or failed without
+   opening a help menu. Ordinary bags should remain satisfying after twenty.
+   Bible: §§2, 3, 10, 19. High value; modest scope.
+
+2. Turn the offload receipt into a short story about the day.
+   Existing: settlement, costs, freshness, crew earnings, records and rival
+   landings. Do not build a second economy or replace the detailed accounts.
+   Lead with net money kept, then two or three factual highlights: the best
+   bag, an especially productive stretch, time spent waiting for pickup, or
+   value lost by missing offload. Show one relevant personal best or comparison
+   with the skipper's own previous trips. Keep gross revenue visually distinct
+   from profit; a big catch with a bad margin is a useful lesson.
+   Small first pass: select three highlights from existing recorded facts.
+   Add new tracking only for facts we actually decide to show. Never invent a
+   cause such as "bad ground" when the result cannot establish that.
+   Success: after a trip, the player has a specific idea to try tomorrow.
+   Bible: §§12–14, 16. High value; modest scope.
+
+3. Give each morning a clear, tempting choice using existing systems.
+   Existing: buyer demand today/tomorrow, area openings, forecasts, current,
+   travel costs, crew fatigue, offload timing and fifteen working maps.
+   Bring the relevant facts together at departure: nearby familiar ground with
+   more fishing time, a quality buyer worth a longer trip, or a slack-water
+   window that suits today's crew. Describe known facts and uncertainty. The
+   player still chooses their own goal; no mandatory quest list or arcade score.
+   Small first pass: a compact departure brief using the existing buyer and
+   forecast data, plus an optional personal goal such as "pay for the thruster."
+   Success: two sensible players can choose different trips for defensible
+   reasons, instead of repeatedly choosing the richest unlocked map.
+   Bible: §§2, 7, 12, 13. High value; moderate scope.
+
+NEXT: MAKE EXPERIENCE AND PEOPLE MATTER
+
+4. Make knowing a ground feel like ownership of useful knowledge.
+   Existing: charts, observations, persistent stock, terrain differences and
+   equipment that changes information. Improve memory and retrieval rather
+   than reveal hidden quality everywhere. A note should help remember where
+   a good drift started, which tide gave access, and when a bed was last worked.
+   First pass: show the age and origin of useful observations in the chart,
+   and make a couple of personal marks easy to revisit. If a fact was not
+   observed by the player, do not quietly add it to a Realistic chart.
+   Success: after several trips, players return to a place because they learned
+   something, not because a menu tells them it is the highest tier.
+   Bible: §§4, 5, 18. High value; moderate scope.
+
+5. Let crew differences show up in small, memorable moments.
+   Existing: named portraits/bios, training, differing skills, current tolerance,
+   fatigue, injuries, availability, shares and poaching. More stat columns are
+   not my first choice. Use occasional concise dialogue tied to actual events:
+   one person reports a useful observation, another is pleased with a clean
+   run of recoveries, an exhausted diver asks for a sensible rest.
+   First pass: a small authored set for a few existing crew, with cooldowns and
+   event conditions. No chatter every bag, free hidden-ground radar, or random
+   disasters that make careful play irrelevant.
+   Success: players remember who they hired and why they like working together.
+   Bible: §§14, 15, 17. Medium/high value; moderate writing and tuning scope.
+
+6. Make one or two rivals recognizable before adding more traffic.
+   Existing: persistent named teams, boats, preferred home grounds, crew
+   loyalty/poaching, real shared-stock pressure and fleet results.
+   Surface their established habits through sightings and a little radio/harbour
+   context. Seeing a familiar rival should inform a decision about moving or
+   staying. A rival result should invite comparison without implying the same
+   boat, ground, weather and working hours as the player.
+   First pass: consistent short introductions and results for a few teams,
+   grounded in their real activity. Keep the mystery boat mysterious.
+   Success: a player recognizes a boat and changes a plan for a reason.
+   Bible: §§16, 17. Medium value; modest/moderate scope.
+
+BALANCE AND POLISH BEFORE EXPANSION
+
+7. Test whether every upgrade creates a new way to work.
+   Existing: different propulsion, draft, capacity, fuel costs and equipment.
+   Give each purchase a plain example: "This lets me turn alongside floats in
+   a tighter space" or "This makes that shallow access window usable."
+   Compare an upgrade against keeping the cheaper boat with better crew and
+   reserve cash. If one purchase is always correct, tune its tradeoffs before
+   adding another near-identical hull. Preserve the confirmed handling baseline.
+   First pass: replay a few identical conditions with current boats and record
+   earnings, fuel, recovery workload and access; revise only with designer buy-in.
+   Success: at least two viable upgrade paths that feel different to skipper.
+   Bible: §§6, 13, 14. High balance value; measurement first.
+
+8. Protect the rhythm: productive work, a decision, then a consequence.
+   The tablet recording shows the basic repeat-bag loop already functioning.
+   Measure how often players wait without anything interesting to judge, and
+   how often two divers, traffic and notices demand attention simultaneously.
+   More hazards or faster clocks can increase stress without increasing fun.
+   First pass: observe three comparable trips—calm familiar water, one current
+   challenge, and a longer quality-focused run. Log time spent working, waiting,
+   navigating menus and repositioning. Look for dull stretches and overload.
+   Success: quiet moments allow planning; busy moments reward preparation.
+   Bible: §§2, 7–10, 17. High value; do this before broad timing changes.
+
+9. Make setbacks teach, while leaving a credible recovery path.
+   Existing: repair costs, injuries/absence history, fatigue, insurance, dock
+   work, delayed offload and freshness losses. Explain the actual sequence of
+   causes after a bad day. Let the player discover a sensible next step from
+   existing options, such as resting, hiring a replacement or working the dock.
+   First pass: improve the explanation of one common disappointing outcome.
+   Do not erase serious consequences, add arbitrary bailouts, or rework saves.
+   Success: "I understand what happened and what to try" beats "the game just
+   took my money." Repeated failure should not require reading the source.
+   Bible: §§13–15. Medium/high value; modest scope.
+
+10. Use atmosphere and rare surprises sparingly.
+    Existing weather, wildlife, procedural audio and mystery-boat material are
+    enough for a focused polish pass. Better transitions between engine, water,
+    wind and brief radio cues would contribute more than frequent new events.
+    Save unusual readings or distant lights for genuinely rare moments; they
+    should not obscure floats, imply false actionable safety information, or
+    become a reward grind. Physical audio testing comes before new sound layers.
+    First pass: make the current mix readable at tablet-speaker volume and
+    verify that repeated engine loops do not dominate everything else.
+    Success: the coast has character and useful sound without constant chatter.
+    Bible: §§3, 7, 17. Medium value; polish before new content.
+
+WHAT I WOULD DEFER
+
+- More maps, nearly identical boats and extra equipment statistics until the
+  existing choices are distinct and the early career has a good pace.
+- Multiplayer, manual underwater control, an elaborate mission system or a
+  second scoring/progression currency. Some would need a design amendment;
+  all would distract from the current skipper experience.
+- Extra random penalties or tighter recovery tolerances as a substitute for
+  meaningful difficulty. Current, visibility, crew and boat differences already
+  offer a strong foundation.
+- A complete UI redesign. Finish the device fixes and observe real trips first.
+
+SUGGESTED DESIGNER SORTING
+
+Mark each numbered proposal YES / LATER / NO, then pick one small pass. My first
+choice is pickup feedback plus a concise end-of-day debrief, followed by the
+morning decision brief. Those improvements reinforce the game already built.

@@ -1,5 +1,7 @@
 # Minimap, sounder and layout editor — September 17 designer amendment
 
+> Historical amendment/implementation record. The current approved design is consolidated in [bible.md](../bible.md). This record preserves provenance; it is not an independent authority or fallback specification.
+
 The designer requested independent modular minimap/sounder switches, charts as a minimap, charted subtle underwater hazards with conspicuous uncharted hazards, tutorial chart guidance, touch-only live editing handles, and a keyboard/gamepad menu route for arranging all UI. This extends the [shore hazard](FEEDBACK_SHORE_HAZARDS.md) and [UI windows](FEEDBACK_S22_LATEST.md) amendments. It is compatible with the definitive DOCX: the sounder remains strictly local, charts remain a partial survey, and hidden ground/diver information is protected.
 
 The current-sector minimap shares the existing chart painter, charted-rock subset, permitted known-ground markings, saved chart tracks and player marks. It has a live boat triangle and opens the larger chart, including Frank’s lesson chart. It never plots moving logs, uncharted rocks, unknown grounds or underwater divers. Terrain painting is cached; tide, ground state, chart settings and world changes invalidate it. The existing physical uncharted-rock crown/wash contrast is retained. Frank’s safe starter cove retains its intentionally empty collision-rock set, and its charts likewise omit generated rocks that are absent from that cove.

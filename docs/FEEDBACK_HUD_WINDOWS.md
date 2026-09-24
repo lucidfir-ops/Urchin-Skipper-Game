@@ -1,5 +1,7 @@
 # September 16 — clear water view and adjustable information windows
 
+> Historical amendment/implementation record. The current approved design is consolidated in [bible.md](../bible.md). This record preserves provenance; it is not an independent authority or fallback specification.
+
 Designer amendment: add a small touchscreen button that hides most UI, including Frank’s lesson, because step 7 obscures the divers. Make text windows scrollable, including the helm information outside menus, and allow resizing. Produce both new TEMP editions.
 
 ## Decisions and behavior

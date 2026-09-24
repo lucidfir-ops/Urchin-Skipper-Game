@@ -1,6 +1,6 @@
 # Development notes
 
-Current design authority and build state: [PROJECT_STATUS.md](PROJECT_STATUS.md#design-authority). These notes describe implementation, not a separate design specification. [v1.7 development](docs/V17_DEVELOPMENT.md), earlier [prototype notes](docs/history/2026-09-11-v17/DEVELOPMENT_NOTES.md) and feedback records linked below are historical implementation evidence only.
+Current design: [bible.md](bible.md). Build state: [PROJECT_STATUS.md](PROJECT_STATUS.md#design-authority). These notes describe implementation, not a separate design specification. [v1.7 development](docs/V17_DEVELOPMENT.md), earlier [prototype notes](docs/history/2026-09-11-v17/DEVELOPMENT_NOTES.md) and feedback records linked below are historical implementation evidence only. Dated references to authority or current decisions below describe that increment; approved current design is consolidated in the living Bible.
 
 ## September 22 preparation and performance
 
@@ -156,6 +156,6 @@ Source checkpoints also exclude nested portable `.player-data` directories. Pres
 September 17 shoreline hazards: [single decision/implementation record](docs/FEEDBACK_SHORE_HAZARDS.md) covers fixed-feature generation, physics/chart/sounder agreement, visible uncharted crowns, persisted weather cohorts and the additive export recipe.
 # September 20 device update
 
-Current decisions: [landscape device amendment](docs/FEEDBACK_SEPTEMBER20_DEVICES.md). Primary modules: `hud-defaults`, `instruments`, `device-feedback.css`, `layout-editor`, `screen-navigation`, `troubleshooting-log`, `screen-fit`, `kelp-cache`. Day-start snapshots are additive keys in `career-save`; no player data is pruned. Current exports use `python3 scripts/package-temp.py --output exports/2026-09-20-device-feedback` and refuse an existing output directory. DOCX reference recipe/preservation: `scripts/add-settings-reference.py`. Storage inventory: `scripts/audit-storage.py` (read-only scan).
+Decisions for this increment: [landscape device amendment](docs/FEEDBACK_SEPTEMBER20_DEVICES.md). Primary modules: `hud-defaults`, `instruments`, `device-feedback.css`, `layout-editor`, `screen-navigation`, `troubleshooting-log`, `screen-fit`, `kelp-cache`. Day-start snapshots are additive keys in `career-save`; no player data is pruned. This increment's exports use `python3 scripts/package-temp.py --output exports/2026-09-20-device-feedback` and refuse an existing output directory. Historical DOCX reference recipe/preservation: [archived editing script](archive/design/2026-09-23/add-settings-reference.py.txt); this recipe is retired and must not target the archived original. Storage inventory: `scripts/audit-storage.py` (read-only scan).
 
 Acceptance: `npm run verify -- --unit-only`, then `npm run verify -- --browsers-only --suite=device-feedback`, `--suite=device-embed`, and an isolated `--suite=performance` run. Physical controllers and Android GPU/FPS remain separate from synthetic browser evidence. [Acceptance record](docs/history/2026-09-20-device-feedback/README.md).

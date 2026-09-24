@@ -1,7 +1,7 @@
 # Urchin Skipper — current status
-Updated 2026-09-23 · Latest game: touch controls, portrait recovery and audio scheduling.
+Updated 2026-09-23 · Documentation: living Bible consolidation. Latest game: touch controls, portrait recovery and audio scheduling.
 
-Read this first, then task-relevant source/tests/references. The designer's [GitHub backup and release workflow](#github-backup-and-release-workflow) supersedes earlier no-GitHub directions and retains additive local TEMP itch.io ZIPs. [Local duplicate-artwork cleanup](docs/ASSET_LAYOUT.md) is complete. [Previous status](docs/history/2026-09-23-touch-and-portrait/PROJECT_STATUS-before.md) is preserved. Gameplay remains governed by the DOCX and explicit amendments, including [September 21](docs/FEEDBACK_SEPTEMBER21.md) and [September 23](docs/FEEDBACK_SEPTEMBER23.md).
+Read this first, then task-relevant source/tests/references. The [living Bible](bible.md) consolidates current approved design; historical amendments are provenance only. The designer's [GitHub backup and release workflow](#github-backup-and-release-workflow) retains additive local TEMP itch.io ZIPs. [Local duplicate-artwork cleanup](docs/ASSET_LAYOUT.md) is complete. [Status before this documentation cleanup](docs/history/2026-09-23-bible-consolidation/before/PROJECT_STATUS.md) is preserved.
 
 ## GitHub backup and release workflow
 
@@ -9,13 +9,15 @@ Standing instruction: after each completed, verified game update, commit and pus
 
 Public backup: [lucidfir-ops/Urchin-Skipper-Game](https://github.com/lucidfir-ops/Urchin-Skipper-Game), branch `main`. First successful source upload: `3b6d59d59a5f51358b40bb860e53098b7b2cbc07`. The minimal repository is `.github-backup/checkout/` in the full authoring workspace, separate from the large local import history. Publish from that repository; synchronize future selected source changes into it before verification and pushing. Existing clones can use their own `main` normally.
 
-The standalone 533-file checkout passed fresh `npm ci`, lint, formatting, 410 unit tests (one private-save regression skipped) and production build. Only setup documentation changed afterward. Dependencies, generated ZIPs, private data and historical screenshots are excluded. [Selection and verification receipt](docs/github-backup-review/README.md) are local authoring records.
+The initial standalone 533-file checkout passed fresh `npm ci`, lint, formatting, 410 unit tests (one private-save regression skipped) and production build. The selected backup now also includes the living Bible, its references and the narrowly scoped preserved design archive. Dependencies, generated ZIPs, private data and unrelated historical screenshots remain excluded. [Selection and verification receipt](docs/github-backup-review/README.md) are local authoring records.
 
 GitHub CLI is installed locally at `.runtime/github-cli/2.101.0/bin/gh`; browser authentication as `lucidfir-ops`, public visibility, push permission and the HTTPS credential helper are confirmed. Credentials stay outside the backup. Routine verified game updates now use the standing GitHub-plus-TEMP export workflow.
 
 ## Design authority
 
-[Urchin Skipper Bible — Definitive v2](Urchin_Skipper_Bible_Definitive_v2.docx) is the sole definitive design, with explicit subsequent designer amendments taking precedence. The DOCX and §23 approved harbour reference are unchanged. Implementation notes/tests do not establish full-Bible compliance. Preserve the orthographic camera and separation between decoration and simulation geometry.
+[bible.md](bible.md) is the single current design authority. The designer authorized this consolidation, permanently fixed two working diver berths per boat, confirmed **Shy Hull Wood**, and reconfirmed the Settings reference within reason. Future approved decisions update the relevant Bible sections in place. Proposals, implementation notes and tests do not establish design approval or full compliance.
+
+The [former DOCX and retrieval mirror](archive/design/2026-09-23/README.md) are archived byte-for-byte; [reference images](docs/reference/bible/README.md) retain their original bytes. The DOCX includes the September 20 Settings addition; previous blanket wording that it was unchanged was inaccurate. [Source mapping and supersession](docs/DESIGN_CONSOLIDATION.md). Preserve the orthographic camera, approved harbour and separation of decoration from simulation geometry.
 
 ## Current implementation
 
@@ -29,6 +31,8 @@ GitHub CLI is installed locally at `.runtime/github-cli/2.101.0/bin/gh`; browser
 - Named restore/day-start saves, migration and troubleshooting exports remain. No gameplay proposal was implemented: [fun recommendations for designer review](docs/GAMEPLAY_RECOMMENDATIONS_2026-09-23.txt). Original assets/media, careers and prior exports are preserved.
 
 ## Verification and latest exports
+
+Bible consolidation: all 23 original sections reconciled with recorded amendments and fresh designer answers; four archived files and three reference images hash-verified, and all 56 links in the new documents resolve. The 412 selected runtime/test/config files are unchanged. Local `npm test` passes all 411 tests and production build matches the existing release's 174 files byte-for-byte. The synchronized public checkout passes lint, formatting, 410 tests (one private-save check skipped) and build. This is a documentation-only update; the following playable exports remain current.
 
 Local asset cleanup: 411 tests, lint, edited-JavaScript formatting and production build pass after removal. No new gameplay export was needed; existing exports remain intact. The following browser/device acceptance describes the unchanged gameplay release.
 

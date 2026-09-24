@@ -1,6 +1,6 @@
 # Canonical artwork and duplicate cleanup
 
-The designer authorized cleaning the local file layout and deleting exact duplicates after tests. This supersedes the old requirement to retain separate source and distribution copies of identical artwork. Public GitHub publication remains a later, separate step.
+The designer authorized cleaning the local file layout and deleting exact duplicates after tests. This supersedes the old requirement to retain separate source and distribution copies of identical artwork. The selected public GitHub backup is now published; follow the [current backup and release workflow](../PROJECT_STATUS.md#github-backup-and-release-workflow).
 
 ## Layout
 

@@ -1,5 +1,7 @@
 # Fishing beds and diver portrait brief
 
+Historical September 19 investigation. The inventory and three-map accounting-bed assumptions below describe that earlier build and have since changed. Current approved world/progression and crew design are in [Bible §13](../bible.md#13-career-economy-and-progression) and [§14](../bible.md#14-crew-hiring-shares-and-fatigue). Proposed UI treatments and portrait prompts below remain proposals, not standing instructions or approved canon.
+
 Prepared 2026-09-19. This is an investigation and production brief only. No portrait images were generated, and the fishing-bed control was not removed or redesigned.
 
 ## Fishing sub-area control

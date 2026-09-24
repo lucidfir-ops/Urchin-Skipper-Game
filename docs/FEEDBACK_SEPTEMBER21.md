@@ -1,5 +1,7 @@
 # September 21 playtest amendment
 
+> Historical amendment/implementation record. The current approved design is consolidated in [bible.md](../bible.md). This record preserves provenance; it is not an independent authority or fallback specification.
+
 Source: designer's September 21 request and preserved files in `feedback/9-21/`. The DOCX remains authoritative except for these explicit subsequent amendments. No original feedback, reference, portrait, career or previous export is replaced.
 
 Decisions: later instructions supersede earlier ones: replace experimental fit with Tiny mode; re-enable portrait while preserving desktop landscape; missed evening offload uses 06:00 next morning and earliest departure 09:00. Harbour menus pause time. Ordinary planning begins 05:00, with a later, rested departure available. Late/night fishing remains possible with equipment and consequences. Easy reverse grounding assistance is the requested exception to Bible §§18/20 shared physics (reported before implementation); Realistic retains wind-limited escape. Deep beds remain within §5's 70-foot limit. Tide-locked fishing basins explicitly extend §4's previously deferred tidal stranding. Existing nine maps, currents, eddies, logs, nitrogen behaviour and eight finished portraits are preserved.

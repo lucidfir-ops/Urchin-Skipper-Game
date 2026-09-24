@@ -1,5 +1,7 @@
 # Current build controls
 
+This is a technical guide to current bindings, including developer fixtures. Approved player-facing controls are defined in [Bible §19](../bible.md#19-controls-and-browser-access); this guide and the dated implementation records below do not independently amend that design.
+
 September 14 implementation of Bible section 19, amended by the designer's R3/difficulty request. The table describes browser-standard Xbox / Steam Input defaults. Existing saved bindings are retained; Controls shows the active device's actual mappings. Optional new shortcuts yield to explicitly assigned actions.
 
 | Control | Action |

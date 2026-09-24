@@ -1,5 +1,7 @@
 # September 16 — Frank, map departure and title navigation
 
+> Historical amendment/implementation record. The current approved design is consolidated in [bible.md](../bible.md). This record preserves provenance; it is not an independent authority or fallback specification.
+
 Designer amendment following the S22/Frank TEMP: the preceding update has **not yet been playtested**. Add visible tutorial pickup-side guidance, a boat fade at the map exit, and Back/Forward navigation; produce new additive TEMP editions. This extends [the preceding feedback](FEEDBACK_S22_FRANK.md). The definitive Bible remains the design authority; its port-side recovery and orthographic view are retained.
 
 ## Decisions and behavior

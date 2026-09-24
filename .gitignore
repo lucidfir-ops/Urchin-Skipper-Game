@@ -59,7 +59,11 @@ Thumbs.db
 *~
 
 # Minimal backup: bulky/private authoring inputs stay in the full workspace.
-/archive/
+# Only the preserved former Bible is included from the authoring archive.
+/archive/*
+!/archive/design/
+/archive/design/*
+!/archive/design/2026-09-23/
 /docs/history/
 /docs/github-backup-review/
 /assets/assets/

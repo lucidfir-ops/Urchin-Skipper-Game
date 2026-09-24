@@ -4,9 +4,9 @@ Read `PROJECT_STATUS.md` first; then retrieve only the source, tests or referenc
 
 ## Authority
 
-`Urchin_Skipper_Bible_Definitive_v2.docx` is the sole definitive design document. The designer's authority reset is recorded in [PROJECT_STATUS.md](PROJECT_STATUS.md#design-authority).
+[`bible.md`](bible.md) is the living definitive design document. The designer's September 23 consolidation and permanent two-diver limit are recorded there; see [current authority](PROJECT_STATUS.md#design-authority). The preserved DOCX in `archive/design/2026-09-23/` is historical provenance, not a parallel specification.
 
-Use the Bible and explicit subsequent designer amendments for design decisions. Per its section 1, if requested feedback implementation conflicts with the Bible, report the conflict before making that change so the document or request can be amended. Earlier designs and feedback decisions are historical records only, not active instructions or fallback specifications.
+Use the living Bible and explicit subsequent designer decisions for design decisions. Record approved changes in the relevant Bible sections, with concise provenance links; do not create another chain of active amendment documents. If a request conflicts with the Bible without clearly replacing that rule, report the conflict before implementation and clarify the designer's preference. Earlier designs, feedback ledgers and unapproved proposals are historical/reference records, not active instructions or fallback specifications. Do not promote current implementation or an agent's recommendation into approved design.
 
 `PROJECT_STATUS.md`, implementation notes and tests describe the current build and outstanding work; they do not override the Bible or establish compliance with it. Preserve working systems while implementing authorized changes. Update tests when the definitive design intentionally changes observed behaviour.
 
@@ -18,7 +18,7 @@ Work in testable increments. Diagnose local code locally; after one sensible fai
 Run focused meaningful regressions after simulation changes; `npm test` and `npm run build` before handoff. Run applicable browser/controller smoke flows and inspect runtime screenshots after UI/art changes. Synthetic input tests do not establish physical controller behaviour. Preserve the orthographic camera and separate decoration from simulation geometry.
 
 ## Preservation and handoff
-The designer's September 16 amendment replaces routine checkpoints with additive, verified game exports under `exports/`; do not recreate the deleted checkpoints. Preserve older exports. Human documents, raw data and assets are irreplaceable; never overwrite their only copy. See `data/README.md` for restore/data categories. Generated exports have authoring recipes; caches and test output are disposable. The DOCX alone is authoritative; its §23 harbour reference is approved and must be preserved except for explicit designer amendments.
+The designer's September 16 amendment replaces routine checkpoints with additive, verified game exports under `exports/`; do not recreate the deleted checkpoints. Preserve older exports. Human documents, raw data and assets are irreplaceable; never overwrite their only copy. See `data/README.md` for restore/data categories. Generated exports have authoring recipes; caches and test output are disposable. Keep the archived DOCX intact. Preserve the approved harbour reference in `docs/reference/bible/` except for explicit designer amendments; reference approval and current usage are governed by `bible.md`.
 Keep `PROJECT_STATUS.md` concise: actual state, superseding decisions, outstanding tasks, verification and latest exports. Put detailed history under `docs/history/`; technical references in `DEVELOPMENT_NOTES.md` and `docs/`. Update `PLAYTEST_GUIDE.md` for user-visible changes. Finish with a working playable build and an honest short handoff.
 
 ## GitHub backup and TEMP exports

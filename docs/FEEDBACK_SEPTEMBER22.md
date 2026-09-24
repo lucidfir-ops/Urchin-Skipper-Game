@@ -1,5 +1,7 @@
 # September 22 playtest and optimisation amendment
 
+> Historical amendment/implementation record. The current approved design is consolidated in [bible.md](../bible.md). This record preserves provenance; it is not an independent authority or fallback specification.
+
 The designer authorises the September 22 playtest fixes and the performance audit's recommendations, with one superseding constraint: prepare required content before play, rather than defer essential terrain/artwork downloads into gameplay. Preserve all original maps, artwork, careers, older exports, the orthographic camera and the DOCX (including §23). The changes concern presentation, input delivery and implementation efficiency; simulation rules remain authoritative.
 
 Acceptance work:

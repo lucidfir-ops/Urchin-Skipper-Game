@@ -1,6 +1,8 @@
 # September 15 follow-up: itch.io TEMP
 
-Authority: the designer's follow-up feedback accompanying [the DFO photo](../feedback/9-15.jpg), amending the [Definitive v2 Bible](../Urchin_Skipper_Bible_Definitive_v2.docx). This supersedes the affected behavior in [the earlier September 15 pass](FEEDBACK_SEPTEMBER15.md). No new video was present with this report; the written navigation report and supplied photo were actionable.
+> Historical amendment/implementation record. The current approved design is consolidated in [bible.md](../bible.md). This record preserves provenance; it is not an independent authority or fallback specification.
+
+Authority: the designer's follow-up feedback accompanying [the DFO photo](../feedback/9-15.jpg), amending the [Definitive v2 Bible](../archive/design/2026-09-23/Urchin_Skipper_Bible_Definitive_v2.docx). This supersedes the affected behavior in [the earlier September 15 pass](FEEDBACK_SEPTEMBER15.md). No new video was present with this report; the written navigation report and supplied photo were actionable.
 
 ## Decisions and implementation
 

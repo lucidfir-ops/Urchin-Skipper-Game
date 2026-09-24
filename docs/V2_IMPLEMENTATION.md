@@ -1,6 +1,8 @@
 # Definitive v2 implementation pass
 
-Authority: [Bible](../Urchin_Skipper_Bible_Definitive_v2.docx) and the designer's September 14 implementation request. This is an implementation ledger, not a replacement design document. Originals and old checkpoints remain untouched.
+> Historical amendment/implementation record. The current approved design is consolidated in [bible.md](../bible.md). This record preserves provenance; it is not an independent authority or fallback specification.
+
+Authority: [Bible](../archive/design/2026-09-23/Urchin_Skipper_Bible_Definitive_v2.docx) and the designer's September 14 implementation request. This is an implementation ledger, not a replacement design document. Originals and old checkpoints remain untouched.
 
 ## Explicit September 14 amendments
 

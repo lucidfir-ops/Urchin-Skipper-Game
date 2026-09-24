@@ -1,5 +1,7 @@
 # September 23 touch and portrait amendment
 
+> Historical amendment/implementation record. The current approved design is consolidated in [bible.md](../bible.md). This record preserves provenance; it is not an independent authority or fallback specification.
+
 The designer requests a local TEMP itch.io ZIP, superseding earlier GitHub requests. Local additive exports are the delivery workflow. No GitHub work or publication is part of this pass.
 
 The latest request explicitly replaces Tiny UI mode with adjustable Tiny Touch Controls, groups touch settings, adds control opacity, repairs portrait/fullscreen and harbour header sizing, and asks for a tablet assessment and gameplay recommendations. These are presentation/implementation changes under the DOCX §§3, 18, 20 and the explicit amendment to the Settings reference in §23. The authoritative DOCX and approved harbour artwork remain untouched. Recommendations are proposals, not amendments or implemented gameplay changes.

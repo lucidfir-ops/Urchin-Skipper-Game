@@ -1,5 +1,7 @@
 # September 17 · compact information, menus and repeat training
 
+> Historical amendment/implementation record. The current approved design is consolidated in [bible.md](../bible.md). This record preserves provenance; it is not an independent authority or fallback specification.
+
 Designer amendment: the three transcripts in `feedback/` (`Screen_Recording_20260916_163908_Firefox.txt`, `screen-20260917-005745.txt`, `screen-20260917-010101.txt`) plus the explicit request for gradients inside the existing circles, separate diver cards and repeat tutorial training. Originals are preserved. This supersedes affected UI/training decisions in [the preceding correction](FEEDBACK_BOAT_CARD_HARBOUR.md).
 
 ## Decisions and implementation

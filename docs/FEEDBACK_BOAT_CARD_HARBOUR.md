@@ -1,6 +1,8 @@
 # September 16 — boat card, approved harbour and title scrolling
 
-Designer amendment: restore the separate boat information card while retaining Hide UI / Show UI and Frank's scrollable, resizable tutorial. Keep the harbour composition added to definitive DOCX §23, with Settings at top right, Talk to Frank at bottom left and Chandlery at centre left. On the Samsung S22, scroll title options inside their card without moving the backdrop. References: [four screenshots and approved harbour](../feedback/9-16/), and the embedded image in the [sole authoritative DOCX](../Urchin_Skipper_Bible_Definitive_v2.docx).
+> Historical amendment/implementation record. The current approved design is consolidated in [bible.md](../bible.md). This record preserves provenance; it is not an independent authority or fallback specification.
+
+Designer amendment: restore the separate boat information card while retaining Hide UI / Show UI and Frank's scrollable, resizable tutorial. Keep the harbour composition added to definitive DOCX §23, with Settings at top right, Talk to Frank at bottom left and Chandlery at centre left. On the Samsung S22, scroll title options inside their card without moving the backdrop. References: [four screenshots and approved harbour](../feedback/9-16/), and the embedded image in the [sole authoritative DOCX](../archive/design/2026-09-23/Urchin_Skipper_Bible_Definitive_v2.docx).
 
 ## Decisions
 

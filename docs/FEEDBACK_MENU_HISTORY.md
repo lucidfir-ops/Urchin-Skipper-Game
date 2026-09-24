@@ -1,5 +1,7 @@
 # September 16 — clarified Back/Forward navigation
 
+> Historical amendment/implementation record. The current approved design is consolidated in [bible.md](../bible.md). This record preserves provenance; it is not an independent authority or fallback specification.
+
 The designer answered the pending question: **“Step back through menus to title; Forward retraces them.”** This explicitly supersedes the direct-to-title interpretation in the earlier [Frank/travel increment](FEEDBACK_FRANK_TRAVEL_NAVIGATION.md). All prior tutorial, fade, phone and gameplay updates remain included.
 
 ## Behavior

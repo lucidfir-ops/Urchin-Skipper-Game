@@ -3,7 +3,7 @@
 | Category | Location | Treatment |
 | --- | --- | --- |
 | Source / configuration | `src/` (excluding generated exports), `world-source/`, `scripts/`, `tests/`, package manifest/lock, HTML/CSS and notes | Preserve authoring inputs; retain verified playable releases in additive exports. |
-| Irreplaceable input | Human DOCX design documents, feedback video, canonical original artwork in `public/assets/`, unique references/source in `assets/`, future `data/raw/` | Preserve originals; never preprocess in place. |
+| Irreplaceable input | Living `bible.md`, archived human design documents, approved images in `docs/reference/bible/`, feedback video, canonical original artwork in `public/assets/`, unique references/source in `assets/`, future `data/raw/` | Preserve original documents/images; make approved design edits in the living Bible with version history. Never preprocess original assets in place. |
 | Generated game data/assets | `src/generated/`, prepared `public/assets/fleet-runtime/` derivatives, runtime textures, future `data/derived/`, `dist/` | Rebuild from recipes and raw inputs; retain dated game exports for playable version restoration. |
 | Career / player data | Dedicated `.runtime/firefox-profile/` browser localStorage; exported `urchin-career-day-*.json` | Irreplaceable progress. Keep the profile. Use Skipper logbook → Export career backup and copy exports into `data/careers/` for independent preservation alongside game exports. Starting another career archives the previous one in the same profile. |
 | Disposable output | `node_modules/`, `.npm-cache/`, `.browser-cache/`, `.runtime/` launcher logs/session files (excluding the browser profile), `test-results/` | Disposable except for the live browser profile. The running browser profile is excluded from source checkpoints; never delete it as routine cache cleanup. |
@@ -26,7 +26,7 @@ The designer deleted the large checkpoints and now uses `exports/` to preserve p
 
 The old checkpoint tool remains available for explicitly requested source recovery work. Its historical policy included accumulated exports in each archive, causing unnecessary duplication; it is no longer the routine release workflow. Live browser profiles remain outside game exports. Use the game's logbook to export irreplaceable careers.
 
-The archived PDF is historical only. The root DOCX is the sole definitive Bible, including its approved harbour screenshot in §23. See the [designer amendment](../docs/FEEDBACK_BOAT_CARD_HARBOUR.md).
+The living [bible.md](../bible.md) is the definitive design. The [former DOCX](../archive/design/2026-09-23/Urchin_Skipper_Bible_Definitive_v2.docx) and older PDF are historical originals; keep them intact. Approved images are preserved under [design references](../docs/reference/bible/), including the harbour composition formerly embedded in §23. Historical amendment ledgers retain provenance rather than independent design authority.
 
 September 15: `public/assets/harbour/harbour-training-mode-v1.png` is a byte-identical copy of the supplied source. Portable packages are reproducible generated exports; see [TEMP recipe](../DEVELOPMENT_NOTES.md#september-15-feedback). Existing TEMP archives/profiles outside this workspace are retained.
 

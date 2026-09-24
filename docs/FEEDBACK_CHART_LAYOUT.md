@@ -1,5 +1,7 @@
 # Chart window sizing — September 17 designer amendment
 
+> Historical amendment/implementation record. The current approved design is consolidated in [bible.md](../bible.md). This record preserves provenance; it is not an independent authority or fallback specification.
+
 The designer supplied [current layout](../feedback/9-17a.jpg) and [preferred proportions](../feedback/9-17b.jpg), requesting a narrower information window on larger screens so the local chart does not become small inside a stretched parchment panel. This is a presentation amendment to the definitive DOCX menu charts, without a substantive design conflict.
 
 Local departure and knowledge windows now centre horizontally, with width bounded by viewport height and a 1200 screen-pixel ceiling, independent of text scaling. The local map no longer has the 480-pixel display-width cap. It scales to its column and available screen height, keeping a square click target. The separate parchment container background is removed; the existing chart artwork, symbols, hazard/depth data and caption remain. Touchscreen menus retain their full-width scrollable page and charts fill their columns. No SVG conversion is needed for this layout fix.

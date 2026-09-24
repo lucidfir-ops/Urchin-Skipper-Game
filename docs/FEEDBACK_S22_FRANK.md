@@ -1,5 +1,7 @@
 # Samsung S22 and Frank / day-zero feedback — September 16
 
+> Historical amendment/implementation record. The current approved design is consolidated in [bible.md](../bible.md). This record preserves provenance; it is not an independent authority or fallback specification.
+
 Designer amendment: the September 15 phone screenshots in `feedback/9-15/` and the accompanying request, supplied September 16. The designer confirms the previous TEMP works on itch.io and requests continued additive TEMP releases. Bible v2 remains authoritative; its tunable safety, insurance and inspection systems permit these explicit changes. No source artwork, old career or previous export is replaced.
 
 ## Decisions

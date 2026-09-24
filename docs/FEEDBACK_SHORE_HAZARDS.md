@@ -1,5 +1,7 @@
 # Shoreline hazards — September 17 designer amendment
 
+> Historical amendment/implementation record. The current approved design is consolidated in [bible.md](../bible.md). This record preserves provenance; it is not an independent authority or fallback specification.
+
 The designer requested more logs and hittable shoreline rocks, a massive increase in logs at night and in fog, fixed features across 1–5 m depths, and selective chart coverage with clearly visible uncharted hazards. The designer explicitly clarified that **1–5 m means surrounding seabed depths, with rocks rising near the surface**.
 
 This extends the definitive DOCX §§3/17 world and visibility rules: obvious uncharted crowns are an explicit visibility amendment. It supersedes the earlier once-only doubling of night logs in [itch feedback](FEEDBACK_ITCH_TEMP.md). Plain shallow-bottom grounding remains harmless; rock/timber strikes use the existing impact-damage system. The orthographic camera and original bathymetry, decorative coastline, fishing patches, stock and day-zero lesson remain intact.

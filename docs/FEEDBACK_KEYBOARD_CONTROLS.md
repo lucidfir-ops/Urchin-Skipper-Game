@@ -1,5 +1,7 @@
 # September 15 keyboard and remapping feedback
 
+> Historical amendment/implementation record. The current approved design is consolidated in [bible.md](../bible.md). This record preserves provenance; it is not an independent authority or fallback specification.
+
 Authority: the designer's written keyboard/remapping feedback in this session, following the [itch.io TEMP update](FEEDBACK_ITCH_TEMP.md). Bible sections 1, 19 and 20 were checked. This adds keyboard defaults and presentation without changing the definitive controller scheme, boat physics, touch commands or camera.
 
 ## Decisions

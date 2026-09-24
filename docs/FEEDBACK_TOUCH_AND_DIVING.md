@@ -1,5 +1,7 @@
 # Touchscreen and fishing feedback — September 14 designer amendment
 
+> Historical amendment/implementation record. The current approved design is consolidated in [bible.md](../bible.md). This record preserves provenance; it is not an independent authority or fallback specification.
+
 This records the designer’s explicit follow-up to the definitive v2 Bible. The DFO request supersedes §16’s 100 m stand-off: a real patrol now waits clear of working divers, aligns behind starboard, comes alongside, and boards only after both divers are aboard and the skipper slows. The earlier simplified fictional dive-model amendment remains in force. These are game tuning choices, not real dive tables.
 
 ## Decisions and behavior
