@@ -1,0 +1,12 @@
+node_modules
+dist
+checkpoints
+.runtime
+.browser-cache
+.npm-cache
+test-results
+src/generated
+src/world-data.json
+public/assets
+assets
+videofeedback

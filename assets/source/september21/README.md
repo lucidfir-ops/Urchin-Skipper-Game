@@ -1,0 +1,13 @@
+# September 21 artwork
+
+Generated with the built-in `image_gen` tool through the imagegen skill. No CLI/API fallback or external stock artwork. The existing eight crew portraits and original vessel/harbour artwork are preserved.
+
+- Canonical crew atlas: `public/assets/crew/remaining-atlas.png`: 4 columns × 7 rows, assigned in stable generated-roster order (including the rare hidden crew). SVG viewports follow the actual unequal row gutters and retain the original atlas.
+- Canonical instrument atlas: `public/assets/instruments/atlas.png`: 3 columns × 2 rows. Runtime SVG viewports select stainless dial, brass clock, urchin clock, depth LCD, red digital timepiece and worn command housing. Readings, needles and controls remain live code.
+
+Generation prompt briefs:
+
+1. **Crew atlas:** Create 28 distinct square head-and-shoulders portraits in an exact 4-column, 7-row grid, matching the game's existing semi-photographic, painterly commercial-diver portraits. Weathered Pacific-coast workers in worn workwear, restrained cool backgrounds, natural uneven light, no text or labels. Distinct ages, facial structures and gender presentation; include an extremely masculine woman, a very feminine man, and very old working divers. Spread asymmetric features, pockmarks, tired or lazy eyes, a healing black eye, crow's feet, broken noses, missing/crooked teeth, scars, sun damage, ruddy cheeks, uneven brows, thinning hair and rough skin among individuals. Give each an individual character rather than applying every feature to everyone. No sexual content, hate symbols or gore.
+2. **Instrument atlas:** Create a 3-by-2 atlas of semi-photographic marine instrument housings for a weathered fishing boat. Top row: worn stainless circular black dial; tarnished brass ship's clock; purple urchin-themed clock. Bottom row: old marine depth sounder with empty green LCD; worn red digital clock housing with blank black display; grooved mechanical throttle/rudder command plate. Straight-on orthographic presentation, tactile metal, glass, screws, salt wear and readable empty faces. No numerals, words, logos or moving needles: the game supplies all live readings and indicators.
+
+The above records the generation briefs; full verbatim tool-call wording was not retained in a separate project file. Original returned files: `exec-b767628d-b7e0-46e7-b753-4270e2a3fa82.png` (crew) and `exec-b3c43eff-d86b-4ba4-a692-e909f81eb7e3.png` (instruments). Their unchanged bytes are retained at the canonical public paths above; the exact duplicates in this folder were removed after verification. No unseen instrument-reference folder is claimed as an input.
