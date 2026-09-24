@@ -29,6 +29,7 @@ The [former DOCX and retrieval mirror](archive/design/2026-09-23/README.md) are 
 - September 22's prepared artwork/all fifteen eager maps, terrain worker/fallback, immutable grids, validated saves, cached render/simulation work, short Chart tap repair and independent instrument fixes remain. [Technical evidence](docs/history/2026-09-22-performance-and-device-fixes/README.md).
 - Harbour time pause, 05:00 planning, 07:00/Sleep options, delayed offload, fatigue/freshness, level-20 crew progression and fictional nitrogen/surface-break mechanics remain. Nine original maps plus six added sectors, rivals, wildlife, Easy grounding assistance and Realistic handling remain. Right-stick jet pivot and installed bow thruster remain; USB Xbox is the known physical baseline.
 - Named restore/day-start saves, migration and troubleshooting exports remain. No gameplay proposal was implemented: [fun recommendations for designer review](docs/GAMEPLAY_RECOMMENDATIONS_2026-09-23.txt). Original assets/media, careers and prior exports are preserved.
+- [Brief how-to-play text](HOW_TO_PLAY.txt) is ready for the itch.io release description. Controls, separate bag/redescent actions and return timing were checked against the current build; this documentation addition changes no game bytes.
 
 ## Verification and latest exports
 

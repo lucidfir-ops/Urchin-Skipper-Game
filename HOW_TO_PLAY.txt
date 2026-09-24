@@ -1,0 +1,24 @@
+HOW TO PLAY
+
+Skipper the boat while two autonomous divers collect urchins. Start with Frank's tutorial and Easy difficulty.
+
+Buy a boat, choose Sail and a nearby ground. Use the chart and sounder to find sheltered seabed around 5-20 m deep. Select each diver, set Orders, then deploy.
+
+Watch bubbles and orange floats. Bring the boat's port side (left facing the bow) slowly alongside a float, clear of the hull and stern. Press Bag once and stay alongside until recovery finishes. Press again to send the diver down when ready, or use Deploy/board to bring them aboard with any bag.
+
+Recover both divers before leaving. Cross the harbour edge shown on the chart; follow its Leave by time to reach offload by 19:00. Catch sells automatically; refuel, rest and upgrade.
+
+DEFAULT KEYBOARD
+W/S throttle; A/D rudder; Space neutral; Enter centre rudder.
+Tab select diver; O orders; 1 deploy/board; 2 bag/send down; 3 recall near bubbles.
+M chart; +/- zoom; Escape menu.
+
+DEFAULT XBOX CONTROLLER
+Left stick up/down throttle; right stick left/right rudder; D-pad left/right neutral.
+LB select diver; B orders; Y deploy/board; X bag/send down; A nearby recall.
+L3 chart; triggers zoom; Menu pause.
+
+TOUCH
+Open Touchscreen Options and enable touch mode; use the labelled sticks and buttons.
+
+Throttle and rudder stay set when released. Neutral does not stop drift. Follow on-screen prompts if an action is unavailable. Controls can be remapped in Settings.

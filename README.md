@@ -1,5 +1,7 @@
 # Urchin Skipper
 
+For players: [brief plain-text how-to-play guide](HOW_TO_PLAY.txt), ready to append to the itch.io release description.
+
 Read [PROJECT_STATUS.md](PROJECT_STATUS.md) for the current playable build and outstanding work. The definitive design is the living [bible.md](bible.md), with current approved decisions consolidated in place and images under [design references](docs/reference/bible/). The original [DOCX](archive/design/2026-09-23/Urchin_Skipper_Bible_Definitive_v2.docx) is preserved as historical provenance. Feedback ledgers and proposals do not form a second specification.
 
 ## Local development

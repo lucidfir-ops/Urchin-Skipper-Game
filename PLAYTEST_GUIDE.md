@@ -1,5 +1,7 @@
 # Playtest guide — September 23 touch and portrait
 
+Player-facing release copy: [HOW_TO_PLAY.txt](HOW_TO_PLAY.txt). This guide below is the detailed testing checklist.
+
 Use [the new itch.io TEMP ZIP](exports/2026-09-23-touch-and-portrait/UrchinSkipper-TEMP-ITCHIO.zip), or [the local/Wi-Fi TEMP ZIP](<exports/2026-09-23-touch-and-portrait/Urchin Skipper TEMP.zip>). Confirm **TEMP · SEP 23 · TOUCH & PORTRAIT**. Older exports remain available. [Implementation record](docs/FEEDBACK_SEPTEMBER23.md). Current approved design is consolidated in [bible.md](bible.md); the documentation cleanup does not change this playable release.
 
 Keep testing the familiar 14-inch landscape setup. Portrait is enabled again. Open **Touchscreen Options** from the title, Settings or Pause. Try 70% Tiny controls and 40–60% opacity; UI Scale remains separate. Harbour fills the display. Physical phone/tablet/Deck performance, speakers and USB Xbox controls still need human playtesting.
