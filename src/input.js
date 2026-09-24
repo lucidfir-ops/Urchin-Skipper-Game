@@ -57,7 +57,7 @@ export const LABELS = {
   right: 'Increase starboard rudder',
   zoomIn: 'Zoom in',
   zoomOut: 'Zoom out',
-  work: 'Recover Bag / give bag',
+  work: 'Take + give bag',
   recoverDiver: 'Recover Diver / deploy',
   instructions: 'Diver instructions',
   pause: 'Pause / close menu',

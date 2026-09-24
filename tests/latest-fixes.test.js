@@ -103,8 +103,8 @@ test('strong current leaves a braced working diver picking with conserved stock'
   assert(w.diver.bag > 149 && w.diver.bag < 151);
   assert(Math.abs(w.diver.bag + patch.remaining - 1000) < 1e-7);
 });
-test('channel peaks reach 3–5 knots and forecasts sample precisely the live vector', () => {
-  for (const id of ['middle', 'far']) {
+test('starter peaks stay workable, later channels reach 3–5 knots, and forecasts match live vectors', () => {
+  for (const id of ['middle', 'far', 'storm-channel', 'storm-sound']) {
     const w = createWorld();
     chooseGround(w, id);
     w.day.minute = 590;
@@ -114,7 +114,11 @@ test('channel peaks reach 3–5 knots and forecasts sample precisely the live ve
       for (let x = 12; x < 600; x += 12)
         if (depthAt(w, x, y) > 2)
           max = Math.max(max, Math.hypot(...Object.values(currentAt(w, x, y))) * C.knotsPerMps);
-    assert(max >= 3.5 && max <= 5.00001, `${id}: ${max}`);
+    assert(
+      max >= (id.startsWith('storm') ? 3.5 : 0.42) &&
+        max <= (id.startsWith('storm') ? 5.00001 : 0.60001),
+      `${id}: ${max}`,
+    );
     const f = forecast(w, id);
     assert.deepEqual(f.vector, currentAt(w, f.station.x, f.station.y));
   }

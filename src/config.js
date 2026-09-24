@@ -116,3 +116,4 @@ export const C = {
 };
 export const DIRECTIONS = ['No preference', 'N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
 export const QUALITIES = [0, 0.6, 0.7, 0.8, 0.9];
+export const BAG_LIMITS = [0, 20, 30, 45, 60, 90];

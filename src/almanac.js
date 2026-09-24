@@ -20,7 +20,12 @@ export function forecast(w, id, offset = 0) {
   const now = environmentMinute(w),
     minute = now + offset,
     environment = { ...structuredClone(C.environment), ...structuredClone(def.environment) };
-  const view = { terrain, environment, day: { phase: 'working', minute }, time: w.time };
+  const view = {
+    terrain,
+    environment,
+    day: { phase: 'working', minute, groundId: id },
+    time: w.time,
+  };
   updateEnvironment(view);
   const station = terrain.tideStation || {
     x: terrain.size * 0.51,
@@ -61,7 +66,7 @@ export function forecastSeries(w, id) {
 export function estimatedCurrents(f) {
   const arrows = [],
     step = f.terrain.size / 7,
-    view = { terrain: f.terrain, environment: f.environment };
+    view = { terrain: f.terrain, environment: f.environment, day: { groundId: f.definition.id } };
   for (let y = step; y < f.terrain.size - step / 2; y += step)
     for (let x = step; x < f.terrain.size - step / 2; x += step) {
       const v = currentAt(view, x, y),

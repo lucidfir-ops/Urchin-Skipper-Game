@@ -68,12 +68,23 @@ export function assignCrew(w) {
       orders =
         record?.orders ||
         (d.crewId === id && d.ordersSet
-          ? { direction: d.direction, minQuality: d.minQuality, searchLimit: d.searchLimit }
+          ? {
+              direction: d.direction,
+              minQuality: d.minQuality,
+              searchLimit: d.searchLimit,
+              maxBagSeconds: d.maxBagSeconds || 0,
+            }
           : null);
+    if (d.crewId !== id) {
+      delete d.speech;
+      delete d.speechReports;
+      delete d.nextBanterAt;
+    }
     Object.assign(d, {
       direction: orders?.direction ?? 0,
       minQuality: orders?.minQuality ?? 0,
       searchLimit: orders?.searchLimit ?? (person?.rank > 0 ? 15 : 70),
+      maxBagSeconds: orders?.maxBagSeconds ?? 0,
       ordersSet: !!orders,
       crewId: id,
       crewSeed: w.career.seed,
@@ -103,6 +114,7 @@ export function rememberCrewOrders(w) {
         direction: d.direction,
         minQuality: d.minQuality,
         searchLimit: d.searchLimit,
+        maxBagSeconds: d.maxBagSeconds || 0,
       };
 }
 export function workCrew(w, d, dt) {

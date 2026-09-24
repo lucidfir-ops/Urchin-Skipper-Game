@@ -1,5 +1,6 @@
 import { september21Checks } from './september21-checks.js';
 import { workingDayChecks } from './working-day-checks.js';
+import { crewCoastsChecks } from './crew-coasts-checks.js';
 import { september23Checks } from './september23-checks.js';
 import { audioSchedulingChecks } from './audio-scheduling-checks.js';
 import { september22Checks, september22Performance } from './september22-checks.js';
@@ -49,7 +50,8 @@ const launchOptions = {
 };
 let browser = await browserType.launch(launchOptions);
 try {
-  if (process.argv.includes('--working-day-only')) await workingDayChecks(browser);
+  if (process.argv.includes('--crew-coasts-only')) await crewCoastsChecks(browser);
+  else if (process.argv.includes('--working-day-only')) await workingDayChecks(browser);
   else if (process.argv.includes('--audio-baseline-only'))
     await audioSchedulingChecks(browser, true);
   else if (process.argv.includes('--audio-scheduling-only')) await audioSchedulingChecks(browser);
@@ -144,7 +146,7 @@ try {
     await page.waitForFunction(() => urchinDebug.world.diver.state === 'searching');
     assert.equal(await page.evaluate(() => urchinDebug.world.diver.bag), 0);
     assert(
-      !/Recover Bag|Recover Diver|Deploy Diver/.test(await page.locator('#help').textContent()),
+      !/Take + give bag|Recover Diver|Deploy Diver/.test(await page.locator('#help').textContent()),
     );
     await page.evaluate(() => urchinDebug.step(6));
     assert.equal(await page.evaluate(() => urchinDebug.world.diver.state), 'harvesting');
@@ -171,26 +173,29 @@ try {
     await page.waitForFunction(() =>
       document.querySelector('#message').textContent.includes('PORT SIDE'),
     );
-    assert(!/Recover Bag|Recover Diver/.test(await page.locator('#help').textContent()));
+    assert(!/Take + give bag|Recover Diver/.test(await page.locator('#help').textContent()));
     await page.evaluate(() => {
       const w = urchinDebug.world;
       w.boat.x = w.diver.x + 4;
     });
     await page.waitForFunction(() =>
-      document.querySelector('#help').textContent.includes('Recover Bag'),
+      document.querySelector('#help').textContent.includes('Take + give bag'),
     );
-    assert.match(await page.locator('#help').textContent(), /2.*Recover Bag.*1 — Recover Diver/);
+    assert.match(
+      await page.locator('#help').textContent(),
+      /2.*Take \+ give bag.*1 — Recover Diver/,
+    );
     await page.screenshot({ path: 'test-results/port-pickup.png' });
     await page.keyboard.press('2');
     await page.waitForFunction(() => urchinDebug.world.diver.hook > 0.2);
     assert(await page.locator('#message progress').isVisible());
     await page.waitForFunction(() => urchinDebug.world.catch === 300);
     console.log('Keyboard: first full bag aboard');
-    assert.equal(await page.evaluate(() => urchinDebug.world.diver.state), 'surface');
-    await page.waitForFunction(() =>
-      document.querySelector('#help').textContent.includes('Send diver down'),
+    assert(
+      ['deploying', 'searching', 'harvesting'].includes(
+        await page.evaluate(() => urchinDebug.world.diver.state),
+      ),
     );
-    await page.keyboard.press('2');
     await page.waitForFunction(() => urchinDebug.world.diver.state === 'harvesting');
     assert.equal(await page.evaluate(() => urchinDebug.visuals.bags.length), 1);
     assert.deepEqual(await page.evaluate(() => urchinDebug.visuals.diver), {

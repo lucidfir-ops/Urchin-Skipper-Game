@@ -285,6 +285,7 @@ export class PlaytestUI {
       direction: this.draft.direction,
       minQuality: this.draft.quality,
       searchLimit: this.draft.searchLimit,
+      maxBagSeconds: this.draft.maxBagSeconds,
     });
     this.hooks.save?.();
     this.notify(`DIVER ${this.draft.diverId + 1} — ORDERS CONFIRMED`);
@@ -372,7 +373,8 @@ export class PlaytestUI {
         const [qualityDown, qualityUp] = this.qualityControls;
         if (a[qualityDown]) this.draft.changeQuality(-1);
         if (a[qualityUp]) this.draft.changeQuality(1);
-        if (a.zoomIn || a.zoomOut) this.draft.changeSearchLimit();
+        if (a.zoomIn) this.draft.changeSearchLimit();
+        if (a.zoomOut) this.draft.changeBagLimit();
         if (a.work) this.draft.clear();
         if (a.confirm || (this.holdOpened && this.instructionHold > 0.22 && a.instructionsReleased))
           this.applyOrders(world);

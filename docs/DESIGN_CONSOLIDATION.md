@@ -44,3 +44,7 @@ Specific cache/audio implementation rates, migration versions, fixture results a
 ## Verification record
 
 Checks and results for this documentation migration are recorded in [PROJECT_STATUS.md](../PROJECT_STATUS.md#verification-and-latest-exports). Pre-edit human documents are preserved locally under `docs/history/2026-09-23-bible-consolidation/before/`. Runtime source, tests, maps, assets and package/build configuration are unchanged. Existing playable exports remain the current release; no duplicate gameplay export is needed for this documentation-only update.
+
+## September 23 crew-and-coasts follow-up
+
+The designer’s follow-up in the implementation conversation explicitly requests informative, non-repeating diver bubbles and personality variation; quality/bag-speed feedback, particularly on unmarked ground; automatic alongside targeting and one-press take/give exchanges while retaining specialist deployment selection; occasional straight taxi passes with physical injury/death; stronger within-day and weaker between-day fatigue; starter-safe storms, harsher fifth-coast weather, Frank’s forecast advice and falling-tide stranding with waiting or paid rescue. Incorporated in living Bible §§4, 7–10 and 14–16. Numeric presets, regional caps and fatigue coefficients are autonomous reversible tuning, not separately dictated designer values.

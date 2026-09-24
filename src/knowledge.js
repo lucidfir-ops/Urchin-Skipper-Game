@@ -72,18 +72,20 @@ export function recordKnowledge(w) {
 // Also called immediately before recovery clears the bag and ground reference.
 // A short hauler operation must not fall between periodic observations.
 export function recordDiverReport(w, d, { recovered = false, automatic = false } = {}) {
+  const observed =
+    d.patch || (d.state === 'surface' && w.patches.find((p) => p.id === d.groundSample?.patchId));
   if (
     !w.career ||
     w.day.phase !== 'working' ||
     (d.state !== 'surface' && !(automatic && d.state === 'harvesting')) ||
     d.bagHandled ||
-    !d.patch ||
-    (d.patch.charted === false && d.state !== 'surface') ||
+    !observed ||
+    (observed.charted === false && d.state !== 'surface') ||
     (!recovered && !automatic && Math.hypot(d.x - w.boat.x, d.y - w.boat.y) >= 12)
   )
     return;
   const c = w.career,
-    p = d.patch,
+    p = observed,
     k = (c.knowledge[w.day.groundId] ??= { depths: {}, grounds: {}, visits: 1 }),
     previous = k.grounds[p.id];
   k.grounds[p.id] = {
@@ -95,7 +97,9 @@ export function recordDiverReport(w, d, { recovered = false, automatic = false }
     condition: d.reason?.includes('exhaust')
       ? 'Worked thin at the last dive'
       : 'Sampled; stock beyond the dive is unknown',
-    quality: d.bag ? Math.round((d.qualitySum / d.bag) * 10) / 10 : (previous?.quality ?? null),
+    quality: d.bag
+      ? Math.round((d.qualitySum / d.bag) * 100) / 100
+      : (d.groundSample?.quality ?? previous?.quality ?? null),
     day: c.day,
     reporter: d.name,
     minute: w.day.minute,

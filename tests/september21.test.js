@@ -115,7 +115,7 @@ test('level 20 specialists outperform level 5, while sustained fatigue reduces r
   assert(w.diver.fatigue > 0.3);
   assert(diverSpec(w.diver).harvestRate < fresh.harvestRate * 0.86);
   const carry = w.diver.fatigue - ECONOMY.restRecovery;
-  assert(carry > 0.24);
+  assert(carry < 0.08, 'ordinary daytime work mostly recovers overnight');
   recordMedical(w.career, 'ada', 'Unfit for work', 'Test absence cause', w.career.day + 1);
   assert.equal(decode(encode(w)).career.people.ada.medicalHistory[0].cause, 'Test absence cause');
 });

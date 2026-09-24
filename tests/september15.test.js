@@ -158,7 +158,7 @@ test('twin jet pivot and fitted bow thruster have independent commands and fuel 
 test('orders persist through offload, new days, reload, replacement and rehire', () => {
   let w = world();
   const id = w.diver.crewId;
-  const orders = { direction: 5, minQuality: 0.8, searchLimit: 30 };
+  const orders = { direction: 5, minQuality: 0.8, searchLimit: 30, maxBagSeconds: 45 };
   assert(setInstructions(w, w.diver.id, orders));
   Object.assign(w.boat, { x: 250, y: w.terrain.size + 0.01 });
   assert(returnToHarbour(w).ok);

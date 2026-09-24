@@ -43,7 +43,7 @@ export const INTRO_STEPS = [
   ],
   [
     'Return through the south edge',
-    'That’s the loop: read the water, scout, look after the divers, and bring the catch home. Recover everyone, then drive all the way through the SOUTH edge of the map to return to harbour. Other edges will hold you inside the cove. I’ll cover today’s fuel; once we cross south, we choose your own boat and start day 1. Miss 19:00 offload and your catch lands at 06:00 next morning, with departure at 09:00. You can still fish a shorter day. Continuing late costs fatigue, freshness and safety; night diving needs flashlights.',
+    'That’s the loop: read the water, scout, look after the divers, and bring the catch home. Recover everyone, then drive all the way through the SOUTH edge of the map to return to harbour. Other edges will hold you inside the cove. I’ll cover today’s fuel; once we cross south, we choose your own boat and start day 1. Miss 19:00 offload and your catch lands at 06:00 next morning, with departure at 09:00. You can still fish a shorter day. Continuing late costs fatigue, freshness and safety; night diving needs flashlights. Home Coast only gets weak storms. Later areas have worse conditions, especially the fifth coast: check the forecast before you fish. A falling tide can leave you beached. Wait at sea for rising water or radio for a paid tow.',
   ],
 ];
 export const INTRO_SCOUT_HINT = 'The urchins are east of the patch you can see, right next to it!';

@@ -107,17 +107,18 @@ export function renderExpedition(ui, w, bind) {
     }
   } else if (ui.screen === 'conditions') {
     title = 'Weather for the next seven days.';
-    const outlook = weatherOutlook(w);
-    detail = `<h3>Coastal outlook · ${outlook.confidence}% confidence</h3><p>${outlook.periods.map((p) => `${p.minute ? `Around ${formatClock(p.minute)}` : 'Morning'} · ${p.name} · ~${p.wind} kn wind<br>${p.visibility}`).join('</p><p>')}</p><p>${GROUNDS.map(
+    const outlook = weatherOutlook(w, 0, id);
+    detail = `<h3>${def.name} outlook · ${outlook.confidence}% confidence</h3><p>${outlook.periods.map((p) => `${p.minute ? `Around ${formatClock(p.minute)}` : 'Morning'} · ${p.name} · ~${p.wind} kn wind<br>${p.visibility}`).join('</p><p>')}</p><p>${GROUNDS.map(
       (g) => {
         const local = conditionsAt(w, w.day.minute, g.id);
         return `${g.name}: ${local.wind.toFixed(0)} kn wind / ${local.wave.toFixed(1)} m sea`;
       },
     ).join(
       '<br>',
-    )}</p><p>Wind and tide are separate. Exposed water builds more sea. The timing is an estimate; watch for changes.</p><p>Departure ${formatClock(w.day.minute)} · Offload 19:00<br>${earlyStartNotice(w)} Waiting back to 07:00 avoids that early-start cost. Darkness limits sight and unlit pickup range. Work lights, radar and a known route give you more choices.</p>`;
+    )}</p><p>Frank: “Home Coast gets weak storms. Later coasts have worse conditions; check the forecast before you fish. The fifth coast can get vicious.” Wind and tide are separate. Exposed water builds more sea. The timing is an estimate; watch for changes.</p><p>Departure ${formatClock(w.day.minute)} · Offload 19:00<br>${earlyStartNotice(w)} Waiting back to 07:00 avoids that early-start cost. Darkness limits sight and unlit pickup range. Work lights, radar and a known route give you more choices.</p>`;
     detail += `<h3>Seven-day coastal forecast</h3><table class="week-forecast"><thead><tr><th>Day</th><th>Outlook</th><th>Wind</th><th>Confidence</th></tr></thead><tbody>${sevenDayForecast(
       w,
+      id,
     )
       .map(
         (day, i) =>

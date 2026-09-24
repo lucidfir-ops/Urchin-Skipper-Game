@@ -6,6 +6,7 @@ import { crewProfile } from './crew-roster.js';
 import { takeCatch } from './harvest-ground.js';
 import { waterEntries, waterRoute } from './water-route.js';
 import { moveTraffic } from './traffic-motion.js';
+import { taxiRoute } from './taxi-route.js';
 import { TRAFFIC, trafficSettings } from './traffic-settings.js';
 import { stepPatrol } from './patrol.js';
 import { inspectionDue } from './inspection-schedule.js';
@@ -140,12 +141,15 @@ function* planTraffic(w, kind, { start, patchId, art, fleetId } = {}) {
     const sample =
       crossing && kind === 'taxi' ? w.divers.find((d) => d.patch?.id === patch.id) : null;
     const working = sample ? { x: sample.x, y: sample.y } : { x: patch.x, y: patch.y },
-      route = waterRoute(w, entry, kind === 'dfo' && !desiredPatch ? end : working, spec);
+      route =
+        kind === 'taxi'
+          ? taxiRoute(w, entry, working, entries, spec)
+          : waterRoute(w, entry, kind === 'dfo' && !desiredPatch ? end : working, spec);
     if (!route.length) {
       yield;
       continue;
     }
-    if (kind === 'taxi' || kind === 'tourist' || (kind === 'dfo' && desiredPatch)) {
+    if (kind === 'tourist' || (kind === 'dfo' && desiredPatch)) {
       const exit = waterRoute(w, working, end, spec);
       if (!exit.length) {
         yield;
@@ -155,6 +159,7 @@ function* planTraffic(w, kind, { start, patchId, art, fleetId } = {}) {
     }
     Object.assign(actor, entry, {
       route,
+      routeStart: { ...entry },
       patchId: patch.id,
       heading: Math.atan2(route[0].x - entry.x, entry.y - route[0].y),
     });

@@ -4,7 +4,7 @@ Skipper the boat while two autonomous divers collect urchins. Start with Frank's
 
 Buy a boat, choose Sail and a nearby ground. Use the chart and sounder to find sheltered seabed around 5-20 m deep. Select each diver, set Orders, then deploy.
 
-Watch bubbles and orange floats. Bring the boat's port side (left facing the bow) slowly alongside a float, clear of the hull and stern. Press Bag once and stay alongside until recovery finishes. Press again to send the diver down when ready, or use Deploy/board to bring them aboard with any bag.
+Watch bubbles and orange floats. Bring the boat's port side (left facing the bow) slowly alongside a float, clear of the hull and stern. Press Bag once and stay alongside: the catch comes aboard and a fresh bag sends that diver back down. If they cannot continue, their bubble tells you why. Deploy/board instead brings the nearby diver aboard with any bag. Neither pickup action needs portrait selection; selection still chooses your scout and their orders.
 
 Recover both divers before leaving. Cross the harbour edge shown on the chart; follow its Leave by time to reach offload by 19:00. Catch sells automatically; refuel, rest and upgrade.
 
@@ -30,3 +30,7 @@ and lets you dump it overboard over its original hauling time. Pause →
 Equipment switches controls fitted gear; enabled boat lights come on after
 dark. Local Chart can save a recent diver sample as a personal mark and show
 its bearing/distance. Gameplay Speed now defaults to +50%.
+
+Crew report new sampled quality and slow picking, especially on unmarked ground. Set a minimum quality and maximum bag time in Orders. Repeated unchanged reports stay quiet; crew have different chatter habits. Fatigue builds during work and mostly clears overnight.
+
+Home Coast storms are weak enough for the loaded starter rudder boat to reverse into deeper water. Later coasts get much worse: check Forecast before fishing. Falling tide can leave you stuck; wait on the water for it to rise or Pause → Radio for rescue for a paid tow. Taxis sometimes pass straight through worked water; an actual surface strike can injure or kill a diver.

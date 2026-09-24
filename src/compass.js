@@ -1,4 +1,4 @@
-import { C, DIRECTIONS, QUALITIES } from './config.js';
+import { C, DIRECTIONS, QUALITIES, BAG_LIMITS } from './config.js';
 import { bearing } from './math.js';
 
 export function compassDirection(x, y, deadZone = C.input.deadZone) {
@@ -19,6 +19,7 @@ export class CompassDraft {
     this.direction = diver.direction;
     this.quality = diver.minQuality;
     this.searchLimit = diver.searchLimit ?? 70;
+    this.maxBagSeconds = diver.maxBagSeconds ?? 0;
     this.angle = (diver.direction - 1) * 45;
     this.moved = false;
   }
@@ -42,6 +43,10 @@ export class CompassDraft {
   changeQuality(delta) {
     this.quality =
       QUALITIES[(QUALITIES.indexOf(this.quality) + delta + QUALITIES.length) % QUALITIES.length];
+  }
+  changeBagLimit() {
+    this.maxBagSeconds =
+      BAG_LIMITS[(BAG_LIMITS.indexOf(this.maxBagSeconds) + 1) % BAG_LIMITS.length];
   }
 }
 

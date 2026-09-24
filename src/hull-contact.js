@@ -34,6 +34,11 @@ export function resolveHullContact(w, old, proposed, velocity, dt, inertiaPerMas
     draft = spec.draft,
     oldSamples = points.map((p) => sample(w, old, p)),
     oldDepth = Math.min(...oldSamples.map((p) => p.depth));
+  // A hull left well up the shoal by a falling tide is seated on the bottom.
+  // Thrust/wind cannot slide it over dry land; rising water restores the normal
+  // contact solver, or the skipper can use the existing paid rescue transition.
+  if (oldDepth < draft * 0.5)
+    return { ...old, vx: 0, vy: 0, turn: 0, impactSpeed: 0, contact: true };
   let pose = { ...proposed },
     contact = oldDepth < draft + spec.contactSkin;
   const floor = oldSamples.map((p) => Math.min(draft, p.depth));

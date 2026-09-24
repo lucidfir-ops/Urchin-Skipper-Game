@@ -234,7 +234,7 @@ test('a report records its witness, age and actual sample point; personal marks 
   assert.equal(mark.outline, undefined);
   assert.equal(decode(encode(w)).career.navigationMark, mark.id);
 });
-test('surface opinions use the sampled bag, throttle authored chatter and preserve cooldown through reload', () => {
+test('surface opinions report new sampled information despite chatter cooldown and preserve memory through reload', () => {
   const w = careerWorld(),
     d = w.divers[0];
   d.bag = 300;
@@ -246,7 +246,7 @@ test('surface opinions use the sampled bag, throttle authored chatter and preser
   d.qualitySum = 150;
   surfaceMoment(w, d);
   assert.equal(d.speech.icon, '👎');
-  assert.equal(d.speech.text, '');
+  assert.match(d.speech.text, /50%/);
   assert.equal(decode(encode(w)).divers[0].nextBanterAt, d.nextBanterAt);
 });
 test('selfish rival identity is persistent; ordinary routes increasingly cross working beds without changing event cadence', () => {

@@ -94,14 +94,9 @@ export const recoveryDuration = (d) =>
   (d.bagHandled ? C.recovery.boardSeconds : d.hookSeconds || C.recovery.hookSeconds) +
   (d.recoveryAction === 'recoverDiver' ? 2 : 0);
 export function nearestRecoveryTarget(w, action, tolerance = C.recovery.tolerance) {
-  let candidates = w.divers
+  const candidates = w.divers
     .map((d) => ({ d, status: recoveryStatus(w, tolerance, d) }))
-    .filter(
-      ({ d, status }) =>
-        status.available && (action !== 'work' || !d.bagHandled || rediveStatus(w, d).available),
-    );
-  if (action === 'work' && candidates.some((c) => !c.d.bagHandled))
-    candidates = candidates.filter((c) => !c.d.bagHandled);
+    .filter(({ status }) => status.available);
   if (!candidates.length) return null;
   const nearest = Math.min(...candidates.map((c) => c.status.distance));
   // Within 20 cm the lower stable entity ID wins. HUD selection is irrelevant.
@@ -110,15 +105,13 @@ export function nearestRecoveryTarget(w, action, tolerance = C.recovery.toleranc
     .sort((a, b) => a.d.id - b.d.id)[0].d;
 }
 export function actionTarget(w, action, tolerance = C.recovery.tolerance) {
+  // Finish one person's deck operation before starting the next. Selection is
+  // reserved for intentional deployment and orders, including a specialist scout.
+  const active = w.divers.find((d) => d.state === 'surface' && d.hooking);
+  if (active) return active;
   const eligible = nearestRecoveryTarget(w, action, tolerance);
   if (eligible) return eligible;
-  // A second press can pause an already running operation even if it has drifted
-  // out of range. Otherwise selection remains the deployment/instruction target.
-  const operation = action === 'work' ? 'recoverBag' : 'recoverDiver';
-  return (
-    w.divers.find((d) => d.state === 'surface' && d.hooking && d.recoveryAction === operation) ||
-    selectedDiver(w)
-  );
+  return selectedDiver(w);
 }
 export function pinActionTargets(w, a, tolerance = C.recovery.tolerance) {
   const result = { ...a };
@@ -148,7 +141,11 @@ export function rediveStatus(w, d) {
                 : !roomForNextBag(w, d)
                   ? 'NO ROOM FOR ANOTHER BAG'
                   : !useful
-                    ? 'NO PRODUCTIVE GROUND NEARBY'
-                    : diveReadiness(w, d);
+                    ? d.groundSample?.quality < d.minQuality
+                      ? 'GROUND BELOW QUALITY INSTRUCTION'
+                      : 'NO PRODUCTIVE GROUND NEARBY'
+                    : d.maxBagSeconds && d.lastBagSeconds > d.maxBagSeconds + 0.05
+                      ? 'PICKING SLOWER THAN BAG TIME ORDER — MOVE OR CHANGE ORDERS'
+                      : diveReadiness(w, d);
   return { available: !reason, reason };
 }

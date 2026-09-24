@@ -13,28 +13,16 @@ function world() {
   Object.assign(w.diver, { state: 'surface', x: 246, y: 250, bag: 300, qualitySum: 270 });
   return w;
 }
-test('bag handling waits indefinitely, then explicit X redescends or Y boards with a full tank', () => {
-  for (const next of ['work', 'recoverDiver']) {
+test('one bag exchange redescends with the same tank; boarding instead supplies a fresh tank', () => {
+  for (const action of ['work', 'recoverDiver']) {
     const w = world(),
       d = w.diver;
     d.air = 60;
-    step(w, { work: true }, 1 / 60);
-    for (let i = 0; i < 300; i++) step(w, {}, 1 / 60);
-    assert.equal(d.state, 'surface');
-    assert(d.bagHandled);
+    step(w, { [action]: true }, 1 / 60);
+    for (let i = 0; i < (action === 'work' ? 180 : 300); i++) step(w, {}, 1 / 60);
     assert.equal(w.catch, 300);
-    assert.equal(d.air, 60);
-    assert(recoveryStatus(w).available);
-    step(w, { [next]: true }, 1 / 60);
-    if (next === 'work') {
-      assert.equal(d.state, 'deploying');
-      assert.equal(d.air, 60);
-    } else {
-      for (let i = 0; i < 180; i++) step(w, {}, 1 / 60);
-      assert.equal(d.state, 'ready');
-      assert.equal(d.air, 100);
-      assert.equal(w.catch, 300);
-    }
+    assert.equal(d.state, action === 'work' ? 'deploying' : 'ready');
+    assert.equal(d.air, action === 'work' ? 60 : 100);
   }
 });
 test('port-side drift matching is safe while a slow hull contact nudges clear without injury', () => {

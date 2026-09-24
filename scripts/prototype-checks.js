@@ -71,7 +71,8 @@ export async function prototypeChecks(browser) {
     await choose('Sheltered Kelp');
     await choose('Begin working day');
     await page.waitForFunction(() => urchinDebug.world.time > 0.1);
-    assert.match(await page.locator('#clock').textContent(), /09:0\d.*Leave 18:00/s);
+    const arrivalMinute = await page.evaluate(() => urchinDebug.world.day.minute);
+    assert(arrivalMinute >= 540 && arrivalMinute < 550, 'one-hour passage arrives around 09:00');
     assert.equal(await page.evaluate(() => urchinDebug.world.divers.length), 2);
     await page.mouse.click(800, 500);
     await page.waitForFunction(() => urchinDebug.audio.manager.context.state === 'running');
@@ -231,9 +232,12 @@ export async function prototypeChecks(browser) {
       w.selectedDiverId = 0;
     });
     await page.waitForFunction(() =>
-      document.querySelector('#help').textContent.includes('Recover Bag'),
+      document.querySelector('#help').textContent.includes('Take + give bag'),
     );
-    assert.match(await page.locator('#help').textContent(), /X — Recover Bag.*Y — Recover Diver/);
+    assert.match(
+      await page.locator('#help').textContent(),
+      /X — Take \+ give bag.*Y — Recover Diver/,
+    );
     await page.screenshot({ path: 'test-results/prototype-adjacent-floats.png' });
     await action('work');
     await page.waitForFunction(() => urchinDebug.world.divers[0].hook > 0.3);
@@ -246,7 +250,7 @@ export async function prototypeChecks(browser) {
     await page.waitForFunction(() => urchinDebug.world.catch === 300);
     assert.equal(await page.evaluate(() => urchinDebug.world.divers[1].bag), 300);
     assert.equal(await page.evaluate(() => urchinDebug.world.divers[1].hook), 0);
-    // Bag-only recovery now leaves Diver 1 waiting. Maneuver to make Diver 2
+    // The completed bag exchange sends Diver 1 back down. Maneuver to make Diver 2
     // the nearest hull target; HUD selection deliberately does not pick for us.
     await page.evaluate(() => {
       const w = urchinDebug.world,
@@ -259,15 +263,11 @@ export async function prototypeChecks(browser) {
     await page.waitForFunction(() => urchinDebug.world.divers[1].state === 'ready');
     assert.equal(await page.evaluate(() => urchinDebug.world.catch), 600);
     assert.notEqual(await page.evaluate(() => urchinDebug.world.divers[0].state), 'ready');
-    assert.equal(await page.evaluate(() => urchinDebug.world.divers[0].state), 'surface');
-    await page.evaluate(() => {
-      const w = urchinDebug.world,
-        d = w.divers[0];
-      w.boat.x = d.x + 4;
-      w.boat.y = d.y;
-    });
-    await action('work');
-    await page.waitForFunction(() => urchinDebug.world.divers[0].state === 'deploying');
+    assert(
+      ['deploying', 'searching', 'harvesting'].includes(
+        await page.evaluate(() => urchinDebug.world.divers[0].state),
+      ),
+    );
     // The diver now walks between clumps. This recovery fixture must maneuver
     // alongside their actual surfaced position instead of assuming a stationary harvester.
     await page.evaluate(() => {
@@ -298,7 +298,9 @@ export async function prototypeChecks(browser) {
     await action('debug');
     await menu();
     await choose('Test pickup: two full bags / 100 lb free');
-    await page.waitForFunction(() => !urchinDebug.ui.blocked);
+    await page.waitForFunction(() => urchinDebug.ready && !urchinDebug.ui.blocked);
+    // Reset prepares a new scene; let its ready transition release the input gate.
+    await page.waitForFunction(() => urchinDebug.ui.lastReady && !urchinDebug.input.suppressed);
     await page.waitForFunction(() =>
       document.querySelector('#help').textContent.includes('Recover Diver'),
     );
@@ -377,8 +379,7 @@ export async function prototypeChecks(browser) {
       await page.screenshot({
         path: `test-results/prototype-day-${late ? 'late' : 'success'}.png`,
       });
-      assert.equal(await page.locator('#clock').getAttribute('class'), '');
-      assert.match(await page.locator('#clock').textContent(), /At harbour/);
+      assert.equal(await page.evaluate(() => urchinDebug.ui.screen), 'summary');
       const time = await page.evaluate(() => urchinDebug.world.time);
       await button(12);
       await page.waitForTimeout(80);

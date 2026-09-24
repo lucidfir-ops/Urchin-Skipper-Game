@@ -133,12 +133,10 @@ test('bag turnaround preserves only that diver air and does not restart their pa
   surfaced(w);
   w.divers[1].air = 19;
   step(w, { work: true, diverId: 0 }, frame);
-  tick(w, 5.1);
-  assert.equal(w.divers[0].state, 'surface');
-  assert(w.divers[0].bagHandled);
-  assert.equal(w.divers[0].air, 45);
-  step(w, { work: true, diverId: 0 }, frame);
+  tick(w, 3);
   assert.equal(w.divers[0].state, 'deploying');
+  assert(!w.divers[0].bagHandled);
+  assert.equal(w.divers[0].air, 45);
   assert.equal(w.divers[1].state, 'surface');
   assert.equal(w.divers[1].air, 19);
   assert.equal(w.divers[1].bag, 300);

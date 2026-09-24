@@ -131,8 +131,12 @@ test('night doubles work fatigue while short workdays build substantially less p
   }
   assert(Math.abs(b.diver.fatigue - a.diver.fatigue * 2) < 1e-9);
   const shortRate = a.diver.fatigue / 100;
-  for (let n = 100; n < 1100; n++) workCrew(a, a.diver, 1);
-  assert(a.diver.fatigue / 1100 > shortRate * 1.1);
+  a.diver.workedSeconds = 1000;
+  const before = a.diver.fatigue;
+  for (let n = 0; n < 100; n++) workCrew(a, a.diver, 1);
+  assert((a.diver.fatigue - before) / 100 > shortRate * 1.5);
+  for (let n = 0; n < 1000; n++) workCrew(a, a.diver, 1);
+  assert.equal(a.diver.fatigue, 1, 'exhaustion remains bounded');
 });
 test('night timber increases the existing field sixfold once and survives reload without multiplying', () => {
   const w = world();

@@ -111,8 +111,12 @@ test('rain, wind and surface exposure remain independent environmental dimension
   const shelteredStorm = conditionsAt(w, 900, 'near'),
     exposedStorm = conditionsAt(w, 900, 'far');
   assert(shelteredStorm.wave < 0.3);
-  assert(shelteredStorm.wind > 20, 'shelter flattens water without erasing strong local wind');
-  assert(exposedStorm.wave > 2);
+  assert(
+    shelteredStorm.wind > 6 && shelteredStorm.wind <= 8,
+    'starter storm stays windy but workable',
+  );
+  assert.equal(exposedStorm.wave, 0.8);
+  assert(conditionsAt(w, 900, 'storm-channel').wave > 2);
   assert(exposedStorm.wind > shelteredStorm.wind);
   const partialExposure = conditionsAt(w, 900, 'middle');
   assert(partialExposure.wave > shelteredStorm.wave && partialExposure.wave < exposedStorm.wave);

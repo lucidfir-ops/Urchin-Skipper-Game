@@ -138,13 +138,15 @@ export function playState(
         status.available &&
         action === 'work' &&
         target.bagHandled &&
-        rediveStatus(w, target).available
+        target.state === 'surface'
       )
-        text = 'Fresh bag → Send diver down';
+        text = rediveStatus(w, target).available
+          ? 'Give bag → Send diver down'
+          : 'Offer bag · hear diver';
       else if (status.available && (action !== 'work' || status.bagAvailable))
         text =
           action === 'work'
-            ? 'Recover Bag · diver waits'
+            ? 'Take + give bag · return to work'
             : target.bagHandled
               ? 'Board Diver · fresh tank'
               : 'Recover Diver + Bag';

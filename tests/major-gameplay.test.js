@@ -47,17 +47,17 @@ test('recovery targets physical proximity in both modes even when the other dive
     assert.equal(w.divers[1].air, 100);
   }
 });
-test('X skips a handled bag while Y chooses its nearer diver, and prompts share those targets', () => {
+test('both bag offers and boarding use the nearer diver, including a handled bag', () => {
   const w = calm();
   floats(w);
   w.divers[0].x = 246;
   w.divers[0].bagHandled = true;
   w.divers[0].bag = 0;
   w.divers[1].x = 245;
-  assert.equal(nearestRecoveryTarget(w, 'work').id, 1);
+  assert.equal(nearestRecoveryTarget(w, 'work').id, 0);
   assert.equal(nearestRecoveryTarget(w, 'recoverDiver').id, 0);
   const actions = playState(w).actions;
-  assert.equal(actions.find((a) => a.action === 'work').diverId, 1);
+  assert.equal(actions.find((a) => a.action === 'work').diverId, 0);
   assert.equal(actions.find((a) => a.action === 'recoverDiver').diverId, 0);
 });
 test('eligibility beats raw distance; ties and already queued targets are stable', () => {

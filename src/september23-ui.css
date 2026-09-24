@@ -138,3 +138,24 @@ body #playtest.wharf-panel .wharf-heading :is(small, .eyebrow) {
     align-items: baseline;
   }
 }
+/* Orders remain usable on a narrow window with touch, keyboard or a pad. */
+@media (max-width: 700px) {
+  #playtest.orders-panel .orders-layout {
+    grid-template-columns: minmax(0, 1fr);
+    overflow-y: auto;
+    align-items: start;
+    flex: 1 1 auto;
+  }
+  #playtest.orders-panel .compass {
+    max-width: 200px;
+  }
+  #playtest.orders-panel .orders-help {
+    min-width: 0;
+    max-height: none;
+    overflow: visible;
+  }
+  #playtest.orders-panel button {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}

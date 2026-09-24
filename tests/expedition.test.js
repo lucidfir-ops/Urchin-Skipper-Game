@@ -137,10 +137,10 @@ test('faster hulls shorten passages, waves lengthen them, local fuel burn follow
   assert(groundTrip(w, 'far').minutes < base);
   w.career.weatherPlan = [{ minute: 0, kind: 'storm', bearing: 210 }];
   updateWeather(w);
-  const rough = groundTrip(w, 'far').minutes;
+  const rough = groundTrip(w, 'storm-channel').minutes;
   w.career.weatherPlan = [{ minute: 0, kind: 'calm', bearing: 210 }];
   updateWeather(w);
-  assert(rough > groundTrip(w, 'far').minutes);
+  assert(rough > groundTrip(w, 'storm-channel').minutes);
   chooseGround(w, 'near');
   const fuel = w.boat.fuel;
   step(w, { fullAhead: true }, 1 / 60);

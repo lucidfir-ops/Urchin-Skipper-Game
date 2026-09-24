@@ -37,8 +37,10 @@ export function checkDiverSafety(w, previous, source = {}) {
       vy = b.vy - flow.y + b.turn * rx;
     const relativeSpeed = Math.hypot(vx, vy);
     const speed = closingImpact(pose, d, spec, vx, vy);
-    if (w.time >= (d.nextSafetyContact || 0)) {
+    const sourceId = source.boat?.id || 'player';
+    if (w.time >= (d.nextSafetyContact || 0) || (d.safetySource && d.safetySource !== sourceId)) {
       d.nextSafetyContact = w.time + 2;
+      d.safetySource = sourceId;
       w.safety ??= { incidents: [], fatalities: 0, injuries: 0 };
       const exposed =
         (source.exposed ?? boatDefinition(b.configuration).damageFactor > 0.1) &&
@@ -49,14 +51,21 @@ export function checkDiverSafety(w, previous, source = {}) {
         speed >= cfg.fatalSpeed || (exposed && relativeSpeed >= cfg.propellerFatalSpeed);
       const injured =
         !fatal &&
-        (speed >= cfg.injurySpeed || (exposed && relativeSpeed >= cfg.propellerInjurySpeed));
+        (speed >= cfg.injurySpeed ||
+          (source.boat?.kind === 'taxi' && relativeSpeed > 0.2) ||
+          (exposed && relativeSpeed >= cfg.propellerInjurySpeed));
       const outcome = fatal ? 'fatality' : injured ? 'injury' : 'near miss';
       w.safety.incidents.push({
         diverId: d.id,
         minute: w.day.minute,
         speed,
         outcome,
-        cause: exposed ? 'powered stern contact' : 'boat strike',
+        cause:
+          source.boat?.kind === 'taxi'
+            ? 'water taxi strike'
+            : exposed
+              ? 'powered stern contact'
+              : 'boat strike',
       });
       if (fatal) {
         w.safety.fatalities++;

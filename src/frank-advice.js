@@ -24,15 +24,19 @@ ${HANDLING[family]}${family === 'basic' && spec.bowThrusterStrength ? ' Your fit
 ${boat.controls}
 ${Math.round(spec.maxSpeed * C.knotsPerMps)} knots at this load · ${spec.capacity.toLocaleString()} lb deck · ${spec.travelBurn} L/h passage. Keep fuel for the return and a reserve.
 
-Drop on promising bottom. The sounder shows depth; kelp and the chart help you find a reef edge. ${bind('recoverDiver')} deploys the selected diver. ${bind('cycleDiver')} selects the other berth. ${bind('instructions')} / ${bind('quickOrders')} changes the search direction and minimum quality. ${bind('recall')} recalls bubbles within 5 m; listen for the clang and allow 2–5 seconds for a response.
+Drop on promising bottom. The sounder shows depth; kelp and the chart help you find a reef edge. ${bind('recoverDiver')} deploys the selected diver. ${bind('cycleDiver')} selects the other berth. ${bind('instructions')} / ${bind('quickOrders')} changes the search direction, minimum quality and maximum bag time. ${bind('recall')} recalls bubbles within 5 m; listen for the clang and allow 2–5 seconds for a response.
 
 Bring the float to port and match its drift. Pickup speed is relative to the float: drifting together at two knots is fine. Keep the float outside the hull and away from powered propellers.
 
-${bind('work')} takes the bag and leaves the diver waiting with the same tank. Press it again to send down with an empty bag if there is air and useful ground. ${bind('recoverDiver')} brings diver and any catch aboard, supplies an empty bag and a fresh tank. Partial bags stay safely on deck. The next deployment starts a new search.
+${bind('work')} takes and replaces one diver’s bag with one press. They go straight back down if air, ground and dive allowance permit; otherwise they tell you why. Both bag work and boarding use the diver alongside, regardless of your selected portrait. Selection still chooses who scouts or deploys next. ${bind('recoverDiver')} brings diver and any catch aboard, supplies an empty bag and a fresh tank. Partial bags stay safely on deck. The next deployment starts a new search.
 
 When diver readouts are enabled, check the surfacing reason: full bag, air reserve, exhausted ground, a table break or the quality order. Fresh tanks do not clear accumulated dive exposure; heed requests for surface intervals. Repeated deep days can lead to suspected decompression sickness and a medical return. These are fictional game tables, never real dive guidance. Reports are written to the chart as the catch comes aboard.
 
 Sometimes your divers pick undersize and there’s nothing you can do.
+
+The Home Coast gets only weak storms. Later coasts have worse conditions; the fifth coast can get vicious. Check the forecast before you fish. If you ground on a falling tide, reverse into deeper water while you can. Once stranded, you can wait at sea for rising water or radio for a paid tow through Pause.
+
+Fatigue builds through the working day, slowing picking, swimming and current holding. A normal night clears most of it; very long days can leave a little behind.
 
 An early departure before 07:00 adds 6% fatigue once; darkness also makes unlit work harder. Rest ashore or warm up the crew at sea. Experience builds over worked trips; check each diver's level in Meet the crew.
 

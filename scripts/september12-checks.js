@@ -204,7 +204,10 @@ export async function september12Checks(browser, name = 'chromium') {
     await page.waitForFunction(() =>
       document.querySelector('#help').textContent.includes('Recover Diver'),
     );
-    assert.match(await page.locator('#help').innerText(), /X — Recover Bag.*Y — Recover Diver/s);
+    assert.match(
+      await page.locator('#help').innerText(),
+      /X — Take \+ give bag.*Y — Recover Diver/s,
+    );
     assert.match(await page.locator('#message').innerText(), /lb in bag/);
     await shot('recovery');
     await action('recoverDiver');

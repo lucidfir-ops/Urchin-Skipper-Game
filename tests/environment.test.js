@@ -33,7 +33,7 @@ test('all spatial currents are finite, bounded and dry cells have no surface flo
           maximum = Math.max(maximum, speed);
         }
       }
-    assert(maximum > minimum + 0.3, `${id} must contain visibly different local currents`);
+    assert(maximum > minimum + 0.03, `${id} must contain visibly different local currents`);
   }
 });
 test('island field splits incoming flow, accelerates a channel, and shelters its lee', () => {
@@ -93,11 +93,11 @@ test('separated surfaced divers drift differently and each samples its own curre
     Object.assign(d, { ...positions[i], state: 'surface' });
     starts.push({ x: d.x, y: d.y, c: currentAt(w, d.x, d.y) });
   }
-  assert(magnitude({ x: starts[0].c.x - starts[1].c.x, y: starts[0].c.y - starts[1].c.y }) > 0.15);
+  assert(magnitude({ x: starts[0].c.x - starts[1].c.x, y: starts[0].c.y - starts[1].c.y }) > 0.018);
   for (let i = 0; i < 600; i++) step(w, {}, 1 / 60);
   const movements = w.divers.map((d, i) => Math.hypot(d.x - starts[i].x, d.y - starts[i].y));
   assert(
-    Math.abs(movements[0] - movements[1]) > 1,
+    Math.abs(movements[0] - movements[1]) > 0.12,
     'ten seconds gives visibly different displacement',
   );
 });

@@ -8,7 +8,30 @@ import { hullDistance, fromHull } from './collision-geometry.js';
 import { surfacedWildlifePoints } from './wildlife.js';
 
 export function moveTraffic(w, actor, dt) {
-  const target = actor.route[actor.waypoint];
+  let target = actor.route[actor.waypoint];
+  if (actor.kind === 'taxi' && target) {
+    const next = actor.route[actor.waypoint + 1],
+      previous = actor.route[actor.waypoint - 1] || actor.routeStart,
+      distance = Math.hypot(target.x - actor.x, target.y - actor.y),
+      passed =
+        previous &&
+        (actor.x - target.x) * (target.x - previous.x) +
+          (actor.y - target.y) * (target.y - previous.y) >=
+          0;
+    // A fast boat looks through nearby intermediate waypoints and never circles
+    // back to touch one it has passed while avoiding another hull.
+    if (
+      next &&
+      (distance < 24 || passed) &&
+      waterSegment(w.terrain, w.environment.seaLevel || 0, actor, next, {
+        draft: actor.draft,
+        radius: Math.max(actor.width / 2, 3),
+      })
+    ) {
+      actor.waypoint++;
+      target = next;
+    }
+  }
   // Transiting boats leave at the final edge waypoint, before water bounds can
   // strand an overshooting turn. They fade over the final approach in the view.
   if (

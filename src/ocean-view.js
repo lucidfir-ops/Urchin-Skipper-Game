@@ -288,7 +288,16 @@ export class OceanView {
       speech.setVisible(!!talking);
       if (talking) {
         speech.setText(`${d.speech.icon}${d.speech.text ? ' ' + d.speech.text : ''}`);
-        speech.setScale(1 / zoom).setPosition(d.x * p, d.y * p - 85 / zoom);
+        const partner = world.divers.find(
+          (other) =>
+            other !== d &&
+            other.state === 'surface' &&
+            other.speech?.until > t &&
+            Math.hypot(other.x - d.x, other.y - d.y) * p * zoom < 200,
+        );
+        speech
+          .setScale(1 / zoom)
+          .setPosition(d.x * p + (partner ? (d.id ? 100 : -100) / zoom : 0), d.y * p - 85 / zoom);
         const bounds = speech.getBounds(),
           sg = this.speechGraphics;
         sg.fillStyle(0xfff8e6, 0.96);

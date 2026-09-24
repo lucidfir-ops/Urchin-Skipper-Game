@@ -24,6 +24,8 @@ export function createDiver(id) {
     direction: 0,
     minQuality: 0,
     searchLimit: 70,
+    maxBagSeconds: 0,
+    bagWorkSeconds: 0,
     diveCount: 0,
     patch: null,
     target: null,

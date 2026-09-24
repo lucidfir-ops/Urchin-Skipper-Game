@@ -33,12 +33,13 @@ export function renderOrders(world, bind) {
       Math.round(d.angle * 10),
       d.quality,
       d.searchLimit,
+      d.maxBagSeconds,
       d.diverId,
       this.input.lastDevice,
     ]);
   if (signature === this.signature) return;
   this.signature = signature;
-  this.panel.innerHTML = `<h2>DIVER ${d.diverId + 1} · SEARCH ORDERS</h2><div class="orders-layout"><div class="compass">${compassMarkup(d)}</div><div class="orders-help"><p>Point the left stick, or use arrow keys.<br>Centre the stick for no preference.</p><p>Minimum quality <strong>${d.quality ? Math.round(d.quality * 100) + '%' : 'Any'}</strong><br>${this.qualityControls.map(bind).join(' / ')} changes quality.</p><p>Hold ${bind('instructions')}, point, then release to apply.<br>Or tap to open and press ${bind('confirm')} to apply.</p><div class="order-quality"><button data-order="quality-less">Quality −</button><button data-order="quality-more">Quality +</button></div><button data-order="search">${bind('zoomIn')} / ${bind('zoomOut')} · Search: ${d.searchLimit ? d.searchLimit + ' seconds' : 'until air reserve'}</button><p>No preference chooses a new, gently varying heading each dive. The limit counts searching, not picking.</p><button data-order="apply">${bind('confirm')} · Apply orders</button><button data-order="clear">${bind('work')} · No preference</button><button data-order="cancel">${bind('back')} · Cancel</button></div></div>`;
+  this.panel.innerHTML = `<h2>DIVER ${d.diverId + 1} · SEARCH ORDERS</h2><div class="orders-layout"><div class="compass">${compassMarkup(d)}</div><div class="orders-help"><p>Point the left stick, or use arrow keys.<br>Centre the stick for no preference.</p><p>Minimum quality <strong>${d.quality ? Math.round(d.quality * 100) + '%' : 'Any'}</strong><br>${this.qualityControls.map(bind).join(' / ')} changes quality.</p><p>Hold ${bind('instructions')}, point, then release to apply.<br>Or tap to open and press ${bind('confirm')} to apply.</p><div class="order-quality"><button data-order="quality-less">Quality −</button><button data-order="quality-more">Quality +</button></div><button data-order="search">${bind('zoomIn')} · Search: ${d.searchLimit ? d.searchLimit + ' seconds' : 'until air reserve'}</button><button data-order="bag">${bind('zoomOut')} · Maximum bag time: ${d.maxBagSeconds ? d.maxBagSeconds + ' seconds' : 'Any speed'}</button><p>Bag time starts when picking begins. Slow picking brings up a partial bag and a report.</p><p>No preference chooses a new, gently varying heading each dive. The limit counts searching, not picking.</p><button data-order="apply">${bind('confirm')} · Apply orders</button><button data-order="clear">${bind('work')} · No preference</button><button data-order="cancel">${bind('back')} · Cancel</button></div></div>`;
   for (const [id, delta] of [
     ['quality-less', -1],
     ['quality-more', 1],
@@ -47,6 +48,10 @@ export function renderOrders(world, bind) {
       d.changeQuality(delta);
       this.signature = null;
     };
+  this.panel.querySelector('[data-order=bag]').onclick = () => {
+    d.changeBagLimit();
+    this.signature = null;
+  };
   this.panel.querySelector('[data-order=search]').onclick = () => {
     d.changeSearchLimit();
     this.signature = null;
@@ -154,7 +159,7 @@ export function render(world) {
     if (i.naming)
       info = `${i.naming.waitRelease ? 'Release every button, then press' : 'Press'} physical ${(i.naming.recoveryOnly ? ['X', 'Y'] : ['A', 'B', 'X', 'Y'])[i.naming.index]} · ${Math.ceil(i.naming.remaining)}s · Escape cancels. ${i.naming.recoveryOnly ? 'X will handle bags / send down; Y will board.' : 'Gameplay bindings will stay unchanged.'}`;
     if (this.screen === 'help')
-      info = `Sticks adjust persistent throttle and rudder. Release holds the command. Bring the orange float to PORT and match its drift (below ${(C.recovery.maxRelativeSpeed * C.knotsPerMps).toFixed(1)} kn relative to the float). ${bind('recoverDiver')} deploys from deck or boards diver + bag. ${bind('work')} recovers a bag; the diver then waits. Press ${bind('work')} again for a fresh descent. ${bind('recall')} recalls underwater bubbles within 5 m after a 2–5 second response and clang. Keep clear of the hull: striking a surfaced diver can injure or kill them. ${bind('cycleDiver')} selects the other diver. ${bind('instructions')} opens compass orders. Both divers need to be aboard before travel. Drive across the marked harbour-facing sector boundary to return. The chart shows when to leave for the ${formatClock(C.day.deadlineMinute)} offload. Bag work and boarding choose the nearest eligible port-side float. All Off hides optional telemetry. Bubbles are the only underwater representation. Menus pause the game.${!world.career || world.career.sandbox ? ' Developer reveal is available separately through test settings.' : ''}`;
+      info = `Sticks adjust persistent throttle and rudder. Release holds the command. Bring the orange float to PORT and match its drift (below ${(C.recovery.maxRelativeSpeed * C.knotsPerMps).toFixed(1)} kn relative to the float). ${bind('recoverDiver')} deploys from deck or boards diver + bag. ${bind('work')} takes and replaces one diver’s bag with one press. They return to work if ready, or explain the refusal in a bubble. ${bind('recall')} recalls underwater bubbles within 5 m after a 2–5 second response and clang. Keep clear of the hull: striking a surfaced diver can injure or kill them. ${bind('cycleDiver')} selects the other diver for deployment and orders; nearby pickup is automatic. ${bind('instructions')} opens compass orders. Both divers need to be aboard before travel. Drive across the marked harbour-facing sector boundary to return. The chart shows when to leave for the ${formatClock(C.day.deadlineMinute)} offload. Bag work and boarding choose the nearest eligible port-side float. All Off hides optional telemetry. Bubbles are the only underwater representation. Menus pause the game.${!world.career || world.career.sandbox ? ' Developer reveal is available separately through test settings.' : ''}`;
     if (this.screen === 'radio')
       info =
         (world.career?.radioLog || this.radioLog || [])

@@ -227,11 +227,11 @@ try {
   console.log('Controller: test X bag turnaround');
   await action('work');
   await page.waitForFunction(() => urchinDebug.world.catch === 400);
-  assert.equal(await page.evaluate(() => urchinDebug.world.diver.state), 'surface');
-  await page.waitForFunction(() =>
-    document.querySelector('#help').textContent.includes('Send diver down'),
+  assert(
+    ['deploying', 'searching', 'harvesting'].includes(
+      await page.evaluate(() => urchinDebug.world.diver.state),
+    ),
   );
-  await action('work');
   await page.waitForFunction(() =>
     ['searching', 'harvesting'].includes(urchinDebug.world.diver.state),
   );

@@ -210,7 +210,7 @@ test('axis binding works, gameplay conflicts rejected, cross-context shared inpu
   p.buttons[3].value = 1;
   input.poll();
   assert(input.capture);
-  assert.match(input.notice, /already controls Recover Bag/);
+  assert.match(input.notice, /already controls Take \+ give bag/);
   p.buttons[3].value = 0;
   input.poll();
   p.buttons[0].value = 1;

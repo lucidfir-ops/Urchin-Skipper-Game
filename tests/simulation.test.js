@@ -285,7 +285,7 @@ test('recovery requires port sector, range and low water speed; capacity never b
   w.catch = C.boat.capacity - 10;
   assert(recoveryStatus(w).available, 'capacity must not prevent diver recovery');
 });
-test('X bag work is a three-second bag turnaround: catch transfers once, explicit redive retains air', () => {
+test('X bag work is a three-second bag turnaround: catch transfers once, automatic redive retains air', () => {
   const w = surfaceWorld(),
     d = w.diver;
   Object.assign(d, {
@@ -304,10 +304,9 @@ test('X bag work is a three-second bag turnaround: catch transfers once, explici
   tick(w, 0.1);
   assert.equal(w.catch, 300);
   assert.equal(w.bags.length, 1);
-  assert.equal(d.state, 'surface');
+  assert.equal(d.state, 'deploying');
   assert.equal(d.air, 40);
   assert.equal(d.bag, 0);
-  step(w, { work: true }, frame);
   assert.equal(d.state, 'deploying');
   assert(diverVisual(d).bubbles);
   until(w, () => d.state === 'harvesting');
@@ -406,7 +405,7 @@ test('action prompts only advertise valid context-dependent actions and obey ext
   const w = surfaceWorld();
   assert.deepEqual(
     playState(w).actions.map((a) => a.text),
-    ['Recover Bag · diver waits', 'Recover Diver + Bag'],
+    ['Take + give bag · return to work', 'Recover Diver + Bag'],
   );
   w.diver.x = w.boat.x + 4;
   assert.deepEqual(playState(w).actions, []);

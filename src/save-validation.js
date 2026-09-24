@@ -230,6 +230,11 @@ export function validateSnapshot(data) {
   }
   for (const d of data.divers) {
     assert(
+      d.maxBagSeconds === undefined || [0, 20, 30, 45, 60, 90].includes(d.maxBagSeconds),
+      'diver bag time order',
+    );
+    assert(d.bagWorkSeconds === undefined || finite(d.bagWorkSeconds, 0), 'diver bag clock');
+    assert(
       [
         'ready',
         'deploying',

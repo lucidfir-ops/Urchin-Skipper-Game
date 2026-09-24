@@ -29,6 +29,8 @@ async function ready() {
   }
 }
 const suites = {
+  'crew-coasts': ['--crew-coasts-only'],
+  'crew-coasts-firefox': ['--crew-coasts-only'],
   'working-day': ['--working-day-only'],
   'working-day-firefox': ['--working-day-only'],
   'audio-baseline': ['--audio-baseline-only'],

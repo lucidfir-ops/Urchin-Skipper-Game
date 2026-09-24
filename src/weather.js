@@ -2,6 +2,7 @@ import { C } from './config.js';
 import { enabledEquipment } from './equipment-controls.js';
 import { roll, rankOf } from './career-data.js';
 import { coastTier } from './coasts.js';
+import { localWind, regionalLimits } from './regional-conditions.js';
 export const WEATHER = {
   calm: { name: 'Light Winds', wind: 3, wave: 0.12, visibility: 500, rain: 0, lightning: 0 },
   // Precipitation is not a proxy for wind: steady coastal rain can arrive in calm air.
@@ -57,15 +58,20 @@ export function conditionsAt(w, minute = w.day.minute, id = w.day.groundId) {
     tier = coastTier(id),
     windFactor = 1 + tier * 0.32,
     rain = blend('rain'),
-    wave =
+    wave = Math.min(
+      regionalLimits(id).wave * (0.55 + 0.45 * surfaceExposure),
       (0.04 + surfaceExposure * 0.08 + blend('wave') * surfaceExposure ** 2) * (1 + tier * 0.25) +
-      tier * 0.12,
+        tier * 0.12,
+    ),
     sunArc = Math.max(0, Math.sin(((localMinute - 360) / 810) * Math.PI)),
     sunlight = sunArc * Math.max(0.08, 1 - rain * 0.58 - (segment.kind === 'fog' ? 0.72 : 0));
   return {
     kind: segment.kind,
-    name: b.name,
-    wind: blend('wind') * (0.55 + 0.45 * exposure) * windFactor,
+    name:
+      tier === 0 && ['storm', 'squall'].includes(segment.kind)
+        ? 'Sheltered ' + (segment.kind === 'storm' ? 'storm' : 'squall')
+        : b.name,
+    wind: localWind(blend('wind') * windFactor, id) * (0.55 + 0.45 * exposure),
     exposure,
     bearing: segment.bearing + tier * 14 * Math.sin(minute / 19),
     wave,
@@ -83,10 +89,11 @@ export function updateWeather(w) {
   const c = conditionsAt(w);
   w.weather = c;
   const radians = (c.bearing * Math.PI) / 180,
-    gust = 1 + Math.sin(w.time * 0.71) * (0.12 + coastTier(w.day.groundId) * 0.08);
+    gust = 1 + Math.sin(w.time * 0.71) * (0.12 + coastTier(w.day.groundId) * 0.08),
+    wind = localWind(c.wind, w.day.groundId, gust);
   w.environment.wind = {
-    x: ((Math.sin(radians) * c.wind) / C.knotsPerMps) * gust,
-    y: ((-Math.cos(radians) * c.wind) / C.knotsPerMps) * gust,
+    x: (Math.sin(radians) * wind) / C.knotsPerMps,
+    y: (-Math.cos(radians) * wind) / C.knotsPerMps,
   };
   w.environment.waves = c.wave * 0.045;
   if (w.day.phase === 'working' && w.day.lastWeather !== c.kind) {
@@ -95,7 +102,7 @@ export function updateWeather(w) {
     w.day.lastWeather = c.kind;
   }
 }
-export function weatherOutlook(w, offset = 0) {
+export function weatherOutlook(w, offset = 0, id = w.day.groundId) {
   const c = w.career,
     gear = enabledEquipment(w),
     confidence = Math.max(25, (gear.includes('forecast') ? 85 : 60 + rankOf(c) * 5) - offset * 6);
@@ -114,14 +121,17 @@ export function weatherOutlook(w, offset = 0) {
     periods: plan.map((p, i) => ({
       minute: i ? Math.round((p.minute + error) / 30) * 30 : 0,
       name: WEATHER[p.kind].name,
-      wind: Math.round((WEATHER[p.kind].wind * (1 + coastTier(w.day.groundId) * 0.32)) / 5) * 5,
+      wind: Math.round(
+        localWind(WEATHER[p.kind].wind * (1 + coastTier(id) * 0.32), id) *
+          (id === 'near' ? 0.811 : id === 'middle' ? 0.919 : 1),
+      ),
       visibility: WEATHER[p.kind].visibility < 60 ? 'Poor visibility' : 'Visibility variable',
     })),
   };
 }
-export function sevenDayForecast(w) {
+export function sevenDayForecast(w, id = w.day.groundId) {
   return Array.from({ length: 7 }, (_, offset) => ({
     day: w.career.day + offset,
-    ...weatherOutlook(w, offset),
+    ...weatherOutlook(w, offset, id),
   }));
 }

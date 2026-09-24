@@ -1,6 +1,7 @@
 import { wildlifeWorkRate } from './wildlife.js';
 import { stepDeckWork } from './deck-work.js';
-import { surfaceMoment } from './crew-moments.js';
+import { surfaceMoment, refusalMoment } from './crew-moments.js';
+import { observeGround } from './diver-observations.js';
 import { releaseRunoff } from './runoff.js';
 import { scoutHeading } from './diver-search.js';
 import { swimToPickupWater } from './diver-escape.js';
@@ -38,7 +39,7 @@ import { checkDiverSafety } from './diver-safety.js';
 import { chooseHarvestClump, clumpDistance, takeCatch } from './harvest-ground.js';
 import { stepLogs } from './hazards.js';
 import { stepRocks } from './rock-collision.js';
-import { C, QUALITIES } from './config.js';
+import { C, QUALITIES, BAG_LIMITS } from './config.js';
 import {
   depthAt,
   visiblePatch,
@@ -61,21 +62,24 @@ export function announce(w, text, d = null) {
 function effect(w, type, d, extra = {}) {
   w.effects.push({ type, diverId: d?.id, x: d?.x ?? w.boat.x, y: d?.y ?? w.boat.y, ...extra });
 }
-export function setInstructions(w, id, { direction, minQuality, searchLimit }) {
+export function setInstructions(w, id, { direction, minQuality, searchLimit, maxBagSeconds }) {
   const d = w.divers.find((item) => item.id === id);
   searchLimit ??= d?.searchLimit ?? 70;
+  maxBagSeconds ??= d?.maxBagSeconds ?? 0;
   if (
     !d ||
     !Number.isInteger(direction) ||
     direction < 0 ||
     direction > 8 ||
     !QUALITIES.includes(minQuality) ||
-    ![0, 10, 15, 20, 30, 60, 70].includes(searchLimit)
+    ![0, 10, 15, 20, 30, 60, 70].includes(searchLimit) ||
+    !BAG_LIMITS.includes(maxBagSeconds)
   )
     return false;
   d.direction = direction;
   d.minQuality = minQuality;
   d.searchLimit = searchLimit;
+  d.maxBagSeconds = maxBagSeconds;
   d.ordersSet = true;
   rememberCrewOrders(w);
   return true;
@@ -84,6 +88,7 @@ function surface(w, d, reason) {
   d.lastDiveDepth = Math.max(0, depthAt(w, d.x, d.y));
   if (d.patch) d.lastPatchRate = d.patch.rate;
   if (d.bag >= C.diver.bagSize - 0.01) d.lastFullBagSeconds = d.diveTime;
+  d.lastBagSeconds = d.bag > 0 ? ((d.bagWorkSeconds || 0) * C.diver.bagSize) / d.bag : 0;
   d.recallAt = null;
   d.state = 'surfacing';
   d.timer = C.diver.warningSeconds;
@@ -92,6 +97,7 @@ function surface(w, d, reason) {
   effect(w, 'warning', d);
 }
 function search(w, d, dt) {
+  observeGround(w, d);
   let p = d.localSearch ? d.patch : visiblePatch(w, d);
   if (d.localSearch) {
     if (!worthwhile(p, d)) {
@@ -185,6 +191,8 @@ function sendDown(w, d) {
     scoutDepthSign: 0,
     scoutTurnUntil: 0,
     harvestTime: 0,
+    bagWorkSeconds: 0,
+    groundSample: null,
     harvestMinute: null,
     localSearch: null,
     bagHandled: false,
@@ -256,11 +264,14 @@ function finishRecovery(w, d) {
     );
     return;
   }
-  // Bag handling leaves the diver alongside. A separate X sends them down;
-  // Y always remains available to bring them aboard instead.
   d.state = 'surface';
-  d.reason = rediveStatus(w, d).reason || 'Fresh bag ready';
-  announce(w, 'BAG ABOARD — DIVER WAITING: SEND DOWN AGAIN OR BRING ABOARD', d);
+  const next = rediveStatus(w, d);
+  if (next.available) sendDown(w, d);
+  else {
+    d.reason = next.reason;
+    refusalMoment(w, d, next.reason);
+    announce(w, `BAG ABOARD — ${next.reason}`, d);
+  }
 }
 function stepDiver(w, d, a, dt, tolerance) {
   if (
@@ -274,8 +285,10 @@ function stepDiver(w, d, a, dt, tolerance) {
     deploy = a.recoverDiver && d.state === 'ready';
   if (deploy) {
     const r = deploymentStatus(w, d);
-    if (!r.available) announce(w, `DEPLOY REJECTED — ${r.reason}`, d);
-    else {
+    if (!r.available) {
+      announce(w, `DEPLOY REJECTED — ${r.reason}`, d);
+      refusalMoment(w, d, r.reason);
+    } else {
       if (w.career)
         Object.assign(d, {
           undersizeCount: null,
@@ -286,6 +299,8 @@ function stepDiver(w, d, a, dt, tolerance) {
         timer: C.diver.deploySeconds + (gear(w, 'nitrox') ? 1 : 0),
         x: r.x,
         y: r.y,
+        dropX: r.x,
+        dropY: r.y,
         bag: 0,
         qualitySum: 0,
         air: diverSpec(d).tankAir || C.diver.air,
@@ -298,6 +313,9 @@ function stepDiver(w, d, a, dt, tolerance) {
         scoutDepthSign: 0,
         scoutTurnUntil: 0,
         harvestTime: 0,
+        bagWorkSeconds: 0,
+        lastBagSeconds: 0,
+        groundSample: null,
         harvestMinute: null,
         hook: 0,
         hooking: false,
@@ -338,6 +356,7 @@ function stepDiver(w, d, a, dt, tolerance) {
       else surface(w, d, 'Ground below quality instruction');
     } else {
       const p = d.patch;
+      observeGround(w, d);
       if (
         p.clumps &&
         (!d.clump || d.clump.remaining <= 0.001 || (d.clump.quality ?? p.quality) < d.minQuality)
@@ -394,13 +413,16 @@ function stepDiver(w, d, a, dt, tolerance) {
         recordFishingPressure(w.career, w.day.groundId, w.day.subAreaId, 'player', amount);
       if (amount > 0 && d.harvestMinute == null) d.harvestMinute = w.day.minute;
       d.harvestTime += amount / p.rate;
+      d.bagWorkSeconds = (d.bagWorkSeconds || 0) + dt;
       if (w.career && amount > 0) rollBagUndersize(w, d);
       d.bag += amount;
       d.qualitySum += amount * (d.clump?.quality ?? p.quality);
       if (d.bag >= C.diver.bagSize - 1e-8) {
         d.bag = C.diver.bagSize;
         surface(w, d, 'Bag full');
-      } else if (p.remaining <= 0.001 || d.clump?.remaining <= 0.001) searchLocally(w, d);
+      } else if (d.maxBagSeconds && d.bagWorkSeconds >= d.maxBagSeconds)
+        surface(w, d, 'Picking slower than bag time order');
+      else if (p.remaining <= 0.001 || d.clump?.remaining <= 0.001) searchLocally(w, d);
     }
   } else if (d.state === 'surfacing') {
     driftSurface(w, d, dt);
@@ -413,6 +435,10 @@ function stepDiver(w, d, a, dt, tolerance) {
     }
   }
   if (d.state === 'surface') {
+    if (d.speech?.pending && Math.hypot(d.x - b.x, d.y - b.y) < 28) {
+      d.speech.pending = false;
+      d.speech.until = w.time + 12;
+    }
     applyDiveInjury(w, d);
     driftSurface(w, d, dt);
     swimToPickupWater(w, d, dt);
@@ -424,6 +450,7 @@ function stepDiver(w, d, a, dt, tolerance) {
         return;
       }
       announce(w, `DIVE REJECTED — ${r.reason || next.reason}`, d);
+      refusalMoment(w, d, r.reason || next.reason);
       return;
     }
     const requested = a.recoverDiver ? 'recoverDiver' : a.work && !deploy ? 'recoverBag' : null;
@@ -434,9 +461,10 @@ function stepDiver(w, d, a, dt, tolerance) {
         d.hooking = false;
         d.recoveryPause = 'PLAYER PAUSED';
         announce(w, 'RECOVERY PAUSED — PLAYER PAUSED', d);
-      } else if (!r.available || (requested === 'recoverBag' && d.bagHandled))
+      } else if (!r.available || (requested === 'recoverBag' && d.bagHandled)) {
         announce(w, `RECOVERY REJECTED — ${r.reason || 'BAG ALREADY ABOARD'}`, d);
-      else {
+        refusalMoment(w, d, r.reason || 'BAG ALREADY ABOARD');
+      } else {
         d.recoveryAction = requested;
         d.hooking = true;
         d.recoveryPause = '';
@@ -487,7 +515,13 @@ export function step(w, a, dt, { tolerance = C.recovery.tolerance } = {}) {
     dt,
   );
   updateFuelWarnings(w);
-  if (w.boat.grounded && !wasGrounded) effect(w, 'ground');
+  if (w.boat.grounded && !wasGrounded) {
+    effect(w, 'ground');
+    announce(
+      w,
+      'GROUNDED — REVERSE TOWARD DEEPER WATER; IF STRANDED, WAIT AT SEA FOR THE TIDE OR RADIO FOR A PAID TOW',
+    );
+  }
   stepRocks(w, previous);
   if (beginDeparture(w)) return;
   releaseRunoff(w);

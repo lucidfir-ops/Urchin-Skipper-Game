@@ -65,7 +65,7 @@ export async function feedbackChecks(browser) {
       });
     });
     await page.waitForFunction(() =>
-      document.querySelector('#help').textContent.includes('Recover Bag'),
+      document.querySelector('#help').textContent.includes('Take + give bag'),
     );
   }
   try {
@@ -223,11 +223,14 @@ export async function feedbackChecks(browser) {
     );
     await calm();
     await float();
+    await page.evaluate(() => {
+      urchinDebug.world.diver.air = 20;
+    });
     await action('work');
     await page.waitForFunction(() => urchinDebug.world.diver.bagHandled);
     await page.waitForTimeout(1000);
     assert.equal(await page.evaluate(() => urchinDebug.world.diver.state), 'surface');
-    assert.match(await page.locator('#help').textContent(), /X — Fresh bag.*Y — Board Diver/s);
+    assert.match(await page.locator('#help').textContent(), /X — Offer bag.*Y — Board Diver/s);
     await page.screenshot({ path: 'test-results/feedback-bag-choice.png' });
     await action('recoverDiver');
     await page.waitForFunction(() => urchinDebug.world.diver.state === 'ready');

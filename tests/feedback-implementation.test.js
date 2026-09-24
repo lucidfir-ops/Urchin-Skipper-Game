@@ -135,21 +135,24 @@ test('new fixed tanks and Workhorse retrofit preserve hull capacity; legacy tank
   assert.equal(w.career.soldVessels.length, 1);
   assert(!w.career.fleet.twinjet);
 });
-test('nominal bags take 45 s; ordinary work builds fatigue over a week and full rest helps', () => {
+test('nominal bags take 45 s; ordinary work recovers overnight and full rest clears an exhausted carryover', () => {
   let w = careerWorld();
   assert.equal(30 / diverSpec(w.diver).harvestRate, 45);
   for (let day = 0; day < 5; day++) {
     w.weather = { night: false };
-    workCrew(w, w.diver, 600);
+    for (let second = 0; second < 600; second++) workCrew(w, w.diver, 1);
+    assert(w.diver.fatigue > 0.5);
     w.career.people.ada.fatigue = w.diver.fatigue;
     w.day.phase = 'complete';
     w = nextCareerDay(w);
-    if (day === 1) assert(w.diver.fatigue > 0.3);
+    assert.equal(w.diver.fatigue, 0);
   }
-  assert(w.diver.fatigue > 0.75 && w.diver.fatigue <= 1);
-  const tired = w.diver.fatigue;
+  w.career.people.ada.fatigue = 1;
+  w.day.phase = 'complete';
   w = nextCareerDay(w);
-  assert(w.diver.fatigue < tired - 0.2 && w.diver.fatigue > tired - 0.3);
+  assert(w.diver.fatigue > 0.3);
+  w = nextCareerDay(w);
+  assert.equal(w.diver.fatigue, 0);
 });
 test('harbour rest and dock-work choices advance a day with the intended operation', () => {
   const w = careerWorld();

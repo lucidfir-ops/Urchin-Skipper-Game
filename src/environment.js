@@ -1,5 +1,6 @@
 import { C } from './config.js';
 import { clamp, depthAt, sampleGridChannels } from './terrain.js';
+import { regionalLimits } from './regional-conditions.js';
 
 const TAU = Math.PI * 2;
 const channels = new Float64Array(7);
@@ -86,10 +87,15 @@ export function currentAt(w, x, y) {
     vy *= shelter;
   }
   const speed = Math.hypot(vx, vy),
-    limit = C.environment.maxCurrent;
-  if (speed > limit) {
-    vx *= limit / speed;
-    vy *= limit / speed;
-  }
+    // Habitat authoring calls this provider without a live sector ID. Preserve
+    // its original deterministic field so existing beds/IDs never relocate.
+    limit = w.day?.groundId ? regionalLimits(w.day.groundId).current : C.environment.maxCurrent,
+    scale =
+      (limit / C.environment.maxCurrent) *
+      Math.min(1, C.environment.maxCurrent / Math.max(1e-9, speed));
+  // Scale the entire authored field, preserving channels, eddies and slack
+  // instead of flattening every faster patch to the starter maximum.
+  vx *= scale;
+  vy *= scale;
   return { x: vx, y: vy };
 }
