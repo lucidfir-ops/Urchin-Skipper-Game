@@ -14,5 +14,5 @@ export function diverTelemetry(w, d) {
       : d.state === 'surface' && d.bagHandled
         ? rediveStatus(w, d).reason
         : d.reason;
-  return `Air ${Math.round((d.air / tank) * 100)}% · Bag ${Math.round(d.bag)} / 300 lb · Last ${d.lastBag ? Math.round(d.lastBag.weight) + ' lb' : '—'}${why ? ' · ' + why : ''}`;
+  return `Air ${Math.round((d.air / tank) * 100)}% · Bag ${Math.round(d.bag)} / 300 lb · Last ${d.lastBag ? Math.round(d.lastBag.weight) + ' lb / ' + Math.round((d.lastBag.quality || 0) * 100) + '%' : '—'}${why ? ' · ' + why : ''}`;
 }

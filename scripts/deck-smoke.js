@@ -174,11 +174,11 @@ try {
   await action('back');
   await page.waitForFunction(() => urchinDebug.ui.screen === 'pause');
   await action('back');
-  await page.waitForFunction(() => !urchinDebug.ui.started);
-  await action('menuUp');
-  await action('confirm');
+  // Sea Pause Back resumes water under the current menu-history design.
+  await page.waitForFunction(() => urchinDebug.ui.started && !urchinDebug.ui.blocked);
+  await action('pause');
   await page.waitForFunction(() => urchinDebug.ui.screen === 'pause');
-  await choose('Forward');
+  await choose('Controls / Remapping');
   await page.waitForFunction(() => urchinDebug.ui.screen === 'bindings');
   await action('back');
   await choose('Resume');
@@ -288,7 +288,7 @@ try {
   assert.equal(await page.evaluate(() => urchinDebug.world.catch), 0);
   assert.equal(await page.evaluate(() => urchinDebug.world.boat.throttle), 0);
   assert.equal(await page.evaluate(() => urchinDebug.world.boat.rudder), 0);
-  assert.equal(await page.evaluate(() => urchinDebug.visuals.bags.length), 0);
+  await page.waitForFunction(() => urchinDebug.ready && urchinDebug.visuals.bags.length === 0);
   // Held stick on resume is visibly gated until released, then fresh motion works.
   await action('pause');
   await axes({ 1: -1 });

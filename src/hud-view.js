@@ -10,7 +10,7 @@ import { fuelGauge, diverTelemetry } from './feedback-hud.js';
 import { fuelStatus } from './preparation.js';
 
 import { assist, gear, pickupTolerance } from './assists.js';
-import { instrumentReadings } from './knowledge.js';
+import { instrumentReadings, markBearing } from './knowledge.js';
 import { soundingDepth } from './hazard-depth.js';
 
 import { C } from './config.js';
@@ -158,9 +158,12 @@ export function renderHud(scene, world, input, lockReason) {
   navigation.hidden = !working || !assist(world, 'departureGuidance', ui.realistic);
   if (working && !navigation.hidden) {
     const exit = world.day.returnExit;
+    const mark = world.career?.marks.find(
+      (m) => m.id === world.career.navigationMark && m.sector === world.day.groundId,
+    );
     setMarkup(
       navigation,
-      `<span style="transform:rotate(${exit.bearing}deg)">↑</span><div>HARBOUR EXIT · ${exit.label}<small>${Math.round(exitDistance(world))} m to boundary · ${passageMinutes(world, ground)} min home${allAboard(world) ? '' : ' · recover both divers'}</small></div>`,
+      `<span style="transform:rotate(${exit.bearing}deg)">↑</span><div>HARBOUR EXIT · ${exit.label}<small>${Math.round(exitDistance(world))} m to boundary · ${passageMinutes(world, ground)} min home${allAboard(world) ? '' : ' · recover both divers'}</small>${mark ? `<small>★ ${mark.label} · ${markBearing(world, mark)}</small>` : ''}</div>`,
     );
   }
   let tideButton = document.querySelector('#openAlmanac');

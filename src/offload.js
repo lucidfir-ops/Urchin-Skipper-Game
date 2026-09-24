@@ -60,10 +60,14 @@ export function calculateOffload(w, arrival) {
       );
     const demand = w.career?.buyerToday,
       qualifies = demand && demand.day === w.career.day && landedQuality >= demand.minQuality,
-      price = basePrice * (qualifies ? 1 + demand.premium : 1);
+      accepted = qualifies
+        ? Math.min(payable, Math.max(0, (demand.target ?? Infinity) - buyerAccepted))
+        : 0,
+      premium = accepted * basePrice * (demand?.premium || 0),
+      price = basePrice + (payable ? premium / payable : 0);
     if (qualifies) {
-      buyerPremium += payable * (price - basePrice);
-      buyerAccepted += payable;
+      buyerPremium += premium;
+      buyerAccepted += accepted;
     }
     if (bag.crewId) catchValues[bag.crewId] = (catchValues[bag.crewId] || 0) + payable * price;
     sourceQuality += weight * quality;

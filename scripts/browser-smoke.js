@@ -1,4 +1,5 @@
 import { september21Checks } from './september21-checks.js';
+import { workingDayChecks } from './working-day-checks.js';
 import { september23Checks } from './september23-checks.js';
 import { audioSchedulingChecks } from './audio-scheduling-checks.js';
 import { september22Checks, september22Performance } from './september22-checks.js';
@@ -48,7 +49,9 @@ const launchOptions = {
 };
 let browser = await browserType.launch(launchOptions);
 try {
-  if (process.argv.includes('--audio-baseline-only')) await audioSchedulingChecks(browser, true);
+  if (process.argv.includes('--working-day-only')) await workingDayChecks(browser);
+  else if (process.argv.includes('--audio-baseline-only'))
+    await audioSchedulingChecks(browser, true);
   else if (process.argv.includes('--audio-scheduling-only')) await audioSchedulingChecks(browser);
   else if (process.argv.includes('--september23-only')) await september23Checks(browser);
   else if (process.argv.includes('--september22-only')) await september22Checks(browser);

@@ -1,4 +1,5 @@
 import { areaStatus } from './season.js';
+import { gear } from './assists.js';
 import { advanceFleet, fleetResults } from './fleet-life.js';
 import { prepareInspection, inspectAtHarbour } from './fishery.js';
 import { conditionsAt } from './weather.js';
@@ -64,7 +65,7 @@ export function groundTrip(w, id) {
     w.career &&
     w.day.phase === 'planning' &&
     (w.day.minute + minutes) % 1440 >= 1170 &&
-    !w.career.fleet[w.boat.configuration].equipment.includes('torch');
+    !gear(w, 'torch');
   const disabled =
     (w.boat.driveHealth ?? 1) <= 0 ||
     w.boat.fuel < fuelNeed ||
@@ -125,8 +126,9 @@ export function chooseGround(w, id, { patchId = 'good', arrivalLane = 0, subArea
 }
 export function returnStatus(w) {
   const ground = selectedGround(w);
-  const reason =
-    w.day.phase !== 'working'
+  const reason = w.day.dump
+    ? 'FINISH DUMPING THE BAG BEFORE RETURNING'
+    : w.day.phase !== 'working'
       ? 'CHOOSE A FISHING GROUND FIRST'
       : !allAboard(w)
         ? 'BRING BOTH DIVERS ABOARD FIRST'
@@ -277,6 +279,7 @@ export function requestRescue(w) {
   if (w.career) result.rivals = fleetResults(w, arrival);
   settleCareer(w, result);
   Object.assign(w.day, { minute: arrival, phase: 'complete', offloaded: result.gross, result });
+  delete w.day.dump;
   w.catch = 0;
   w.bags = [];
   Object.assign(w.boat, { throttle: 0, rudder: 0, thruster: 0, vx: 0, vy: 0, turn: 0 });

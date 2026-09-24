@@ -57,6 +57,8 @@ export function choices(world) {
             'Arrange UI layout',
             'UI / difficulty options',
             'Touchscreen Options',
+            'Deck catch',
+            'Equipment switches',
             ...(world.career.sandbox ? ['Test conditions'] : []),
             ...(rescueStatus(world).available ? ['Radio for rescue / end fishing'] : []),
             ...(world.day.inspection
@@ -245,7 +247,9 @@ export function activate(world) {
     else if (choice === 'Coastal Chart') this.open('chart');
     else this.back();
   } else if (this.screen === 'pause') {
-    if (choice === 'Debug mode') this.open('debug-mode');
+    if (choice === 'Deck catch') this.open('deck-catch');
+    else if (choice === 'Equipment switches') this.open('equipment-controls');
+    else if (choice === 'Debug mode') this.open('debug-mode');
     else if (choice === 'Arrange UI layout') this.open('layout');
     else if (choice === 'Skipper Stuff') this.open('skipper-stuff');
     else if (choice === 'Return to Title Screen') this.showTitle();

@@ -8,6 +8,7 @@ import { boatSpec, boatDefinition } from './boats.js';
 import { canCrossReturnBoundary, canExitSector } from './navigation.js';
 import { ECONOMY } from './career-data.js';
 import { windLoads } from './wind-motion.js';
+import { waterLoads } from './water-loads.js';
 let Matter;
 const bodies = new WeakMap();
 export function configureBoatPhysics(matter) {
@@ -91,6 +92,16 @@ export function stepBoat(w, a, dt) {
     x: (body.mass * (along * s + across * co)) / 1e6,
     y: (body.mass * (-along * co + across * s)) / 1e6,
   });
+  const passive = 1 - Math.min(1, Math.abs(b.throttle) * 4);
+  for (const load of waterLoads(spec, forward, lateral, body.angularVelocity * 60, b.rudder))
+    Body.applyForce(
+      body,
+      { x: body.position.x + s * load.fore, y: body.position.y - co * load.fore },
+      {
+        x: (body.mass * load.side * co * passive) / 1e6,
+        y: (body.mass * load.side * s * passive) / 1e6,
+      },
+    );
   // Cabin wind load acts forward of the centre of mass, matching the visible wheelhouse.
   for (const load of windLoads(w.environment.wind, spec, !!w.career))
     Body.applyForce(
@@ -115,9 +126,12 @@ export function stepBoat(w, a, dt) {
       { x: (body.mass * thruster * co) / 1e6, y: (body.mass * thruster * s) / 1e6 },
     );
   const authority = spec.vectorDrive
-    ? Math.min(1, (powered ? Math.abs(b.throttle) * 1.9 : 0) + 0.12 * Math.abs(forward)) *
+    ? Math.min(1, powered ? Math.abs(b.throttle) * 1.9 : 0) *
       (1 - 0.38 * smooth(0.55, 1, Math.abs(forward) / spec.maxSpeed))
-    : Math.max(rudderAuthority(forward), w.career && powered ? Math.max(0, b.throttle) * 0.24 : 0);
+    : Math.max(
+        rudderAuthority(forward) * Math.min(1, Math.abs(b.throttle) * 4),
+        w.career && powered ? Math.max(0, b.throttle) * 0.24 : 0,
+      );
   const turnSign = spec.vectorDrive
     ? Math.sign((powered ? b.throttle : 0) || forward)
     : Math.sign(forward);
@@ -138,7 +152,11 @@ export function stepBoat(w, a, dt) {
     (powered && b.throttle < 0 ? spec.reversePropWalk * -b.throttle : 0) +
     (Math.sin(w.time * 1.3) * w.environment.waves) / spec.waveTolerance;
   body.torque +=
-    (body.inertia * (targetTurn - body.angularVelocity * 60) * spec.turnResponse) / 1e6;
+    (body.inertia *
+      (targetTurn - body.angularVelocity * 60) *
+      spec.turnResponse *
+      (Math.abs(b.throttle) > 0.05 || b.pivotGesture || !w.career ? 1 : 0.35)) /
+    1e6;
   if (w.career?.difficulty === 'easy' && b.grounded && b.throttle < -0.05 && powered) {
     const reverse = spec.groundedReverseSpeed;
     const testDepth = hullDepth(w, b.x - s * reverse * dt, b.y + co * reverse * dt, b.heading);

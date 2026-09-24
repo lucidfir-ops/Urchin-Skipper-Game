@@ -10,8 +10,9 @@ export function crossedReturnBoundary(w) {
   );
 }
 export const canExitSector = (w) =>
-  w.day.phase === 'working' && w.divers.every((d) => d.state === 'ready');
+  !w.day.dump && w.day.phase === 'working' && w.divers.every((d) => d.state === 'ready');
 export const canCrossReturnBoundary = (w) =>
+  !w.day.dump &&
   w.divers.every((d) => d.state === 'ready') &&
   (w.day.phase === 'working' ||
     (w.career?.intro?.status === 'active' && w.career.intro.step === 9));

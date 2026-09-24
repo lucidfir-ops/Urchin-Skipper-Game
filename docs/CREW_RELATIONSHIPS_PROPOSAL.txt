@@ -1,0 +1,74 @@
+URCHIN SKIPPER — CREW BANTER AND RELATIONSHIPS
+23 September 2026 · Writing proposal, requested by the designer
+
+The living Bible remains the authority. Only the small surface-bubble first
+pass below is implemented. The following longer relationship arc is a proposal.
+
+IMPLEMENTED FIRST PASS
+Surfacing produces a short-lived cartoon bubble: a thumbs-up for a useful
+sample, thumbs-down for poor/empty catch, or a pause sign for fatigue/a requested
+surface interval. Authored text has a 65-simulation-second per-person cooldown.
+Opinions use the bag just picked and the diver’s actual state; they reveal no
+hidden nearby ground. A bubble follows a visible surfaced person and disappears
+on descent. Ada, Milo, Nell and Roy have distinct lines; other crew have a small
+neutral set. Save/reload preserves the cooldown.
+
+WHAT MAKES A RELATIONSHIP WORTH REMEMBERING
+The skipper should recognize a person through how they work. Ada remembers a
+useful drift and appreciates orderly recoveries. Milo likes moving quickly but
+can learn when waiting is the right decision. Nell likes good records. Roy’s
+bravado should never imply that his hidden disregard of limits is safe advice.
+Existing biographies govern additional characterization; do not replace them
+with arbitrary new backstories.
+
+Proposed next layer: keep a short, factual shared-history ledger per person.
+Examples: first full bag together; returning before fatigue became severe;
+recovering an injured colleague; a week of steady earnings; being left waiting
+at the surface; revisiting a mark they reported. Let one moment be mentioned
+at the next natural pause, not immediately after every input. Never claim that
+the skipper caused a bad outcome unless the simulation establishes it.
+
+THREE LEVELS OF WRITING
+1. Work signals: a few words or a gesture at the surface. Fast to read, no
+   mandatory dialogue. Catch opinion is provisional, based on one sample.
+2. Familiarity: a name, remembered event or recurring joke during an offload
+   or idle harbour moment. A second diver may answer. Keep exchanges under
+   three short lines and give serious safety calls priority.
+3. Trust: after repeated work together, occasional invitations to discuss the
+   next day, a rest request, or a reason for staying with/leaving a crew. Any
+   consequence should connect to existing wages, fatigue, availability or
+   poaching mechanics, with visible warning before a consequential decision.
+
+Example proposed exchange after a successful return to Ada’s recorded drift:
+Ada: “Same bend in the kelp. Different tide.”
+Milo: “And this time you believed the mark.”
+These are future authored lines, not evidence that such an event happened.
+
+CONTROLS AND PRESENTATION
+Keep surface bubbles above the float without covering the hook cue. Offer
+separate chatter visibility/volume settings before expanding dialogue. Future
+speech should have the same subtitles and interruption rules. A work gesture
+can remain when chatter is hidden. Do not require reading dialogue to steer.
+Retain a few recent exchanges in a separate crew log; radio stays radio-only.
+
+GUARDRAILS FOR A SECOND PASS
+No romance meter, gift currency, alignment score or forced friendship quest.
+Do not award invisible quality radar for liking a diver. Distinct working
+preferences matter more than stat bonuses. Avoid a daily demand to hear every
+line. Limit a substantial exchange to once per day and repeated topics across
+several days; urgent safety communication has no narrative cooldown.
+
+TRY IT WITH PLAYERS
+After three trips, can the player identify two people by their voice and a
+shared event? Do they understand why a request was made? Can they ignore the
+dialogue and still operate safely? Does reload repeat a story or invent one?
+Start with Ada and Milo, then expand only after those checks work.
+
+SEPARATE WEATHER IDEA — NOT IMPLEMENTED
+The designer suggested meaningful bad-weather lay days and possible sinking
+on harbour passages above roughly 40 knots. Before adding a loss roll, make
+the forecast threshold and departure warning explicit, tie risk to exposure,
+hull condition, boat capability and the actual route, and let waiting/resting
+be viable. Decide how a forecast change during a trip offers shelter or a
+credible return choice. Existing wind, sea, visibility, fatigue and transit
+penalties remain active. This update adds no random passage-sinking rule.

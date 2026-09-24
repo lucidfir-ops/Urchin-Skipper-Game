@@ -29,6 +29,8 @@ async function ready() {
   }
 }
 const suites = {
+  'working-day': ['--working-day-only'],
+  'working-day-firefox': ['--working-day-only'],
   'audio-baseline': ['--audio-baseline-only'],
   'audio-scheduling': ['--audio-scheduling-only'],
   'audio-scheduling-firefox': ['--audio-scheduling-only'],

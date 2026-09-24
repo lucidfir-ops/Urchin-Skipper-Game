@@ -1,6 +1,7 @@
 import { rainMotion } from './wind-motion.js';
 import { C } from './config.js';
-import { gear, visibilityRange } from './assists.js';
+import { visibilityRange } from './assists.js';
+import { workLightsOn } from './equipment-controls.js';
 import { lightningState } from './weather-effects.js';
 // A screen veil changes what can be seen; it never changes the sea bed.
 export class WeatherView {
@@ -8,6 +9,28 @@ export class WeatherView {
     this.canvas = document.createElement('canvas');
     this.canvas.id = 'weatherVeil';
     document.querySelector('#game').after(this.canvas);
+    this.lights = document.createElement('canvas');
+    this.lights.width = this.lights.height = 384;
+    const light = this.lights.getContext('2d');
+    // Overlapping elliptical pools feather in every direction, including the
+    // sides and far end. The mask is prepared once rather than blurred per frame.
+    for (const [x, y, rx, ry, strength] of [
+      [0, -0.4, 0.29, 0.53, 0.8],
+      [0, -0.14, 0.14, 0.26, 0.7],
+      [-0.34, 0.05, 0.48, 0.36, 0.85],
+    ]) {
+      light.save();
+      light.translate(192 + x * 192, 192 + y * 192);
+      light.scale(rx * 192, ry * 192);
+      const glow = light.createRadialGradient(0, 0, 0, 0, 0, 1);
+      glow.addColorStop(0, `rgba(255,228,165,${strength})`);
+      glow.addColorStop(0.3, `rgba(255,228,165,${strength * 0.7})`);
+      glow.addColorStop(0.65, `rgba(255,228,165,${strength * 0.22})`);
+      glow.addColorStop(1, 'rgba(255,228,165,0)');
+      light.fillStyle = glow;
+      light.fillRect(-1, -1, 2, 2);
+      light.restore();
+    }
   }
   draw(w, width, height, zoom) {
     const canvas = this.canvas;
@@ -30,31 +53,15 @@ export class WeatherView {
       light.addColorStop(1, `rgba(3,15,26,${weather.darkness})`);
       ctx.fillStyle = light;
       ctx.fillRect(0, 0, width, height);
-      if (gear(w, 'lights')) {
+      if (workLightsOn(w)) {
         ctx.save();
         ctx.translate(cx, cy);
         ctx.rotate(w.boat.heading);
-        ctx.fillStyle = '#f8dfa416';
-        ctx.beginPath();
-        ctx.moveTo(-8, -10);
-        ctx.lineTo(-r * 0.6, -r * 0.4);
-        ctx.lineTo(-r * 0.7, r * 0.5);
-        ctx.closePath();
-        ctx.fill();
-        // Clear part of the darkness in the forward beam, then tint it warmly.
-        const beam = ctx.createRadialGradient(0, -10, 0, 0, -10, r);
-        beam.addColorStop(0, 'rgba(255,255,255,0.78)');
-        beam.addColorStop(1, 'rgba(255,255,255,0)');
         ctx.globalCompositeOperation = 'destination-out';
-        ctx.fillStyle = beam;
-        ctx.beginPath();
-        ctx.moveTo(0, -10);
-        ctx.arc(0, -10, r, -Math.PI / 2 - 0.48, -Math.PI / 2 + 0.48);
-        ctx.closePath();
-        ctx.fill();
+        ctx.drawImage(this.lights, -r, -r, r * 2, r * 2);
         ctx.globalCompositeOperation = 'source-over';
-        ctx.fillStyle = '#ffe6a014';
-        ctx.fill();
+        ctx.globalAlpha = 0.12;
+        ctx.drawImage(this.lights, -r, -r, r * 2, r * 2);
         ctx.restore();
       }
     }

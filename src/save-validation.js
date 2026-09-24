@@ -90,6 +90,12 @@ export function validateSnapshot(data) {
       'vessel condition',
     );
     assert(Array.isArray(v.equipment), 'vessel fittings');
+    if (v.disabledEquipment !== undefined)
+      assert(
+        Array.isArray(v.disabledEquipment) &&
+          v.disabledEquipment.every((id) => v.equipment.includes(id)),
+        'equipment switches',
+      );
   }
   assert(
     (['planning', 'working', 'complete'].includes(data.day?.phase) ||
@@ -102,6 +108,23 @@ export function validateSnapshot(data) {
     'working totals',
   );
   const b = data.boat;
+  if (c.buyerToday)
+    assert(
+      finite(c.buyerToday.day, 0) &&
+        finite(c.buyerToday.minQuality, 0, 1) &&
+        finite(c.buyerToday.premium, 0, 1) &&
+        (c.buyerToday.target === undefined || finite(c.buyerToday.target, 1)),
+      'buyer order',
+    );
+  if (data.day.dump)
+    assert(
+      data.day.phase === 'working' &&
+        typeof data.day.dump.bagId === 'string' &&
+        data.bags.some((bag) => bag.id === data.day.dump.bagId) &&
+        finite(data.day.dump.duration, 0.1, 10) &&
+        finite(data.day.dump.remaining, 0, data.day.dump.duration),
+      'deck operation',
+    );
   if (data.day.returnFade !== undefined)
     assert(
       data.day.phase === 'working' &&

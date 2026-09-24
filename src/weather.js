@@ -1,4 +1,5 @@
 import { C } from './config.js';
+import { enabledEquipment } from './equipment-controls.js';
 import { roll, rankOf } from './career-data.js';
 import { coastTier } from './coasts.js';
 export const WEATHER = {
@@ -96,7 +97,7 @@ export function updateWeather(w) {
 }
 export function weatherOutlook(w, offset = 0) {
   const c = w.career,
-    gear = c?.fleet[w.boat.configuration]?.equipment || [],
+    gear = enabledEquipment(w),
     confidence = Math.max(25, (gear.includes('forecast') ? 85 : 60 + rankOf(c) * 5) - offset * 6);
   const error =
       (roll(c.seed, c.day + offset + 653) - 0.5) *

@@ -7,7 +7,7 @@ import { GROUNDS, chooseGround, formatClock } from './day.js';
 import { ASSISTS, REALISTIC_ASSISTS, setPreset, toggleAssist } from './assists.js';
 import { changeDepartureTime } from './career-state.js';
 import { updateWeather } from './weather.js';
-import { markPosition } from './knowledge.js';
+import { markPosition, markReport, markBearing } from './knowledge.js';
 import { selectedSubArea } from './quota-areas.js';
 
 export const EXPEDITION_SCREENS = ['departure', 'knowledge', 'conditions', 'assists'];
@@ -131,6 +131,7 @@ export function expeditionActions(ui, w) {
           },
         ),
         open('knowledge', 'Local Chart'),
+        open('market', 'Buyer market · today’s goal'),
         open('conditions', 'Weather & tides'),
         action('back', 'Back to chart', () => ui.back()),
       ];
@@ -138,6 +139,33 @@ export function expeditionActions(ui, w) {
     case 'knowledge':
       return [
         action('mark', 'Mark current position', () => markPosition(w)),
+        ...Object.values(w.career.knowledge[area()]?.grounds || {})
+          .filter((r) => Number.isFinite(r.sampleX))
+          .sort((a, b) => b.day - a.day || b.minute - a.minute)
+          .slice(0, 3)
+          .map((r) =>
+            action(`mark-report-${r.id}`, `Mark sample: ${r.name} · day ${r.day}`, () =>
+              markReport(w, area(), r.id),
+            ),
+          ),
+        ...(w.career.marks || [])
+          .filter((m) => m.sector === area())
+          .slice(-6)
+          .map((m) =>
+            action(
+              `navigate-mark-${m.id}`,
+              `${w.career.navigationMark === m.id ? '✓ ' : ''}${m.label} · ${markBearing(w, m)}`,
+              () => {
+                w.career.navigationMark = w.career.navigationMark === m.id ? null : m.id;
+                return {
+                  ok: true,
+                  reason: w.career.navigationMark
+                    ? `Following ${m.label}: ${markBearing(w, m)}`
+                    : 'Mark guidance cleared.',
+                };
+              },
+            ),
+          ),
         action('previous-area', 'Previous area', () => cycleArea(-1)),
         action('next-area', 'Next area', () => cycleArea(1)),
         back,

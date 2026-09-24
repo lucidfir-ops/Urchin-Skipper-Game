@@ -1,4 +1,7 @@
 import { crewRoster } from './crew-roster.js';
+import { marketOffers, chooseBuyer } from './buyer.js';
+import { enabledEquipment, toggleEquipment } from './equipment-controls.js';
+import { startDump } from './deck-work.js';
 import { fullscreenLabel, toggleFullscreen } from './fullscreen.js';
 import { uiScale, changeUiScale, setUiScale } from './ui-scale.js';
 import { confirmPurchase, purchaseActions } from './purchase.js';
@@ -8,7 +11,7 @@ import { boatArtLabel, toggleBoatArtMode } from './boat-art-mode.js';
 import { testConditionActions } from './test-mode.js';
 import { trainingActions, restTrainingCrew } from './training-tools.js';
 import { setPreset, presetLabel } from './assists.js';
-import { FLEET, ECONOMY, RANKS, money } from './career-data.js';
+import { FLEET, ECONOMY, RANKS, UPGRADES, money } from './career-data.js';
 import { boatDefinition, boatSpec } from './boats.js';
 import { harbourScreen } from './starter-career.js';
 import { areaStatus } from './season.js';
@@ -29,6 +32,9 @@ import {
 
 // Focus is positional; actions are identified by stable IDs, never English text or menu offsets.
 export const CAREER_SCREENS = [
+  'market',
+  'deck-catch',
+  'equipment-controls',
   'purchase',
   'starter',
   'harbour',
@@ -81,6 +87,49 @@ export function careerActions(ui, w) {
       back,
     );
   switch (ui.screen) {
+    case 'market':
+      return [
+        action('buyer-standard', 'Standard market · no target', () => chooseBuyer(w, 'standard')),
+        ...marketOffers(c).map((o) =>
+          action(
+            `buyer-${o.id}`,
+            `${c.buyerToday?.id === o.id ? '✓ ' : ''}${o.name} · ${o.target.toLocaleString()} lb / ${Math.round(o.minQuality * 100)}%${o.unlocked ? '' : ' · contact locked'}`,
+            () => chooseBuyer(w, o.id),
+          ),
+        ),
+        back,
+      ];
+    case 'deck-catch':
+      return [
+        ...w.bags
+          .map((bag, index) =>
+            action(
+              `dump-${index}`,
+              `Dump bag ${index + 1} · ${Math.round(bag.weight)} lb / ${Math.round(bag.quality * 100)}% · ${(bag.haulSeconds || 3).toFixed(1)}s`,
+              () => {
+                const result = startDump(w, index);
+                if (result.ok) ui.open(null);
+                return result;
+              },
+            ),
+          )
+          .reverse(),
+        open('market', 'Today’s buyer / return estimate'),
+        back,
+      ];
+    case 'equipment-controls':
+      return [
+        ...(c.fleet[w.boat.configuration]?.equipment || [])
+          .filter((id) => UPGRADES.find((u) => u.id === id)?.slot !== 'timepiece')
+          .map((id) =>
+            action(
+              `switch-${id}`,
+              `${UPGRADES.find((u) => u.id === id)?.name || id}: ${enabledEquipment(w).includes(id) ? (id === 'lights' ? 'AUTO · after dark' : 'ON') : 'OFF'}`,
+              () => toggleEquipment(w, id),
+            ),
+          ),
+        back,
+      ];
     case 'purchase':
       return purchaseActions(ui);
     case 'harbour':
@@ -104,6 +153,7 @@ export function careerActions(ui, w) {
         action('dockwork', `Work a day on the dock · ${money(ECONOMY.dockWage)}`, () =>
           nextDay(true),
         ),
+        open('market', 'Buyer market · choose today’s goal'),
         back,
       ];
     case 'settings':
@@ -240,6 +290,7 @@ export function careerActions(ui, w) {
       ];
     case 'yourboat':
       return [
+        open('equipment-controls', 'Equipment switches'),
         ...Object.keys(c.fleet)
           .filter((id) => !c.fleet[id].lost)
           .map((id) =>

@@ -22,3 +22,11 @@ TOUCH
 Open Touchscreen Options and enable touch mode; use the labelled sticks and buttons.
 
 Throttle and rudder stay set when released. Neutral does not stop drift. Follow on-screen prompts if an action is unavailable. Controls can be remapped in Settings.
+
+NEW WORKING-DAY OPTIONS
+Before sailing, visit Harbour office → Buyer market to choose an optional
+quality/volume order. Pause → Deck catch shows each recovered bag’s quality
+and lets you dump it overboard over its original hauling time. Pause →
+Equipment switches controls fitted gear; enabled boat lights come on after
+dark. Local Chart can save a recent diver sample as a personal mark and show
+its bearing/distance. Gameplay Speed now defaults to +50%.

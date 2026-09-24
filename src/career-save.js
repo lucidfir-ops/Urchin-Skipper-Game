@@ -158,7 +158,11 @@ export function snapshot(w, copy = true) {
 }
 export function restore(data) {
   validateSnapshot(data);
-  const w = careerWorld(clone(data.career));
+  const career = clone(data.career);
+  // The boat actually present in the saved trip is authoritative. Older saves
+  // could retain a different harbour selection and revert on the next day.
+  if (career.fleet[data.boat.configuration]) career.activeBoat = data.boat.configuration;
+  const w = careerWorld(career);
   w.day = clone(data.day);
   if (
     w.day.phase === 'planning' &&

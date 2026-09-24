@@ -1,4 +1,5 @@
 import { boatFamily } from './vessel-catalog.js';
+import { gear } from './assists.js';
 import { roll } from './career-data.js';
 export function earlyStartNotice(w) {
   const exposed = ['outboard', 'sterndrive'].includes(boatFamily(w.boat.configuration));
@@ -13,7 +14,7 @@ export function earlyPassageStrike(w) {
   if (!w.career || w.day.minute >= 420 || w.day.earlyStrikeChecked) return false;
   w.day.earlyStrikeChecked = true;
   if (!['outboard', 'sterndrive'].includes(boatFamily(w.boat.configuration))) return false;
-  const radar = w.career.fleet[w.boat.configuration].equipment.includes('radar');
+  const radar = gear(w, 'radar');
   if (roll(w.career.seed, w.career.day + 6907) >= (radar ? 0.04 : 0.08)) return false;
   const before = w.boat.driveHealth;
   w.boat.driveHealth = Math.max(0.1, before - 0.18);

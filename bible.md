@@ -14,6 +14,8 @@ If requested work conflicts with an agreed design rule, report the conflict befo
 
 The [prior DOCX and retrieval mirror](archive/design/2026-09-23/README.md) are archived intact. The approved visual references are collected in [§23](#23-approved-visual-references). Preserve originals, careers, artwork and older exports. [AGENTS.md](AGENTS.md) owns the working and GitHub/TEMP backup policy; routine checkpoints remain retired.
 
+The September 23 working-day implementation request approved handling, deck/pickup, buyer, chart-memory, surface-banter, rival and equipment-switch changes now incorporated below. [Implementation and verification](docs/WORKING_DAY_2026-09-23.md); [longer crew-writing proposal](docs/CREW_RELATIONSHIPS_PROPOSAL.txt) remains a proposal beyond its explicitly implemented first pass.
+
 ## 2. Core vision and intended experience
 
 The player is the skipper of a small commercial sea-urchin dive boat. They control the boat and give high-level instructions to two autonomous solo SCUBA divers. There is no manual underwater control or planned tender/hookah replacement.
@@ -58,7 +60,7 @@ Grounds should follow shoreline and contour in elongated, curved shapes, rather 
 
 Preserve existing reef IDs, geography, stock and observations when adding grounds. The established original-sector recipe has 13 marked and 52 unmarked patches; newer sectors may add richer or specialized beds. Unmarked stock is available to player and rival divers. Ordinary water/chart overlays and hit targets do not reveal unmarked live boundaries, even after a diver reports a sample.
 
-Players learn through actual exploration and diver reports. Persist observed depths, reefs, sampled quality, worked-thin reports, chart tracks and personal marks. Preserve the age and limited scope of observations. Better charting/scanning equipment improves records without providing universal live stock knowledge. Easy/debug may reveal specifically allowed information; Realistic retains hidden productivity. The explicit temporary “Reveal every urchin” developer overlay is not a persistent chart upgrade or a normal information entitlement.
+Players learn through actual exploration and diver reports. Persist observed depths, reefs, sampled quality, worked-thin reports, chart tracks and personal marks. Preserve the age and limited scope of observations. September 23: show report age and the reporting diver, remember the actual sample position and tide phase, and let the skipper make a personal mark from a recent report. Mark guidance provides bearing/distance to an already known point; it does not reveal unmarked bed boundaries or live stock. Better charting/scanning equipment improves records without providing universal live stock knowledge. Easy/debug may reveal specifically allowed information; Realistic retains hidden productivity. The explicit temporary “Reveal every urchin” developer overlay is not a persistent chart upgrade or a normal information entitlement.
 
 Harvesting removes local patch stock shared by physical rival crews. Longer-term fishery pressure and season recovery are separate from immediate patch exhaustion. Current nine-day rollover tuning uses survivor growth of 1.35 plus 0.4% recolonization, replacing automatic doubling. Regional pressure weights and recovery remain balance data. Do not reset depleted beds through travel, reloads or save migration.
 
@@ -66,7 +68,9 @@ Harvesting removes local patch stock shared by physical rival crews. Longer-term
 
 Commercial working hulls differ in capacity, weather capability, fuel use, windage, draft and maneuverability. Supported propulsion families include prop/rudder, outboard, leg and jet, single/twin engines and bow thrusters. Preserve the established controller feel and improve it conservatively.
 
-Boats have momentum. Use velocity through water—world velocity minus local current—with stronger lateral than longitudinal resistance. Wind acts according to hull/cabin exposure. Rudder boats need thrust to turn and have reduced authority at top speed and in reverse. High-speed turns are broad. Twin engines improve maneuverability; steerable drives handle well; jets maneuver well in reverse and can pivot. Bow thrust provides a distinct fitted capability.
+Boats have momentum. Use velocity through water—world velocity minus local current—with stronger lateral than longitudinal resistance. Wind acts according to hull/cabin exposure. Rudder boats turn through propwash and water flowing over the rudder, including in neutral; powered authority remains reduced at top speed and in reverse. High-speed turns are broad. Twin engines improve maneuverability; steerable drives handle well; jets maneuver well in reverse and can pivot. Bow thrust provides a distinct fitted capability.
+
+September 23 working-day decision: in neutral, a perfectly aligned boat drifts astern in current; deflecting a shaft rudder supplies passive yaw. Outboard/leg appendages have substantially less passive area; unpowered jet nozzles supply none. Off-axis hull pressure tends toward a beam-on drift, resisted more by shaft appendages than legs and least by jets. Use water-relative forces alongside independent wind loads. Larger hulls have more environmental exposure and retain more stopping/turning momentum; cargo adds inertia. Do not invent perpetual rudder force once a boat is moving with uniform water.
 
 Keep mass, acceleration, speed, reverse, steering, rudder authority, thruster force, draft, waves, windage and fuel configurable. Prefer forces/corrections to blindly overwriting velocity. Physics references remain conceptual aids rather than a mandate to copy another architecture.
 
@@ -86,7 +90,9 @@ Communicate current through kelp, drift, fixed objects and, where enabled, curre
 
 Weather includes calm, rain, squalls, storms, fog, wind shifts, rough seas, lightning and rare rogue waves. Conditions affect decisions and handling. Forecasts provide current detail and seven seeded daily outlooks with increasing uncertainty; equipment/experience can improve confidence without perfect foreknowledge. Viewing a forecast never advances or mutates the world.
 
-Night is 19:30–06:00. Without diver flashlights, deployed divers begin their normal warned ascent and cannot descend again in darkness. Boat working lights are separate: they illuminate port recovery and forward water. Distant bubbles fade in waves/rain and disappear beyond fog visibility. Night work doubles fatigue accrual.
+Night is 19:30–06:00. Without diver flashlights, deployed divers begin their normal warned ascent and cannot descend again in darkness. Boat working lights are separate: they illuminate port recovery and forward water. Installed operational upgrades have saved per-boat switches reachable at harbour and at sea. Enabled boat lights operate automatically only after dark, with softly feathered forward and port recovery pools. Disabled lights also remove their night visibility/pickup benefit. Change diver equipment with both people aboard, finish a lift before switching its hauler, and use auxiliary fuel before isolating its tank.
+
+Distant bubbles fade in waves/rain and disappear beyond fog visibility. Night work doubles fatigue accrual.
 
 ## 8. Divers: core rules, AI and instructions
 
@@ -122,19 +128,19 @@ Recovery rewards boat handling: bring the working side alongside at low relative
 
 Bag turnaround and ending a diver's operation are distinct. Bag-only recovery can keep a productive diver working; boarding with any outstanding bag permits moving or ending that operation. Maintain a short bag hook/preparation phase around three seconds. Boarding adds two seconds, with or without a bag. Returning aboard resets deployment state for a fresh bag without erasing persistent fatigue/exposure.
 
-Show the currently valid action and readable reasons when an operation is unavailable. Physical deck bags and recovery sound communicate completion. Frank teaches port relative to bow, Neutral, matching drift, the actual working rail and the danger of reversing the stern into a diver.
+Show the currently valid action and readable reasons when an operation is unavailable. Physical deck bags and recovery sound communicate completion. September 23: surfaced floats may show a subtle distance/readiness cue in both difficulties while physically visible; green means the actual recovery gates pass and amber gives one actionable reason. Keep underwater and fog/night information restrictions. Surface speech bubbles convey a sampled-bag opinion, with occasional brief authored crew text and per-person cooldowns. Frank teaches port relative to bow, Neutral, matching drift, the actual working rail and the danger of reversing the stern into a diver.
 
 ## 11. Deck, loading and catch handling
 
-Recovered bags visibly accumulate on the working deck and affect exact boat load. Keep visual bag placement separate from numerical weight and capacity. Loading affects hull behavior and load-sensitive travel speed.
+Recovered bags visibly accumulate on the working deck and affect exact boat load. Keep visual bag placement separate from numerical weight and capacity. September 23: bags are conspicuously red, large and fixed in size. Use bounded overlapping layers inside the working deck; existing bags do not shrink or rearrange as more arrive, and later layers cover deck gaps. Loading affects hull behavior and load-sensitive travel speed.
 
 Exact deck/diver readouts are permitted in Realistic by the subsequent information amendment; they can be independently hidden. Physical bags remain useful information when readouts are off. Preserve modular UI and the remaining hidden-ground/underwater-information limits in §18.
 
-There is no player-controlled catch-care or sorting gameplay. Freshness, bag quality and hidden undersize outcomes feed established settlement. Undersize occurrence is diver-specific per bag; ordinary default tuning is a 1% chance of one undersized urchin. DFO independently detects each occurrence at 25% and charges $1,000 per detected urchin to the boat at settlement, without deducting it from crew shares. Preserve outcomes through reloads and charge once.
+September 23 market decision supersedes the former blanket prohibition on catch sorting: show the sampled quality of each recovered bag and let the skipper choose a deck bag to dump overboard. Dumping takes that bag’s original hauling time, reserves the deck while the boat and sea continue moving, survives reload and removes its weight and sale value exactly once. It does not restore harvested stock. No additional catch-care minigame is approved. Freshness, bag quality and hidden undersize outcomes feed established settlement. Undersize occurrence is diver-specific per bag; ordinary default tuning is a 1% chance of one undersized urchin. DFO independently detects each occurrence at 25% and charges $1,000 per detected urchin to the boat at settlement, without deducting it from crew shares. Preserve outcomes through reloads and charge once.
 
 ## 12. Day, travel, chart and offload
 
-Harbour menus pause time. Ordinary planning begins at 05:00, with a later rested departure and Sleep/rest options. Choose destination and drop location using travel time, conditions, boat and crew. Passage is abstracted; distance and actual boat speed/fuel use reduce working time. Example return allowances are three hours for a distant ground or one hour for a near ground, with tunable weather-sensitive travel.
+Harbour menus pause time. The default browser world-speed increase is +50% (1.5× original pace), with deliberate saved preferences retained. Ordinary planning begins at 05:00, with a later rested departure and Sleep/rest options. Choose destination and drop location using travel time, conditions, boat and crew. Passage is abstracted; distance and actual boat speed/fuel use reduce working time. Example return allowances are three hours for a distant ground or one hour for a near ground, with tunable weather-sensitive travel.
 
 The evening offload deadline is 19:00. Late/night work remains possible with equipment, fatigue, freshness and offload consequences. Missing evening offload means offloading at 06:00 next morning, with earliest ensuing departure at 09:00. Preserve meaningful rest and recovery rather than the old random shipping-delay behavior.
 
@@ -146,7 +152,7 @@ New Career is offered only at Title. Logbook provides Save game now and Load sav
 
 ## 13. Career, economy and progression
 
-Career progress comes from money, assets, reputation/experience, crew access and knowledge. Revenue reflects landed catch, quality, freshness and markets. Meaningful costs include fuel, shares/wages, maintenance, repairs, boats, equipment, licences, insurance and financing. Avoid accounting that creates no decision.
+Career progress comes from money, assets, reputation/experience, crew access and knowledge. Revenue reflects landed catch, quality, freshness and markets. September 23: before sailing, offer optional daily buyer orders with distinct quality and volume demands. Small local contacts are available initially; premium and bulk contacts unlock through sales and safe returns. Premium demand includes 3,000 landed lb at 90%+; bulk demand includes 10,000 lb at 60%+. Pay a bonus per qualifying landed pound up to the selected order’s cap, including partial orders. Extra or lower-quality catch sells normally, with no shortfall fine or duty to fill the boat. Shipping age still matters, current trips keep saved agreements, and orders cannot be changed at sea. Show return-now progress/bonus estimates and the actual settlement on the receipt. Meaningful costs include fuel, shares/wages, maintenance, repairs, boats, equipment, licences, insurance and financing. Avoid accounting that creates no decision.
 
 Start with $20,000 and a choice of two $15,000 starter boats, leaving $5,000 working cash. Buying equipment/boats, refuelling, repairing, renewing licences and repaying debt use explicit confirmations initially on Cancel. Selecting owned boats or share-paid crew is not itself a purchase. Insurance is automatic at departure, retaining costs and coverage without an arming/reminder interaction or separate premium confirmation.
 
@@ -164,7 +170,7 @@ Sail displays unavailable destinations with opening day and/or permit requiremen
 
 Better crew contacts require a combined operating record, rather than a permit or a single rank number: crew returns, total catch, best load/net day, sales, safe days, substantial working days and controlled fatigue. Current rank-one targets include 5,000 lb total, 1,400 lb best load, $2,500 best net, $8,000 sales, three safe days and a six-hour day at ≤72% fatigue. Rank two uses 15,000 lb, 2,800 lb, $6,500, $30,000, six safe days and an eight-hour day at ≤62%. These remain balance targets rather than promises about when a player will unlock contacts.
 
-Economic failure is the principal long-term fail state. A bad day need not trigger arbitrary Game Over, but catastrophic losses can make continuing impossible. Retain existing ways to recover through work, rest, hiring or financing without guaranteeing rescue from every decision. Track useful records such as best load/revenue/net return, average catch, boat history, work days and incidents. Long-season economic balance remains a playtesting question, not established by this document.
+Economic failure is the principal long-term fail state. A bad day need not trigger arbitrary Game Over, but catastrophic losses can make continuing impossible. Retain existing ways to recover through work, rest, hiring or financing without guaranteeing rescue from every decision. Track useful records such as best load/revenue/net return, average catch, boat history, work days and incidents. Lead the offload receipt with net return and up to three factual highlights drawn from the actual bags, buyer bonus, missed offload or previous trip. Do not fabricate causes or treat gross sales as profit. Long-season economic balance remains a playtesting question, not established by this document.
 
 ## 14. Crew, hiring, shares and fatigue
 
@@ -192,13 +198,13 @@ End-of-day reporting identifies incident, cause, time, injury/fatality, expected
 
 ## 16. Other boats, rivals and inspections
 
-Other skippers have recognizable boats, grounds, tendencies and performance. Use the supplied rival assets with seeded speed/maneuverability and distinct crews. Rival activity consumes grounds and daily landings provide context. Physical local rivals use shared stock and visible bubbles, pickup movement and deck bags; off-map work is bounded aggregate activity and must not double-count the active map.
+Other skippers have recognizable boats, grounds, tendencies and performance. Use the supplied rival assets with seeded speed/maneuverability and distinct crews. September 23: a few persistent teams are recognizably selfish, sometimes selecting a bed already worked by the player. Show their boat names on genuine nearby sightings and concise radio introductions. Their actual picking depletes shared stock; encounters are noticeable without making every rival crowd the player. Rival activity consumes grounds and daily landings provide context. Physical local rivals use shared stock and visible bubbles, pickup movement and deck bags; off-map work is bounded aggregate activity and must not double-count the active map.
 
 Rivals choose grounds according to weather, experience and achievable passage times. Slow boats do not attempt impossible remote round trips. Current increased activity selects roughly 78% of ordinary teams daily with higher catch targets/pressure. Keep participation, rates and routes tunable. Preserve the distinction between immediate patch depletion and seasonal fishery pressure.
 
 The mystery vessel's canonical name is **Shy Hull Wood**. Its loyal hidden divers are Paul and Worm, and its skipper is Jessy Bean. Keep them out of normal crew/boat information and poaching. Preserve its rare radio material in §17.
 
-Taxis travel around 30 knots, avoid boats but ignore underwater bubbles, and can strike a surfaced diver under the ordinary injury rules. Routes should cross productive ground; the player can position to influence traffic. Nine-ships tourists move around 5 knots and avoid bubbles. Keep spawns, routes and encounters configurable.
+Taxis travel around 30 knots, avoid boats but ignore underwater bubbles, and can strike a surfaced diver under the ordinary injury rules. Routes should cross productive ground, with a noticeable share crossing currently worked beds; commit each course rather than homing on moving divers. Warn on an actual close fast pass near a surfaced diver. The player can position to influence traffic. Nine-ships tourists move around 5 knots and avoid bubbles. Keep spawns, routes and encounters configurable.
 
 DFO uses a roughly 25-knot patrol boat, waits about 100 m clear, and boards after invitation, recovered divers and a slowed boat. Provide direct readable skipper interaction. A bounded alongside-positioning transition may bypass shoal depth as the approved patrol exception; it does not change player grounding. Deployment remains blocked during inspection and the short casting-off transition. Fine settlement occurs once across saving, reloading and sector changes.
 
@@ -206,7 +212,7 @@ The ordinary career inspection schedule is first visit on day 3, none on days 4�
 
 ## 17. Events, wildlife and rare weirdness
 
-Storms, fog, waves, debris, equipment problems, wildlife, traffic, inspections and crew events intersect with the current plan. Keep unusual incidents sparse enough that ordinary work remains satisfying.
+Storms, fog, waves, debris, equipment problems, wildlife, traffic, inspections and crew events intersect with the current plan. Preserve existing event frequency in this pass, as explicitly requested September 23; polish readability and context rather than reducing encounters.
 
 Radio history contains broadcasts and patrol calls, including when reading older logs. Local diver, bag and helm feedback stays separate.
 

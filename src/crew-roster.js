@@ -55,7 +55,7 @@ function generated(seed) {
       crew,
       name: hidden ? 'Jessy Bean' : `${first[i]} ${last[(i + 3) % last.length]}`,
       boat: hidden
-        ? 'Shai hull wood'
+        ? 'Shy Hull Wood'
         : [
             'Second Wind',
             'Northwesterly',
@@ -133,6 +133,8 @@ export const crewRoster = (c) =>
   );
 export function prepareRosters(c) {
   c.opponents ??= structuredClone(generated(c.seed).teams);
+  for (const team of c.opponents) if (team.hidden) team.boat = 'Shy Hull Wood';
+  for (const team of c.todayFleet || []) if (team.hidden) team.boat = 'Shy Hull Wood';
   for (const p of generated(c.seed).people) {
     const team = c.opponents.find((t) => t.crew.includes(p.id));
     c.people[p.id] ??= {

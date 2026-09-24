@@ -2,6 +2,7 @@ import { alongsidePoint } from './patrol.js';
 import { C } from './config.js';
 import { clamp, angleDelta } from './math.js';
 import { TRAFFIC } from './traffic-settings.js';
+import { visibilityRange } from './assists.js';
 export function trafficPose(actor, accumulator) {
   const previous = actor.renderFrom || actor,
     alpha = clamp(accumulator / TRAFFIC.tickSeconds, 0, 1);
@@ -16,11 +17,14 @@ export class TrafficView {
     this.scene = scene;
     this.vessels = vessels;
     this.images = new Map();
+    this.labels = new Map();
     this.g = scene.add.graphics().setDepth(1.1);
   }
   reset() {
     for (const image of this.images.values()) image.destroy();
     this.images.clear();
+    for (const label of this.labels.values()) label.destroy();
+    this.labels.clear();
     this.g.clear();
   }
   draw(w) {
@@ -53,6 +57,37 @@ export class TrafficView {
           .setPosition(pose.x * p, pose.y * p)
           .setRotation(pose.heading)
           .setDisplaySize(actor.width * p, actor.length * p);
+      let label = this.labels.get(actor.id);
+      if (!label) {
+        label = this.scene.add
+          .text(0, 0, '', {
+            fontFamily: 'system-ui',
+            fontSize: '12px',
+            color: '#f4e4bf',
+            backgroundColor: '#122e36',
+            padding: { x: 4, y: 2 },
+          })
+          .setOrigin(0.5, 1)
+          .setDepth(3);
+        this.labels.set(actor.id, label);
+      }
+      label.setVisible(
+        visible &&
+          Math.hypot(actor.x - w.boat.x, actor.y - w.boat.y) < Math.min(110, visibilityRange(w)),
+      );
+      label.setText(
+        actor.hidden
+          ? 'Shy Hull Wood'
+          : actor.name ||
+              (actor.kind === 'taxi'
+                ? 'Water taxi'
+                : actor.kind === 'dfo'
+                  ? 'DFO patrol'
+                  : 'Nine Ships'),
+      );
+      label
+        .setScale(1 / this.scene.cameras.main.zoom)
+        .setPosition(pose.x * p, (pose.y - actor.length / 2 - 2) * p);
       if (!visible) continue;
       if (!image) {
         this.g.fillStyle(actor.kind === 'dfo' ? 0xe3a15b : 0xc5d7d5);
@@ -86,7 +121,7 @@ export class TrafficView {
           fore = 1 + Math.floor(n / 3) * 0.6,
           s = Math.sin(pose.heading),
           c = Math.cos(pose.heading);
-        this.g.fillStyle(0xc99754, 0.9);
+        this.g.fillStyle(0xb5212e, 0.95);
         this.g.fillCircle(
           (pose.x + side * c - fore * s) * p,
           (pose.y + side * s + fore * c) * p,
@@ -102,6 +137,11 @@ export class TrafficView {
       if (!active.has(id)) {
         image.destroy();
         this.images.delete(id);
+      }
+    for (const [id, label] of this.labels)
+      if (!active.has(id)) {
+        label.destroy();
+        this.labels.delete(id);
       }
   }
 }

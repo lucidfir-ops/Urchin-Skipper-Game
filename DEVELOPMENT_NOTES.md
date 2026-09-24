@@ -2,6 +2,10 @@
 
 Current design: [bible.md](bible.md). Build state: [PROJECT_STATUS.md](PROJECT_STATUS.md#design-authority). These notes describe implementation, not a separate design specification. [v1.7 development](docs/V17_DEVELOPMENT.md), earlier [prototype notes](docs/history/2026-09-11-v17/DEVELOPMENT_NOTES.md) and feedback records linked below are historical implementation evidence only. Dated references to authority or current decisions below describe that increment; approved current design is consolidated in the living Bible.
 
+## September 23 working day
+
+[Implementation and limits](docs/WORKING_DAY_2026-09-23.md). `water-loads.js` distributes neutral hydrodynamic resistance and appendage lift; `equipment-controls.js` centralizes enabled gear; `deck-work.js` persists one timed discard job; `buyer.js` supplies seeded optional orders and contacts. The offload quote caps eligible premium and preserves crew attribution. `crew-moments.js`, `day-story.js` and dated chart reports only describe observed facts. New regression entry: `npm run verify -- --browsers-only --suite=working-day` (and `working-day-firefox`).
+
 ## September 22 preparation and performance
 
 [Implementation and evidence](docs/history/2026-09-22-performance-and-device-fixes/README.md) follow the [designer amendment](docs/FEEDBACK_SEPTEMBER22.md). All fifteen sector grids remain eager static imports. `loading.js` gates play on required interface/vessel artwork and the current sector's first terrain paint. A sector change prepares its local raster before controls resume; it does not fetch another terrain dataset. Failed image loads offer Retry. `terrain-painter.worker.js` generates terrain materials and tide pixels using two transferred reusable buffers; blocked/timed-out workers use yielded row/pixel work on the main thread.

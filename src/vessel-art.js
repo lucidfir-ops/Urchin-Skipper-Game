@@ -137,20 +137,29 @@ export class VesselSprites {
     this.pending = new Map();
     this.failed = new Map();
   }
+  install(key, canvas) {
+    if (this.scene.textures.exists(key)) return key;
+    // Give Phaser its own canvas. Cached preview pixels must not become a
+    // renderer-owned surface that can be cleared/reused or destroyed with a
+    // texture. Explicit refresh uploads the completed pixels on WebGL too.
+    const texture = this.scene.textures.createCanvas(key, canvas.width, canvas.height);
+    texture.context.drawImage(canvas, 0, 0);
+    texture.refresh();
+    return key;
+  }
   texture(id, mode = boatArtMode()) {
     const key = `vessel-${mode}-${id}`;
     if (this.scene.textures.exists(key)) return key;
     const pendingKey = `${mode}:${id}`;
     if (ready.has(pendingKey)) {
-      this.scene.textures.addCanvas(key, ready.get(pendingKey));
-      return key;
+      return this.install(key, ready.get(pendingKey));
     }
     if (!this.pending.has(pendingKey) && Date.now() >= (this.failed.get(pendingKey) || 0))
       this.pending.set(
         pendingKey,
         vesselCanvas(id, mode)
           .then((canvas) => {
-            if (!this.scene.textures.exists(key)) this.scene.textures.addCanvas(key, canvas);
+            this.install(key, canvas);
           })
           .catch((error) => {
             logEvent('asset-error', { key, error: String(error) });

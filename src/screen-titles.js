@@ -1,4 +1,7 @@
 export const TITLES = {
+  market: 'BUYER MARKET',
+  'deck-catch': 'CATCH ON DECK',
+  'equipment-controls': 'EQUIPMENT SWITCHES',
   'touch-options': 'TOUCHSCREEN OPTIONS',
   intro: 'A TALKING TO BY FRANK',
   introchart: 'FRANK’S COVE',

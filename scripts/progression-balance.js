@@ -33,6 +33,7 @@ import { recordFishingPressure, subAreaYield } from '../src/quota-areas.js';
 import { workCrew } from '../src/crew.js';
 import { conditionsAt } from '../src/weather.js';
 import { C } from '../src/config.js';
+import { chooseBuyer, marketOffers } from '../src/buyer.js';
 
 export const STRATEGIES = {
   cautious: {
@@ -130,6 +131,16 @@ export function assessProgression({
     const highest = Math.max(...destinations.map(coastTier));
     const pool = destinations.filter((id) => coastTier(id) === highest);
     const id = pool[(day - 1) % pool.length];
+    // This fishing strategy now makes the optional buyer decision explicitly.
+    // Assume ordinary 60%+ landed catch, without foreknowledge of hidden quality.
+    const order = marketOffers(w.career)
+      .filter((o) => o.unlocked && o.minQuality <= 0.6)
+      .sort(
+        (a, b) =>
+          Math.min(profile.target, b.target) * b.premium -
+          Math.min(profile.target, a.target) * a.premium,
+      )[0];
+    chooseBuyer(w, order?.id || 'standard');
     const trip = chooseGround(w, id);
     if (!trip.ok) {
       rows.push({ day, rest: true, reason: trip.reason, cash: w.career.cash });

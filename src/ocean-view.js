@@ -13,6 +13,8 @@ import { drawWildlife } from './wildlife-view.js';
 import { LessonCues } from './lesson-cues.js';
 import { departureBoat } from './departure-transition.js';
 import { introActive } from './career-intro.js';
+import { workLightsOn } from './equipment-controls.js';
+import { recoveryStatus } from './diver-recovery.js';
 
 export class OceanView {
   constructor(scene) {
@@ -45,6 +47,20 @@ export class OceanView {
     );
     this.offscreen = document.querySelector('#offscreen');
     this.loadFlash = { value: 0 };
+    this.speechGraphics = scene.add.graphics().setDepth(4);
+    this.speechLabels = [0, 1].map(() =>
+      scene.add
+        .text(0, 0, '', {
+          fontFamily: 'system-ui',
+          fontSize: '13px',
+          color: '#17313a',
+          align: 'center',
+          wordWrap: { width: 170 },
+          padding: { x: 9, y: 7 },
+        })
+        .setOrigin(0.5, 1)
+        .setDepth(5),
+    );
   }
   reset() {
     this.trafficView.reset();
@@ -102,6 +118,7 @@ export class OceanView {
       rangeY = height / (2 * p * zoom) + 12;
     g.clear();
     this.deckGraphics.clear();
+    this.speechGraphics.clear();
     this.deckGraphics.setAlpha(b.alpha);
     this.lessonCues.draw(world, ui);
     const waterKey = `${Math.floor(t * this.surfaceRefreshHz)}/${zoom.toFixed(3)}/${Math.floor(b.x / 4)}/${Math.floor(b.y / 4)}/${width}/${height}/${ui.debug}/${ui.realistic}/${ui.revealUrchins}/${world.career?.assists.currentOverlay}/${Math.round(world.environment.waves * 100)}/${Math.round((world.weather?.sunlight || 0) * 100)}`;
@@ -247,13 +264,46 @@ export class OceanView {
         g.strokeCircle(d.x * p, d.y * p, (visual.surface ? 2 : 2.1) * p);
       }
       const label = this.labels[d.id];
-      label.setVisible(assist(world, 'diverIndicators', ui.realistic, ui.debug) && !visual.aboard);
+      const pickupCue =
+        visual.surface && physicallyVisible && assist(world, 'actionPrompts', ui.realistic);
+      const recovery = pickupCue
+        ? recoveryStatus(world, pickupTolerance(world, ui.realistic), d)
+        : null;
+      label.setVisible(
+        pickupCue || (assist(world, 'diverIndicators', ui.realistic, ui.debug) && !visual.aboard),
+      );
       label.setScale(1 / zoom);
-      label.setText(`${selected ? '› ' : ''}${d.name}`);
+      label.setColor(pickupCue ? (recovery.available ? '#9be5c3' : '#f3cf92') : '#f8ead1');
+      label.setText(
+        pickupCue
+          ? `${recovery.available ? '✓' : '↧'} ${d.name} · ${Math.round(distance)} m\n${d.hooking ? 'Hauling…' : recovery.available ? (d.bagHandled ? 'Bag aboard' : 'Ready to hook') : recovery.reason === 'SLOW DOWN' ? 'Match the float’s drift' : recovery.reason === 'OUT OF RANGE' ? 'Bring port alongside' : recovery.reason}`
+          : `${selected ? '› ' : ''}${d.name}`,
+      );
       label.setPosition(
         d.x * p + (d.id ? 18 : -18) / zoom,
         d.y * p - 30 / zoom - (d.id * 19) / zoom,
       );
+      const speech = this.speechLabels[d.id],
+        talking = visual.surface && physicallyVisible && distance < 28 && d.speech?.until > t;
+      speech.setVisible(!!talking);
+      if (talking) {
+        speech.setText(`${d.speech.icon}${d.speech.text ? ' ' + d.speech.text : ''}`);
+        speech.setScale(1 / zoom).setPosition(d.x * p, d.y * p - 85 / zoom);
+        const bounds = speech.getBounds(),
+          sg = this.speechGraphics;
+        sg.fillStyle(0xfff8e6, 0.96);
+        sg.fillRoundedRect(bounds.x, bounds.y, bounds.width, bounds.height, 9 / zoom);
+        sg.fillTriangle(
+          speech.x - 5 / zoom,
+          bounds.bottom - 1 / zoom,
+          speech.x + 7 / zoom,
+          bounds.bottom - 1 / zoom,
+          speech.x + 1 / zoom,
+          bounds.bottom + 9 / zoom,
+        );
+        sg.lineStyle(1 / zoom, 0x294b53, 0.6);
+        sg.strokeRoundedRect(bounds.x, bounds.y, bounds.width, bounds.height, 9 / zoom);
+      }
       const sx = (d.x - b.x) * p * zoom + width / 2,
         sy = (d.y - b.y) * p * zoom + height / 2;
       const visible = sx >= 15 && sy >= 15 && sx <= width - 15 && sy <= height - 15;
@@ -348,7 +398,8 @@ export class OceanView {
     const vesselTexture = this.vessels.texture(b.configuration);
     if (!this.boatArt && vesselTexture)
       this.boatArt = this.scene.add.image(0, 0, vesselTexture).setDepth(1);
-    if (this.boatArt && vesselTexture) this.boatArt.setTexture(vesselTexture);
+    if (this.boatArt && vesselTexture && this.boatArt.texture.key !== vesselTexture)
+      this.boatArt.setTexture(vesselTexture);
     if (this.boatArt)
       this.boatArt
         .setVisible(!!vesselTexture)
@@ -397,10 +448,10 @@ export class OceanView {
       g.lineStyle(3, 0xaac3b2);
       g.lineBetween(a.x, a.y, z.x, z.y);
     }
-    if (gear(world, 'lights'))
+    if (workLightsOn(world))
       for (const side of [-1, 1]) {
         const q = pt(side * 1.5, -1);
-        g.fillStyle(0xf9e5a9, world.weather?.night ? 1 : 0.6);
+        g.fillStyle(0xf9e5a9, 0.9);
         g.fillCircle(q.x, q.y, 2.5);
       }
     const drive = boatDefinition(b.configuration),
@@ -485,22 +536,28 @@ export class OceanView {
       g.fillStyle(0xffd694, this.loadFlash.value * 0.22);
       g.fillPoints([pt(-1.7, 0.3), pt(1.7, 0.3), pt(1.7, 4.6), pt(-1.7, 4.6)], true);
     }
-    if (this.markerCount !== world.bags.length) {
-      this.markers = deckMarkers(world.bags);
-      this.markerCount = world.bags.length;
+    const markerKey = `${b.configuration}/${world.bags.length}`;
+    if (this.markerKey !== markerKey) {
+      this.markers = deckMarkers(world.bags, spec);
+      this.markerKey = markerKey;
     }
     for (const mark of this.markers) {
       const q = pt(mark.x, mark.y),
         r = mark.radius * p;
-      g.fillStyle(0x593f22, 0.5);
+      g.fillStyle(0x291a19, 0.5);
       g.fillCircle(q.x + 1.5, q.y + 2, r);
-      g.fillStyle(0xe68a3d);
+      g.fillStyle(mark.layer % 2 ? 0xc93438 : 0xb5212e);
       g.fillCircle(q.x, q.y, r);
-      g.lineStyle(1, 0x573d21, 0.65);
+      g.lineStyle(1, 0x63151f, 0.85);
       g.strokeCircle(q.x, q.y, r);
-      g.lineStyle(0.8, 0xffd492, 0.7);
-      g.lineBetween(q.x - r * 0.6, q.y, q.x + r * 0.6, q.y);
-      g.lineBetween(q.x, q.y - r * 0.6, q.x, q.y + r * 0.6);
+      g.lineStyle(0.8, 0xf0887d, 0.65);
+      for (const offset of [-0.45, 0, 0.45]) {
+        const span = Math.sqrt(1 - offset * offset) * r * 0.85;
+        g.lineBetween(q.x - span, q.y + offset * r, q.x + span, q.y + offset * r);
+        g.lineBetween(q.x + offset * r, q.y - span, q.x + offset * r, q.y + span);
+      }
+      g.fillStyle(0xefb6a1, 0.9);
+      g.fillCircle(q.x - r * 0.23, q.y - r * 0.35, 1.3);
     }
     if (world.career?.intro?.status === 'active') {
       const q = pt(0.8, -3);

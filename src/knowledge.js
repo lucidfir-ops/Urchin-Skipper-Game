@@ -3,6 +3,7 @@ import { bearing } from './math.js';
 import { seaLevel } from './terrain.js';
 import { soundingDepth } from './hazard-depth.js';
 import { gear } from './assists.js';
+import { currentAt } from './environment.js';
 // Tools make local measurements; they never alter hidden terrain/productivity.
 export function instrumentReadings(w) {
   const b = w.boat,
@@ -96,6 +97,13 @@ export function recordDiverReport(w, d, { recovered = false, automatic = false }
       : 'Sampled; stock beyond the dive is unknown',
     quality: d.bag ? Math.round((d.qualitySum / d.bag) * 10) / 10 : (previous?.quality ?? null),
     day: c.day,
+    reporter: d.name,
+    minute: w.day.minute,
+    sampleX: d.x,
+    sampleY: d.y,
+    tide: w.environment.seaLevel || 0,
+    tidePhase: (w.environment.tideRate || 0) >= 0 ? 'rising' : 'falling',
+    current: { ...currentAt(w, d.x, d.y) },
     report:
       d.bag >= 299 ? 'A full bag' : d.bag ? 'Partial bag' : d.reason || 'No catch on this dive',
   };
@@ -120,6 +128,42 @@ export function markPosition(w) {
     label: `Mark ${marks.length + 1}`,
   });
   return { ok: true, reason: 'Position marked on your chart.' };
+}
+
+export function reportAge(report, day) {
+  const age = Math.max(0, day - report.day);
+  return `${age === 0 ? 'Today' : age === 1 ? '1 day ago' : age + ' days ago'} · ${report.reporter ? 'reported by ' + report.reporter : 'earlier diver report'}${report.tidePhase ? ' · tide ' + report.tidePhase : ''}`;
+}
+export function markReport(w, sector, reportId) {
+  const report = w.career.knowledge[sector]?.grounds?.[reportId];
+  if (!report || !Number.isFinite(report.sampleX) || !Number.isFinite(report.sampleY))
+    return {
+      ok: false,
+      reason: 'This older report has no recorded sample position. Mark a fresh drift at sea.',
+    };
+  if (w.career.marks.length >= 100) return { ok: false, reason: 'Chart holds 100 marks.' };
+  const id = Math.max(0, ...w.career.marks.map((m) => m.id)) + 1;
+  w.career.marks.push({
+    id,
+    sector,
+    x: report.sampleX,
+    y: report.sampleY,
+    day: report.day,
+    label: `Sample ${id} · ${report.quality === null ? 'empty' : Math.round(report.quality * 100) + '%'}`,
+    origin: report.reporter,
+    tidePhase: report.tidePhase,
+  });
+  w.career.navigationMark = id;
+  return {
+    ok: true,
+    reason: 'Sample position marked. This records one dive, not the bed boundary.',
+  };
+}
+export function markBearing(w, mark) {
+  if (mark.sector !== w.day.groundId) return 'In another sector';
+  return `${Math.round(bearing(mark.x - w.boat.x, mark.y - w.boat.y))
+    .toString()
+    .padStart(3, '0')}° · ${Math.round(Math.hypot(mark.x - w.boat.x, mark.y - w.boat.y))} m`;
 }
 
 export function recordTrack(knowledge, boat, day, trip, time) {

@@ -2,6 +2,7 @@ import { renderAssistOptions } from './assist-view.js';
 import { appendChoices } from './menu-buttons.js';
 import { earlyStartNotice } from './early-start.js';
 import { buyerNotice } from './buyer.js';
+import { reportAge, markBearing } from './knowledge.js';
 import { seasonStatus, areaStatus } from './season.js';
 import { selectedSubArea, subAreaDefinition } from './quota-areas.js';
 import { coastFor } from './coasts.js';
@@ -77,6 +78,8 @@ export function renderExpedition(ui, w, bind) {
     ui.mapSelection,
     w.nextObservation,
     ui.menuNotice,
+    w.career.navigationMark,
+    w.career.marks.length,
     chartMode(ui),
   ]);
   if (ui.signature === signature) return;
@@ -88,7 +91,10 @@ export function renderExpedition(ui, w, bind) {
   if (map) {
     const k = w.career.knowledge[id],
       reports = Object.values(k?.grounds || {});
-    detail = `<div class="travel-strip"><div>Arrive<strong>${formatClock(trip.arrival)}</strong></div><div>Leave by<strong>${formatClock(trip.depart)}</strong></div></div><p>${def.flowLabel}</p><p>Return across the <strong>${def.harbourEdge}</strong> edge. Arrival is at the entrance; find a safe drop using the sounder, kelp and shoreline.</p><p>${gear(w, 'plotter') ? 'Thin red lines show your recorded chartplotter track. The sounder keeps local depth readable.' : 'Standard sounder: local depth only. A plotter can keep your depth tracks.'}</p><div class="knowledge-reports">${reports.map((p) => `<p>Day ${p.day} · ${p.name}<br>${p.report} · ${p.condition || 'Old observation'}${p.quality === null ? '' : ` · ${Math.round(p.quality * 100)}% sampled quality`}</p>`).join('') || '<p>No diver reports here yet. Bring a working diver alongside to learn more.</p>'}</div>`;
+    detail = `<div class="travel-strip"><div>Arrive<strong>${formatClock(trip.arrival)}</strong></div><div>Leave by<strong>${formatClock(trip.depart)}</strong></div></div><p>${def.flowLabel}</p><p>Return across the <strong>${def.harbourEdge}</strong> edge. Arrival is at the entrance; find a safe drop using the sounder, kelp and shoreline.</p><p>${gear(w, 'plotter') ? 'Thin red lines show your recorded chartplotter track. The sounder keeps local depth readable.' : 'Standard sounder: local depth only. A plotter can keep your depth tracks.'}</p><div class="knowledge-reports">${reports.map((p) => `<p>${reportAge(p, w.career.day)} · ${p.name}<br>${p.report} · ${p.condition || 'Old observation'}${p.quality === null ? '' : ` · ${Math.round(p.quality * 100)}% sampled quality`}</p>`).join('') || '<p>No diver reports here yet. Bring a working diver alongside to learn more.</p>'}</div>`;
+    const marks = (w.career.marks || []).filter((m) => m.sector === id);
+    if (ui.screen === 'knowledge')
+      detail += `<h3>Your marks</h3>${marks.map((m) => `<p>${w.career.navigationMark === m.id ? '★ ' : ''}${m.label} · day ${m.day}<br>${markBearing(w, m)}</p>`).join('') || '<p>Mark a position or one of your recent samples below.</p>'}`;
     if (ui.screen === 'departure') {
       const brief = departureBriefing(w, id),
         f = brief.fuel;

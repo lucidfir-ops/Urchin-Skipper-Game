@@ -1,4 +1,5 @@
 import { seededRandom } from './math.js';
+import { rivalHabit, workingPatches } from './rival-habits.js';
 import { boatDefinition } from './boats.js';
 import { TAXI_ART, DFO_ART, NINE_ART } from './vessel-catalog.js';
 import { crewProfile } from './crew-roster.js';
@@ -61,7 +62,7 @@ function* planTraffic(w, kind, { start, patchId, art, fleetId } = {}) {
     fleet = fleetId
       ? candidates.find((r) => r.id === fleetId)
       : pick(
-          candidates.filter((r) => !r.hidden || random() < 0.08),
+          candidates.filter((r) => !r.hidden || random() < 0.35),
           random,
         );
     if (!fleet) return null;
@@ -101,6 +102,8 @@ function* planTraffic(w, kind, { start, patchId, art, fleetId } = {}) {
       checked: [],
       fleetId: fleet?.id || null,
       hidden: !!fleet?.hidden,
+      habit: fleet ? rivalHabit(fleet) : null,
+      name: fleet?.hidden ? 'Shy Hull Wood' : fleet?.boat || null,
       subAreaId: fleet?.subAreaId || null,
       wildlifeCurious: kind === 'tourist' && random() < 0.65,
     };
@@ -115,9 +118,15 @@ function* planTraffic(w, kind, { start, patchId, art, fleetId } = {}) {
       (kind !== 'rival' || p.quality >= 0.6) &&
       (!desiredPatch || p.id === desiredPatch),
   );
+  const worked = workingPatches(w).filter((p) => patches.includes(p));
+  const crossing =
+    !desiredPatch &&
+    worked.length &&
+    ((kind === 'rival' && actor.habit === 'encroaching' && random() < 0.8) ||
+      (kind === 'taxi' && random() < 0.65));
   for (let attempt = 0; attempt < 12; attempt++) {
     const entry = pick(starts, random),
-      patch = pick(patches, random),
+      patch = pick(crossing && attempt < 6 ? worked : patches, random),
       end = pick(
         entries.filter((p) => Math.hypot(p.x - entry.x, p.y - entry.y) > w.terrain.size * 0.6),
         random,
@@ -126,7 +135,11 @@ function* planTraffic(w, kind, { start, patchId, art, fleetId } = {}) {
       yield;
       continue;
     }
-    const working = { x: patch.x, y: patch.y },
+    // Taxi routes are committed across a working bed, never retargeted at a
+    // moving diver. Bubbles and floats do not trigger taxi avoidance.
+    const sample =
+      crossing && kind === 'taxi' ? w.divers.find((d) => d.patch?.id === patch.id) : null;
+    const working = sample ? { x: sample.x, y: sample.y } : { x: patch.x, y: patch.y },
       route = waterRoute(w, entry, kind === 'dfo' && !desiredPatch ? end : working, spec);
     if (!route.length) {
       yield;
@@ -284,6 +297,28 @@ export function stepTraffic(w, dt) {
   while (traffic.accumulator >= TRAFFIC.tickSeconds) {
     traffic.accumulator -= TRAFFIC.tickSeconds;
     for (const actor of traffic.actors) {
+      const distance = Math.hypot(actor.x - w.boat.x, actor.y - w.boat.y);
+      if (!actor.announced && distance < 100 && actor.kind === 'rival') {
+        actor.announced = true;
+        w.events.push(
+          `RADIO · ${actor.name || 'Working boat'}: ${actor.hidden ? 'Shy Hull Wood passing through. No further details on the set.' : actor.habit === 'encroaching' ? 'We’re putting down on this drift too. There’s room for another pick.' : 'Working our usual ground. See you at the landing.'}`,
+        );
+        w.effects.push({ type: 'radio' });
+      }
+      if (
+        !actor.nearMissCalled &&
+        actor.kind === 'taxi' &&
+        w.divers.some(
+          (d) =>
+            d.state === 'surface' &&
+            Math.hypot(d.x - actor.x, d.y - actor.y) < 24 &&
+            actor.speed > 3,
+        )
+      ) {
+        actor.nearMissCalled = true;
+        w.events.push('RADIO · Water taxi cutting close to a surfaced diver — watch its course!');
+        w.effects.push({ type: 'warning' });
+      }
       actor.renderFrom = { x: actor.x, y: actor.y, heading: actor.heading };
       if (actor.kind === 'dfo') stepPatrol(w, actor, TRAFFIC.tickSeconds);
       else if (actor.kind === 'rival') fish(w, actor, TRAFFIC.tickSeconds);

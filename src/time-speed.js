@@ -1,5 +1,5 @@
 const KEY = 'urchin-time-speed-v1';
-export const DEFAULT_TIME_INCREASE = 25;
+export const DEFAULT_TIME_INCREASE = 50;
 export const clampTimeIncrease = (value) =>
   Number.isFinite(Number(value))
     ? Math.max(0, Math.min(100, Number(value)))

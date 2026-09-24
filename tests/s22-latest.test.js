@@ -16,13 +16,13 @@ import { boatDefinition } from '../src/boats.js';
 import { FLEET } from '../src/career-data.js';
 import { canCrossReturnBoundary } from '../src/navigation.js';
 import { WEATHER } from '../src/weather.js';
-import { freshVessel } from '../src/career-state.js';
+import { freshVessel, useVessel } from '../src/career-state.js';
 import { UI_SCALES } from '../src/ui-scale.js';
 
 test('training copies current equipment, rehearses night, then restores the exact working career', () => {
   const real = careerWorld();
   real.career.fleet.twinjet = freshVessel('twinjet');
-  real.career.activeBoat = 'twinjet';
+  useVessel(real, 'twinjet');
   real.career.fleet.twinjet.equipment = ['bowthruster', 'plotter', 'lights', 'torch', 'nitrox'];
   real.career.fleet.twinjet.fuel = 0;
   const before = encode(real),

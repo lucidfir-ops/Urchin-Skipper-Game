@@ -191,12 +191,14 @@ test('awareness crew chart an actual worked patch remotely; other crew still rep
   recordDiverReport(w, d, { automatic: diverSpec(d).autoChart });
   assert(!w.career.knowledge.near.grounds[p.id]);
 });
-test('buyer demand is announced the previous day and pays only qualifying lots an additive premium', () => {
+test('legacy announced buyer demand survives once and pays only qualifying lots an additive premium', () => {
   const w = careerWorld();
   assert.match(buyerNotice(w.career), /Tomorrow/);
+  w.career.buyerNext = { day: w.career.day + 1, minQuality: 0.8, premium: 0.2 };
   const tomorrow = structuredClone(w.career.buyerNext);
   advanceCareer(w.career);
   assert.deepEqual(w.career.buyerToday, tomorrow);
+  assert.equal(w.career.buyerNext, null);
   w.career.buyerToday = { day: w.career.day, minQuality: 0.8, premium: 0.2 };
   w.day.minute = 1100;
   w.catch = 600;
@@ -212,6 +214,8 @@ test('buyer demand is announced the previous day and pays only qualifying lots a
   assert(Math.abs(quote.value - calculateOffload(w, 1140).value - bonus) < 0.02);
   assert.equal(calculateOffload(w, 1141).lateMinutes, 1);
   assert.equal(calculateOffload(createWorld(), 1140).buyerPremium, 0);
+  advanceCareer(w.career);
+  assert.equal(w.career.buyerToday, null);
 });
 test('rain runoff waits two hours, carries into the following day, and releases real timber only once', () => {
   const w = careerWorld();

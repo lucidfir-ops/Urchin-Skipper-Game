@@ -2,7 +2,7 @@ import { earlyStartNotice } from './early-start.js';
 import { conditionsAt } from './weather.js';
 import { boatSpec } from './boats.js';
 import { GROUNDS, groundTrip, passageMinutes } from './day.js';
-import { assist } from './assists.js';
+import { assist, gear } from './assists.js';
 import { engineState } from './operating-state.js';
 export const PREPARATION = {
   reserveMinutes: 15,
@@ -92,7 +92,7 @@ export function departureBriefing(w, id) {
       level: 'warn',
       text: 'Sea conditions exceed this boat’s comfortable working range.',
     });
-  if (weather?.night && !w.career?.fleet[w.boat.configuration]?.equipment.includes('lights'))
+  if (weather?.night && !gear(w, 'lights'))
     notes.push({
       level: 'warn',
       text: 'Unlit night departure: visibility and the recovery area are limited.',

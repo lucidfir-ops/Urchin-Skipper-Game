@@ -1,4 +1,5 @@
 import { C } from './config.js';
+import { enabledEquipment } from './equipment-controls.js';
 import { UI_OPTIONS } from './assist-options.js';
 export const ASSISTS = {
   timepiece: 'Timepiece',
@@ -159,7 +160,7 @@ export function assist(w, name, realistic = false, reveal = false) {
   );
 }
 export function gear(w, id) {
-  return !!w.career?.fleet[w.boat.configuration]?.equipment.includes(id);
+  return enabledEquipment(w).includes(id);
 }
 export function pickupTolerance(w, realistic = false) {
   const base = assist(w, 'widePickup', realistic)

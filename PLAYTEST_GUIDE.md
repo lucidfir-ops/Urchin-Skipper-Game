@@ -1,10 +1,24 @@
-# Playtest guide — September 23 touch and portrait
+# Playtest guide — September 23 working day
 
 Player-facing release copy: [HOW_TO_PLAY.txt](HOW_TO_PLAY.txt). This guide below is the detailed testing checklist.
 
-Use [the new itch.io TEMP ZIP](exports/2026-09-23-touch-and-portrait/UrchinSkipper-TEMP-ITCHIO.zip), or [the local/Wi-Fi TEMP ZIP](<exports/2026-09-23-touch-and-portrait/Urchin Skipper TEMP.zip>). Confirm **TEMP · SEP 23 · TOUCH & PORTRAIT**. Older exports remain available. [Implementation record](docs/FEEDBACK_SEPTEMBER23.md). Current approved design is consolidated in [bible.md](bible.md); the documentation cleanup does not change this playable release.
+Use [the new itch.io TEMP ZIP](exports/2026-09-23-working-day/UrchinSkipper-TEMP-ITCHIO.zip), or [the local/Wi-Fi TEMP ZIP](<exports/2026-09-23-working-day/Urchin Skipper TEMP.zip>). Confirm **TEMP · SEP 23 · WORKING DAY**. Older exports remain available. [Implementation record](docs/WORKING_DAY_2026-09-23.md). Current approved design is in [bible.md](bible.md).
 
 Keep testing the familiar 14-inch landscape setup. Portrait is enabled again. Open **Touchscreen Options** from the title, Settings or Pause. Try 70% Tiny controls and 40–60% opacity; UI Scale remains separate. Harbour fills the display. Physical phone/tablet/Deck performance, speakers and USB Xbox controls still need human playtesting.
+
+## Working-day checks
+
+- Close/reopen the browser at sea with each owned boat, including sister hulls; compare both Raster/Vector settings. The same boat, equipment, catch and crew should return. Report any shadow-only hull with renderer, boat, screenshot and troubleshooting log.
+- In a strong current, select Neutral and centre the rudder while facing upstream. Drift astern; apply full port/starboard and compare shaft, leg/outboard and jet hulls. Jets have no passive nozzle steering. Try a slightly angled heading, an opposing wind and an empty versus loaded large boat. Powered helm/pivot and USB Xbox mappings remain familiar.
+- Recover several ordinary bags. A visible surfaced float has an amber approach cue and turns green only when all pickup gates pass. Bring port alongside and match drift; the actual action still chooses the nearest eligible float. Watch for a brief crew bubble and sampled quality on recovery.
+- Bags stay red, fixed in size and inside the deck. Fill a small and large boat; later bags overlap and cover gaps. In Realistic, keep Exact deck/diver readouts enabled to see quality.
+- Pause → Deck catch lists the bags newest first. Dump a low-quality bag: its original haul time elapses on the working sea, deck pickup is blocked meanwhile, exact weight comes off once, and the bed never regrows. Save/reload during the operation. Check a 2.2-second hauler bag and a 3-second ordinary bag.
+- Harbour office → Buyer market, or Sail → departure plan → Buyer market: choose a small order or standard sales. Premium/bulk contacts display sales/safe-return unlocks. At sea the same screen estimates eligible landed weight/bonus if returning now; the order is fixed until the next day. Excess catch still sells normally, and short orders have no fine.
+- Local Chart: read report age, reporter and tide phase. Mark a recent sample, then select that personal mark for bearing/distance guidance. It must retain the actual sample point without revealing an unmarked bed outline. Reload and revisit next day; old reports remain dated observations.
+- Return to harbour: compare net return, three factual highlights, buyer premium, crew shares and the previous trip. Try an early quality trip and a late offload; gross sales must stay distinct from profit.
+- Pause → Equipment switches (also Your boat): toggle lights, hauler, electronics or retrofit thruster. Enabled lights are automatic after dark, feather smoothly and are absent at noon. Switching lights off restores the shorter unlit pickup/visibility range. Each hull retains its own switches after reload.
+- Watch for named selfish rivals working the same bed and real depletion of shared stock. Taxis sometimes cut across an occupied bed and warn on an actual close surface pass; they still avoid boats. Shy Hull Wood has a readable nearby name, with hidden crew still private. Event frequency has not been reduced.
+- Gameplay Speed defaults to +50%; a deliberate older saved choice remains. The [crew relationship proposal](docs/CREW_RELATIONSHIPS_PROPOSAL.txt) includes the deferred 40-knot passage-weather idea; no new random sinking rule ships here.
 
 ## September 23 checks
 

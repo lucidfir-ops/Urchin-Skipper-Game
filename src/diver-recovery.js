@@ -63,8 +63,9 @@ export function recoveryStatus(w, tolerance = C.recovery.tolerance, d = selected
     close = distance <= tolerance,
     clear = Math.abs(side) >= boatSpec(w).width / 2 || Math.abs(fore) >= boatSpec(w).length / 2,
     slow = waterSpeed <= C.recovery.maxRelativeSpeed;
-  const reason =
-    d.state !== 'surface'
+  const reason = w.day.dump
+    ? 'DECK BUSY — DUMPING BAG'
+    : d.state !== 'surface'
       ? d.state === 'ready'
         ? 'DIVER ABOARD'
         : 'DIVER NOT SURFACED'

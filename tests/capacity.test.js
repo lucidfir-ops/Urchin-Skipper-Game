@@ -34,7 +34,11 @@ test('near-capacity combined recovery lands only fitting catch, reports overflow
   assert.equal(w.diver.state, 'ready');
   assert.equal(w.catch, 5000);
   assert.equal(w.discarded, 200);
-  assert.deepEqual(w.bags, [{ weight: 100, quality: 0.8, harvestMinute: 480 }]);
+  assert.deepEqual(
+    w.bags.map(({ weight, quality, harvestMinute }) => ({ weight, quality, harvestMinute })),
+    [{ weight: 100, quality: 0.8, harvestMinute: 480 }],
+  );
+  assert.equal(w.bags[0].haulSeconds, 3);
   assert(w.events.some((e) => /200 lb EXCESS CATCH RELEASED/.test(e)));
   recover(w, { recoverDiver: true });
   assert.equal(w.catch, 5000);

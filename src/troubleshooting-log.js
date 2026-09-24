@@ -126,7 +126,7 @@ if (typeof window !== 'undefined') {
 
 export function troubleshootingSnapshot() {
   return {
-    build: 'TEMP · SEP 23 · TOUCH & PORTRAIT',
+    build: 'TEMP · SEP 23 · WORKING DAY',
     userAgent: globalThis.navigator?.userAgent || 'unavailable',
     viewport: typeof innerWidth === 'number' ? { width: innerWidth, height: innerHeight } : null,
     enabled,

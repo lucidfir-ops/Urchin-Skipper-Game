@@ -1,4 +1,5 @@
 import { crewStatTable, medicalHistoryMarkup } from './medical-history.js';
+import { workingDayDetail } from './working-day-view.js';
 import { crewRoster, crewEmployer } from './crew-roster.js';
 import { insurancePremium } from './insurance.js';
 import { timeIncrease, setTimeIncrease } from './time-speed.js';
@@ -67,6 +68,9 @@ export function renderCareer(ui, w, bind) {
       c.crew,
       c.people,
       c.fleet,
+      c.buyerToday,
+      w.day.dump,
+      w.bags.length,
       c.insured,
       c.licenceThrough,
       c.areaAccess,
@@ -85,6 +89,14 @@ export function renderCareer(ui, w, bind) {
   }
   let title = 'A living from the water.',
     detail = '';
+  if (['market', 'deck-catch', 'equipment-controls'].includes(ui.screen)) {
+    title = {
+      market: 'The buyers’ board.',
+      'deck-catch': 'Catch on deck.',
+      'equipment-controls': 'Your boat’s switches.',
+    }[ui.screen];
+    detail = workingDayDetail(w, ui.screen);
+  }
   if (ui.screen === 'purchase') {
     title = 'Confirm purchase';
     detail = `<h3>${ui.pendingPurchase?.label || 'No purchase selected'}</h3><p>${ui.pendingPurchase?.detail || ''}</p><p>Available: ${money(c.cash)}</p>`;
@@ -191,7 +203,7 @@ export function renderCareer(ui, w, bind) {
   }
   if (ui.screen === 'gameplay-speed') {
     title = 'Gameplay Speed';
-    detail = `<label for="timeSpeed">World time speed increase: <strong>+${timeIncrease()}%</strong></label><input id="timeSpeed" type="range" min="0" max="100" step="5" value="${timeIncrease()}"/><p>0% is the original pace; +100% runs twice as fast. Bags, days, boats and weather all speed up together. Default: +25%. Saved for this browser.</p><p>Use the −5%/+5% buttons with a controller, or drag the slider.</p>`;
+    detail = `<label for="timeSpeed">World time speed increase: <strong>+${timeIncrease()}%</strong></label><input id="timeSpeed" type="range" min="0" max="100" step="5" value="${timeIncrease()}"/><p>0% is the original pace; +100% runs twice as fast. Bags, days, boats and weather all speed up together. Default: +50%. Saved for this browser.</p><p>Use the −5%/+5% buttons with a controller, or drag the slider.</p>`;
   }
   if (ui.screen === 'workshop') {
     title = c.sandbox ? 'Developer conditions' : 'Training Mode · aboard with Frank';

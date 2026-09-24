@@ -44,7 +44,7 @@ test('pace changes scale the complete world with finite 0–100% increase bounds
     setTimeIncrease(increase);
     assert.equal(worldTimeScale(), scale);
   }
-  assert.equal(clampTimeIncrease('bad'), 25);
+  assert.equal(clampTimeIncrease('bad'), 50);
   setTimeIncrease(25);
 });
 test('open-water scouting alternates seven-second legs around the ordered course', () => {

@@ -458,5 +458,7 @@ test('bubbles only underwater, float only at surface, and deck markers remain in
   assert(diverVisual(d).aboard);
   const markers = deckMarkers(Array.from({ length: 35 }, () => ({ weight: 100 })));
   assert.equal(markers.length, 35);
-  assert.equal(new Set(markers.map((m) => `${m.x},${m.y}`)).size, 35);
+  assert(markers.some((m) => m.layer > 0));
+  assert(markers.every((m) => m.radius === markers[0].radius));
+  assert.deepEqual(markers.slice(0, 10), deckMarkers(Array.from({ length: 10 })));
 });

@@ -1,4 +1,6 @@
 import { wildlifeWorkRate } from './wildlife.js';
+import { stepDeckWork } from './deck-work.js';
+import { surfaceMoment } from './crew-moments.js';
 import { releaseRunoff } from './runoff.js';
 import { scoutHeading } from './diver-search.js';
 import { swimToPickupWater } from './diver-escape.js';
@@ -205,7 +207,12 @@ function finishRecovery(w, d) {
     };
     if (landed > 0)
       w.bags.push({
+        id: `bag-${w.career?.day || 0}-${w.time}-${d.id}`,
         weight: landed,
+        haulSeconds: d.hookSeconds || C.recovery.hookSeconds,
+        diverName: d.name,
+        groundName: d.patch?.name || null,
+        recoveredMinute: w.day.minute,
         quality: d.qualitySum / weight,
         harvestMinute: d.harvestMinute ?? w.day.minute,
         ...(w.day.groundId ? { areaId: w.day.groundId, subAreaId: w.day.subAreaId } : {}),
@@ -220,7 +227,11 @@ function finishRecovery(w, d) {
     d.qualitySum = 0;
     d.bagHandled = true;
     if (w.career) d.undersizeCount = null;
-    announce(w, `BAG RECOVERED — ${landed.toFixed(0)} lb`, d);
+    announce(
+      w,
+      `BAG RECOVERED — ${landed.toFixed(0)} lb · ${Math.round((d.lastBag.quality || 0) * 100)}% QUALITY`,
+      d,
+    );
     effect(w, 'bag', d, { weight: landed });
   }
   d.hook = 0;
@@ -396,6 +407,7 @@ function stepDiver(w, d, a, dt, tolerance) {
     d.timer -= dt;
     if (d.timer <= 0) {
       d.state = 'surface';
+      surfaceMoment(w, d);
       announce(w, 'DIVER SURFACED — GET ALONGSIDE ON PORT', d);
       effect(w, 'surface', d);
     }
@@ -461,6 +473,7 @@ export function step(w, a, dt, { tolerance = C.recovery.tolerance } = {}) {
   updateWeather(w);
   stepFishery(w, dt);
   stepSeaEvents(w, dt);
+  stepDeckWork(w, dt);
   for (const d of w.divers) d.hookSeconds = gear(w, 'hoist') ? 2.2 : C.recovery.hookSeconds;
   const commands = pinActionTargets(w, a, tolerance);
   if (a.recall && commands.recallDiverId !== undefined) recallDiver(w, commands.recallDiverId);

@@ -1,4 +1,5 @@
 import { recordMedical } from './medical-history.js';
+import { dayHighlights } from './day-story.js';
 import { earlyPassageStrike, earlyStartNotice } from './early-start.js';
 import { insurancePremium, recordInsuranceClaims } from './insurance.js';
 import { presetAssists } from './assists.js';
@@ -80,13 +81,15 @@ export const equipment = (w) => w.career?.fleet[w.boat.configuration]?.equipment
 export function syncVessel(w) {
   if (!w.career) return;
   const v = w.career.fleet[w.boat.configuration];
-  if (v)
+  if (v) {
+    w.career.activeBoat = w.boat.configuration;
     Object.assign(v, {
       hullHealth: w.boat.hullHealth,
       driveHealth: w.boat.driveHealth,
       fuel: w.boat.fuel,
       lost: !!w.boat.sinking,
     });
+  }
 }
 export function useVessel(w, id) {
   const c = w.career,
@@ -243,6 +246,7 @@ export function credit(w, repay = false) {
   return { ok: true };
 }
 export function departureReady(w) {
+  if (w.day.dump) return 'Finish dumping the bag before travelling.';
   if (!w.career) return '';
   const c = w.career;
   if (c.starterPending) return 'Choose your first boat at the harbour.';
@@ -394,6 +398,7 @@ export function settleCareer(w, result) {
   result.expenses = cost + (w.day.insurancePaid || 0);
   result.netValue = cents(net - (w.day.insurancePaid || 0));
   result.priceIsPrototype = false;
+  result.highlights = dayHighlights(w, result);
   c.history.unshift({
     id: trip.id,
     day: c.day,
@@ -405,6 +410,7 @@ export function settleCareer(w, result) {
     onTime: result.onTime,
     sunk: result.sunk,
     crew: result.crew,
+    highlights: result.highlights,
   });
   c.history = c.history.slice(0, 60);
 }

@@ -1,4 +1,5 @@
 import { C } from './config.js';
+import { enabledEquipment } from './equipment-controls.js';
 import { FLEET, ECONOMY } from './career-data.js';
 import { depthAt } from './terrain.js';
 import { currentAt } from './environment.js';
@@ -189,11 +190,13 @@ export function boatSpec(w) {
   const spec = { ...C.boat, ...boatDefinition(w.boat.configuration).spec };
   if (w.career) {
     Object.assign(spec, FLEET[w.boat.configuration]);
-    const gear = w.career.fleet[w.boat.configuration]?.equipment || [];
+    const gear = enabledEquipment(w);
     if (gear.includes('tank'))
       spec.fuelCapacity +=
         w.career.fleet[w.boat.configuration].auxTankLitres ?? ECONOMY.auxTankLitres;
     if (gear.includes('bowthruster')) Object.assign(spec, boatDefinition('thruster').spec);
+    if (w.career.fleet[w.boat.configuration]?.disabledEquipment?.includes('bowthruster'))
+      spec.bowThrusterStrength = 0;
     spec.turnResponse *= spec.maneuverability ?? 1;
     spec.rudderEffectiveness *= spec.maneuverability ?? 1;
     if (spec.pivotRate) spec.pivotRate *= spec.maneuverability ?? 1;
@@ -203,6 +206,16 @@ export function boatSpec(w) {
     spec.acceleration *= 1 / (1 + (Math.max(0, w.boat.fuel) * 0.84) / spec.mass);
     if (gear.includes('stabilizer')) spec.waveTolerance *= 1.5;
     const load = Math.min(1, w.catch / spec.capacity);
+    // Displacement and cargo retain momentum through neutral/braking and turns.
+    // Hull exposure also grows with size; environmental response is deliberately
+    // stronger on large working boats, while cargo adds inertia, not windage.
+    const inertia = Math.sqrt(spec.mass / C.boat.mass) * (1 + load * 0.35);
+    spec.environmentResponse = Math.sqrt((spec.length * spec.width) / 40);
+    spec.drag /= inertia;
+    spec.lateralDrag *= spec.environmentResponse / Math.sqrt(inertia);
+    spec.turnResponse /= inertia;
+    spec.rudderEffectiveness /= Math.sqrt(inertia);
+    spec.windage *= spec.environmentResponse;
     spec.acceleration *= 1 - load * 0.3;
     spec.maxSpeed =
       spec.loadedSpeed === undefined

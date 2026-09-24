@@ -2,6 +2,7 @@ import { engineState } from './operating-state.js';
 import { recallStatus } from './diver-recall.js';
 import { pickupTolerance } from './assists.js';
 import { C } from './config.js';
+import { clamp } from './math.js';
 import {
   recoveryStatus,
   recoveryDuration,
@@ -51,14 +52,36 @@ export function diverVisual(d) {
     aboard: d.state === 'ready',
   };
 }
-export function deckMarkers(bags) {
-  const columns = Math.max(3, Math.ceil(Math.sqrt(bags.length))),
-    rows = Math.max(4, Math.ceil(bags.length / columns));
-  return bags.map((_, i) => ({
-    x: -1.4 + ((i % columns) * 2.8) / Math.max(1, columns - 1),
-    y: 1 + (Math.floor(i / columns) * 3) / Math.max(1, rows - 1),
-    radius: Math.min(0.55, 1.6 / columns, 1.8 / rows),
-  }));
+export function deckMarkers(bags, spec = C.boat) {
+  const radius = 0.64,
+    left = -spec.width * 0.4 + radius + 0.06,
+    right = -left,
+    top = spec.length * 0.055 + radius + 0.06,
+    bottom = spec.length * 0.44 - radius - 0.06,
+    columns = Math.max(2, Math.ceil((right - left) / (radius * 1.4)) + 1),
+    rows = Math.max(2, Math.ceil((bottom - top) / (radius * 1.4)) + 1),
+    layerSize = columns * rows;
+  return bags.map((_, i) => {
+    const layer = Math.floor(i / layerSize),
+      slot = i % layerSize,
+      stagger = layer % 2 ? radius * 0.6 : 0;
+    return {
+      x:
+        (clamp(left + ((slot % columns) * (right - left)) / (columns - 1) + stagger, left, right) *
+          4) /
+        spec.width,
+      y:
+        (clamp(
+          top + (Math.floor(slot / columns) * (bottom - top)) / (rows - 1) + stagger,
+          top,
+          bottom,
+        ) *
+          10) /
+        spec.length,
+      radius,
+      layer,
+    };
+  });
 }
 export function playState(
   w,
@@ -140,6 +163,7 @@ export function playState(
   const observable =
     !realistic || d.state === 'ready' || (waiting && r.distance <= C.recovery.tolerance + 3);
   if (!observable) status = 'WATCH BUBBLES / MANEUVER ALONGSIDE';
+  if (w.day.dump) status = `DUMPING BAG — ${w.day.dump.remaining.toFixed(1)}s`;
   return {
     status,
     operation,
