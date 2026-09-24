@@ -14,7 +14,7 @@ Canonical artwork now lives in `public/assets/`: the supplied title, fleet origi
 
 ## Git source and local game exports
 
-The designer subsequently requested a minimal public GitHub backup, proceeding one step at a time, and authorized local duplicate cleanup. Publication is a later step; the current task performs no remote changes. Local additive TEMP ZIPs remain the game-delivery workflow. [Backup review](../docs/github-backup-review/README.md). The setup below describes the existing local Git state, not a completed upload.
+The designer subsequently requested a minimal public GitHub backup, proceeding one step at a time, and authorized local duplicate cleanup. The verified minimal repository is now published; future verified game updates follow the [standing GitHub-plus-TEMP workflow](../AGENTS.md#github-backup-and-temp-exports). Local additive TEMP ZIPs remain the game-delivery workflow. [Backup review](../docs/github-backup-review/README.md). The setup below describes the existing local Git state, not the minimal public selection.
 
 The September 23 GitHub setup tracks editable source, tests, scripts, design documents, original artwork and required runtime assets. It preserves the existing additive game-export workflow. `.gitignore` excludes dependencies, caches, `dist/`, `exports/`, `feedback/`, careers, browser profiles, credentials, environment files and machine-local state; ignored files remain on disk. Curated design/verification history remains source documentation, while raw `.log` files stay local.
 
