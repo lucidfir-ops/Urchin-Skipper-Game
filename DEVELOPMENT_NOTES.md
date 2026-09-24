@@ -2,6 +2,12 @@
 
 Current design: [bible.md](bible.md). Build state: [PROJECT_STATUS.md](PROJECT_STATUS.md#design-authority). These notes describe implementation, not a separate design specification. [v1.7 development](docs/V17_DEVELOPMENT.md), earlier [prototype notes](docs/history/2026-09-11-v17/DEVELOPMENT_NOTES.md) and feedback records linked below are historical implementation evidence only. Dated references to authority or current decisions below describe that increment; approved current design is consolidated in the living Bible.
 
+## September 24 rotation and helm
+
+[Acceptance and limits](docs/history/2026-09-24-rotation-and-helm/README.md). `rotation-policy.js` deduplicates explicit `lock('any')`, caches success through ordinary resizes, retries on context changes and prevents stale failures from unlocking a newer context. `fullscreen.js` uses the next trusted touch to claim child fullscreen only inside an already-fullscreen host. Inline views, mouse play and deliberate exits keep their behavior. The embed checks model mobile orientation permission while exercising real cross-origin fullscreen/touch in Chromium and Firefox; physical phone rotation still needs a device check.
+
+`water-loads.js` gives real low-speed longitudinal flow more readable rudder lift near neutral, fading by 8% throttle and in strong flow. It remains zero at matched drift and preserves shaft/leg/jet distinctions. Bow force is reduced 20% through the shared factory/retrofit specification. Run the rotation/helm unit tests and `npm run verify -- --browsers-only --suite=device-embed` (or `device-embed-firefox`).
+
 ## September 24 crew and coasts
 
 [Implementation and acceptance](docs/history/2026-09-24-crew-and-coasts/README.md). One-command bag exchange uses the nearby diver; selection remains for deployment/orders. `crew-moments.js` keeps bounded per-diver report memory; `diver-observations.js` samples only local awareness; `maxBagSeconds` and the picking-only clock persist in saves. `regional-conditions.js` limits live Home Coast conditions and forecasts while habitat authoring keeps its original field. Taxi crossing routes commit once and look past reached waypoints. Deeply seated hulls wait for water or the existing paid rescue transition. Run `npm run verify -- --suite=crew-coasts` (or `crew-coasts-firefox`) and the synthetic controller flow.

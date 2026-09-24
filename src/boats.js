@@ -40,7 +40,7 @@ export const BOATS = [
     description:
       'A larger coastal hull with a fitted bow thruster. Swing into position at idle, then release the thruster to coast.',
     controls: 'Hold bow thruster: {thrustPort} / {thrustStarboard}. Right stick remains rudder.',
-    spec: { bowThrusterStrength: 1.65, bowThrusterFadeStart: 1.2, bowThrusterFadeEnd: 3.1 },
+    spec: { bowThrusterStrength: 1.32, bowThrusterFadeStart: 1.2, bowThrusterFadeEnd: 3.1 },
     damageFactor: 0.2,
     repairHours: 24,
     repairCost: 1800,

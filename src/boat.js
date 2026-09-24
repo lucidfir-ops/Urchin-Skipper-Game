@@ -93,7 +93,14 @@ export function stepBoat(w, a, dt) {
     y: (body.mass * (-along * co + across * s)) / 1e6,
   });
   const passive = 1 - Math.min(1, Math.abs(b.throttle) * 4);
-  for (const load of waterLoads(spec, forward, lateral, body.angularVelocity * 60, b.rudder))
+  for (const load of waterLoads(
+    spec,
+    forward,
+    lateral,
+    body.angularVelocity * 60,
+    b.rudder,
+    1 - smooth(0.02, 0.08, Math.abs(b.throttle)),
+  ))
     Body.applyForce(
       body,
       { x: body.position.x + s * load.fore, y: body.position.y - co * load.fore },

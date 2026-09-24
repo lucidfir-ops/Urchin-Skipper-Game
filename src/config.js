@@ -14,6 +14,7 @@ export const C = {
     rudderSensitivity: 1,
     rudderLimit: 1,
     rudderEffectiveness: 0.22,
+    neutralRudderLift: 1,
     turnResponse: 1.8,
     reverseRudder: 0.15,
     reversePropWalk: 0.0015,

@@ -44,6 +44,7 @@ const suites = {
   'device-feedback': ['--device-feedback-only'],
   'device-feedback-firefox': ['--device-feedback-only'],
   'device-embed': ['--device-embed-only'],
+  'device-embed-firefox': ['--device-embed-only'],
   'minimap-layout': ['--minimap-layout-only'],
   'minimap-layout-firefox': ['--minimap-layout-only'],
   'chart-layout': ['--chart-layout-only'],

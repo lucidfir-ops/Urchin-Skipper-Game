@@ -1,10 +1,16 @@
-# Playtest guide — September 24 crew and coasts
+# Playtest guide — September 24 rotation and helm
 
 Player-facing release copy: [HOW_TO_PLAY.txt](HOW_TO_PLAY.txt). This guide below is the detailed testing checklist.
 
-Use [the new itch.io TEMP ZIP](exports/2026-09-24-crew-and-coasts/UrchinSkipper-TEMP-ITCHIO.zip), or [the local/Wi-Fi TEMP ZIP](<exports/2026-09-24-crew-and-coasts/Urchin Skipper TEMP.zip>). Confirm **TEMP · SEP 24 · CREW & COASTS**. Older exports remain available. [Implementation and acceptance](docs/history/2026-09-24-crew-and-coasts/README.md). Current approved design is in [bible.md](bible.md).
+Use [the new itch.io TEMP ZIP](exports/2026-09-24-rotation-and-helm/UrchinSkipper-TEMP-ITCHIO.zip), or [the local/Wi-Fi TEMP ZIP](<exports/2026-09-24-rotation-and-helm/Urchin Skipper TEMP.zip>). Confirm **TEMP · SEP 24 · ROTATION & HELM**. Older exports remain available. [Implementation and acceptance](docs/history/2026-09-24-rotation-and-helm/README.md). Current approved design is in [bible.md](bible.md).
 
 Keep testing the familiar 14-inch landscape setup. Portrait is enabled again. Open **Touchscreen Options** from the title, Settings or Pause. Try 70% Tiny controls and 40–60% opacity; UI Scale remains separate. Harbour fills the display. Physical phone/tablet/Deck performance, speakers and USB Xbox controls still need human playtesting.
+
+## Rotation and helm checks
+
+- On the same Android/Firefox itch setup as the recording, launch normally and touch the game. Rotate between portrait and landscape several times, then background/restore the browser. The layout should follow the phone without visiting Fullscreen. Also check ordinary inline hosting and deliberate fullscreen exit. Report browser/version and download the troubleshooting log if it sticks; desktop automation cannot confirm the physical sensor/host behavior.
+- Load the Coastal Workhorse to roughly 3,300 lb. In light current (about 0.6 knots), face upstream and neutralize the throttle. While water still passes the hull, hold either rudder direction: turning should be clear within several seconds. Once the hull exactly matches uniform drift, the rudder has no water flow to turn it. Compare ahead/reverse and jet/leg behavior with the previous export.
+- Compare bow thrust against the previous export, empty and loaded: the bow should swing more gently but remain useful alongside a float. Test factory and retrofitted thrusters and their equipment switch; twin-jet pivot is independent.
 
 ## Crew and coast checks
 
