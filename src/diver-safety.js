@@ -104,12 +104,9 @@ export function checkDiverSafety(w, previous, source = {}) {
     }
     if (d.state === 'surface') {
       // Prevent a slow hull overlap becoming a way to collect a diver through the boat.
-      const side = local.side < 0 ? -1 : 1,
-        q = fromHull(
-          b,
-          side * (spec.width / 2 + cfg.radius + 0.15),
-          Math.max(-spec.length / 2, Math.min(spec.length / 2, local.fore)),
-        );
+      const current = toHull(b, d.x, d.y),
+        side = current.side < 0 ? -1 : 1,
+        q = fromHull(b, side * (spec.width / 2 + cfg.radius + 0.15), current.fore);
       d.x = q.x;
       d.y = q.y;
     }

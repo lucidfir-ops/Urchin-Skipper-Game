@@ -82,7 +82,7 @@ export function downloadLog() {
   const url = URL.createObjectURL(
     new Blob(
       [
-        `Urchin Skipper TEMP · SEP 24 · DEPLOY & TABLET\n${navigator.userAgent}\n` +
+        `Urchin Skipper TEMP · SEP 24 · COASTING & TRAFFIC\n${navigator.userAgent}\n` +
           entries
             .map(
               (e) =>
@@ -126,7 +126,7 @@ if (typeof window !== 'undefined') {
 
 export function troubleshootingSnapshot() {
   return {
-    build: 'TEMP · SEP 24 · DEPLOY & TABLET',
+    build: 'TEMP · SEP 24 · COASTING & TRAFFIC',
     userAgent: globalThis.navigator?.userAgent || 'unavailable',
     viewport: typeof innerWidth === 'number' ? { width: innerWidth, height: innerHeight } : null,
     enabled,

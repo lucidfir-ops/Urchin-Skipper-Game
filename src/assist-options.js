@@ -1,5 +1,9 @@
 // UI controls remain available regardless of the career's difficulty ceiling.
 export const UI_OPTIONS = {
+  almanacShortcut: [
+    'Tide & current almanac button',
+    'A movable shortcut to the almanac, independent of the current instruments. The almanac also remains available from Menu.',
+  ],
   timepiece: [
     'Timepiece',
     'A separate ship’s clock. The black red-digit clock is standard; buy other faces in Chandlery → Timepiece. Independent of the clock/offload card.',

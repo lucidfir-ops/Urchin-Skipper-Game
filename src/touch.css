@@ -241,7 +241,7 @@ body.touchscreen button {
 }
 body.touch-playing #help,
 body.touch-playing #actionFeedback,
-body.touch-playing #openAlmanac,
+body.touch-playing #almanacPanel,
 body.touch-playing #groundLegend {
   display: none;
 }

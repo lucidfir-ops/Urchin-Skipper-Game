@@ -29,6 +29,8 @@ async function ready() {
   }
 }
 const suites = {
+  'traffic-coasting': ['--traffic-coasting-only'],
+  'traffic-coasting-firefox': ['--traffic-coasting-only'],
   'tablet-feedback': ['--tablet-feedback-only'],
   'tablet-feedback-firefox': ['--tablet-feedback-only'],
   'crew-coasts': ['--crew-coasts-only'],

@@ -2,14 +2,18 @@ import { clearVesselPose } from './vessel-contact.js';
 import { C } from './config.js';
 import { clamp, angleDelta } from './math.js';
 import { boatSpec } from './boats.js';
-import { clearWater, waterSegment } from './water-route.js';
+import { clearWater, waterSegment, waterRoute } from './water-route.js';
+import { rivalWater, trafficHull } from './rival-plan.js';
 import { checkDiverSafety } from './diver-safety.js';
 import { hullDistance, fromHull } from './collision-geometry.js';
 import { surfacedWildlifePoints } from './wildlife.js';
 
 export function moveTraffic(w, actor, dt) {
   let target = actor.route[actor.waypoint];
-  if (actor.kind === 'taxi' && target) {
+  const navigation = actor.kind === 'rival' && !actor.shallowEscape ? rivalWater(w) : w,
+    level = navigation.environment.seaLevel || 0;
+  const spec = actor.docking ? { draft: actor.draft, radius: 3 } : trafficHull(actor);
+  if (!actor.docking && target) {
     const next = actor.route[actor.waypoint + 1],
       previous = actor.route[actor.waypoint - 1] || actor.routeStart,
       distance = Math.hypot(target.x - actor.x, target.y - actor.y),
@@ -20,14 +24,7 @@ export function moveTraffic(w, actor, dt) {
           0;
     // A fast boat looks through nearby intermediate waypoints and never circles
     // back to touch one it has passed while avoiding another hull.
-    if (
-      next &&
-      (distance < 24 || passed) &&
-      waterSegment(w.terrain, w.environment.seaLevel || 0, actor, next, {
-        draft: actor.draft,
-        radius: Math.max(actor.width / 2, 3),
-      })
-    ) {
+    if (next && (distance < 24 || passed) && waterSegment(w.terrain, level, actor, next, spec)) {
       actor.waypoint++;
       target = next;
     }
@@ -69,7 +66,10 @@ export function moveTraffic(w, actor, dt) {
       ...(actor.kind === 'taxi' ? surfacedWildlifePoints(w) : []),
     ];
   if (actor.kind !== 'taxi')
-    for (const d of [...w.divers, ...(w.traffic?.actors || []).flatMap((a) => a.divers || [])])
+    for (const d of [
+      ...w.divers,
+      ...(w.traffic?.actors || []).filter((a) => a !== actor).flatMap((a) => a.divers || []),
+    ])
       if (
         typeof d.underwater === 'boolean' ||
         ['deploying', 'searching', 'harvesting', 'surfacing', 'surface'].includes(d.state)
@@ -86,22 +86,23 @@ export function moveTraffic(w, actor, dt) {
     dx += (x / d) * force - (y / d) * force * 0.8 * side;
     dy += (y / d) * force + (x / d) * force * 0.8 * side;
   }
-  const desired = Math.atan2(dx, -dy),
+  const desired = actor.detourUntil > w.time ? actor.detourHeading : Math.atan2(dx, -dy),
     delta = angleDelta(desired, actor.heading),
     heading = actor.heading + clamp(delta, -actor.turnRate * dt, actor.turnRate * dt),
-    speed = (actor.knots / C.knotsPerMps) * Math.max(0.12, Math.cos(delta)),
+    speed =
+      Math.min(actor.knots / C.knotsPerMps, length / (actor.docking ? 0.5 : 2)) *
+      (!actor.docking && Math.abs(delta) > 0.35 ? 0 : Math.max(0, Math.cos(delta))),
     next = {
       x: actor.x + Math.sin(heading) * speed * dt,
       y: actor.y - Math.cos(heading) * speed * dt,
-    },
-    spec = { draft: actor.draft, radius: Math.max(actor.width / 2, 3) };
+    };
   const previous = { x: actor.x, y: actor.y, heading: actor.heading };
   const safe = clearVesselPose(w, actor, previous, { ...next, heading });
   actor.heading = safe.heading;
   if (
     safe.blocked ||
-    !clearWater(w.terrain, w.environment.seaLevel || 0, next, spec) ||
-    !waterSegment(w.terrain, w.environment.seaLevel || 0, actor, next, spec) ||
+    !clearWater(w.terrain, level, next, spec) ||
+    !waterSegment(w.terrain, level, actor, next, spec) ||
     (actor.docking &&
       actor.target === 'player' &&
       [-1, 1].some((side) =>
@@ -126,6 +127,32 @@ export function moveTraffic(w, actor, dt) {
     }
     actor.vx = actor.vy = actor.speed = 0;
     actor.stuckSeconds = (actor.stuckSeconds || 0) + dt;
+    if (!actor.docking && actor.stuckSeconds >= 1 && !(actor.detourUntil > w.time)) {
+      // Try a short, fully wet escape leg before returning to the committed
+      // destination. Do not keep pushing the same shoreline or orbit a hull.
+      const bearing = Math.atan2(target.x - actor.x, actor.y - target.y);
+      for (const offset of [0, 0.4, -0.4, 0.8, -0.8, 1.2, -1.2, 1.6, -1.6, Math.PI]) {
+        const angle = bearing + offset,
+          p = { x: actor.x + Math.sin(angle) * 12, y: actor.y - Math.cos(angle) * 12 };
+        if (
+          waterSegment(w.terrain, level, actor, p, spec) &&
+          !avoid.some((o) => Math.hypot(p.x - o.x, p.y - o.y) < o.radius + 1)
+        ) {
+          actor.detourHeading = angle;
+          actor.detourUntil = w.time + 3;
+          break;
+        }
+      }
+      if (actor.stuckSeconds >= 4) {
+        const route = waterRoute(navigation, actor, actor.route.at(-1), spec);
+        if (route.length) {
+          actor.route = route;
+          actor.routeStart = { x: actor.x, y: actor.y };
+          actor.waypoint = 0;
+        }
+        actor.stuckSeconds = 1;
+      }
+    }
     const edge = Math.min(actor.x, actor.y, w.terrain.size - actor.x, w.terrain.size - actor.y);
     if (['taxi', 'tourist'].includes(actor.kind) && edge < 22 && actor.stuckSeconds >= 3)
       return true;

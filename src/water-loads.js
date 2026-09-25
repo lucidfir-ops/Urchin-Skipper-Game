@@ -15,11 +15,16 @@ export function waterLoads(spec, forward, lateral, turn, rudder, neutral = 1) {
   const lightFlow =
     ((spec.neutralRudderLift ?? 1) * forward * Math.exp(-((forward / 0.4) ** 2))) /
     (Math.abs(forward) + 0.035);
-  const rudderFlow = clamp(forward * Math.abs(forward), -9, 9) + lightFlow * neutral;
+  // At passage speed, cutting the engine must not suddenly apply the full
+  // low-speed stern/bow couple. Keep a small coasting response and blend back
+  // to the established current response as water-relative speed falls.
+  const coast = 0.08 + 0.92 * Math.exp(-((Math.max(0, forward) / 1.6) ** 4));
+  const rudderFlow = clamp(forward * Math.abs(forward), -9, 9) * coast + lightFlow * neutral;
   const bowSide =
     -lateral *
     (0.8 + Math.abs(forward) * 0.55) *
     exposure *
+    coast *
     (spec.jetCount ? 1.6 : spec.vectorDrive ? 1.2 : 1);
   return [
     { fore: bow, side: bowSide },

@@ -15,7 +15,11 @@ export function taxiRoute(w, entry, working, entries, spec) {
     const approach = waterRoute(w, entry, before, spec);
     if (!approach.length) continue;
     const exits = entries
-      .filter((p) => (p.x - after.x) * dx + (p.y - after.y) * dy > 0)
+      .filter(
+        (p) =>
+          (p.x - after.x) * dx + (p.y - after.y) * dy > 0 &&
+          Math.hypot(p.x - entry.x, p.y - entry.y) > w.terrain.size * 0.6,
+      )
       .sort((a, b) => {
         const score = (p) =>
           Math.abs((p.x - after.x) * dy - (p.y - after.y) * dx) * 3 +

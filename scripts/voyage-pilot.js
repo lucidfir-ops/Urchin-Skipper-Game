@@ -77,6 +77,13 @@ function helm(w, goal, speed = 2) {
     flow = currentAt(w, b.x, b.y);
   let wanted = clamp(distance * 0.18, 0.35, speed);
   if (Math.abs(angle(Math.atan2(dx, -dy) - b.heading)) > 0.25) wanted = Math.max(wanted, 1.9);
+  // The pilot must slow before visible floating timber instead of relying on
+  // the old exaggerated neutral turn to miss it by chance. Keep real contacts,
+  // weather, damage thresholds and the voyage's hull-health assertion intact.
+  const timber = Math.min(
+    ...w.logs.map((log) => Math.hypot(log.x - b.x, log.y - b.y) - log.length / 2),
+  );
+  if (timber < 24) wanted = Math.min(wanted, 0.45 + Math.max(0, timber - 12) * 0.12);
   const heading = Math.atan2(
       (dx / Math.max(0.1, distance)) * wanted - flow.x,
       (-dy / Math.max(0.1, distance)) * wanted + flow.y,
@@ -133,7 +140,7 @@ export async function careerVoyage(w, observe = async () => {}) {
       if (attempt % 100 === 0) await observe('underway');
     }
     if (i < path.length) throw new Error('Pilot did not reach waypoint');
-    tick(w, { neutral: true }, 4);
+    tick(w, { neutral: true, centerRudder: true }, 4);
   }
   // This repeatable voyage follows a charted drop. New hidden grounds have their
   // own discovery/scouting regressions and must not silently change its route.
@@ -169,7 +176,7 @@ export async function careerVoyage(w, observe = async () => {}) {
   tick(w, { recoverDiver: true });
   for (let i = 0; i < 400 && w.diver.state !== 'surface'; i++) {
     check();
-    tick(w, { neutral: true });
+    tick(w, { neutral: true, centerRudder: true });
     if (i % 100 === 0) await observe('diver working');
   }
   if (w.diver.state !== 'surface' || w.diver.bag <= 0)
@@ -186,8 +193,9 @@ export async function careerVoyage(w, observe = async () => {}) {
       break;
     }
     const available = recoveryStatus(w, 5, diver).available;
-    if (available && !diver.hooking) tick(w, { neutral: true, recoverDiver: true });
-    else if (diver.hooking) tick(w, { neutral: true });
+    if (available && !diver.hooking)
+      tick(w, { neutral: true, centerRudder: true, recoverDiver: true });
+    else if (diver.hooking) tick(w, { neutral: true, centerRudder: true });
     else tick(w, helm(w, { x: diver.x + 5, y: diver.y }, 0.6));
     if (i % 100 === 0) await observe('recovery approach');
   }

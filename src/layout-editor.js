@@ -24,6 +24,7 @@ const SAMPLES = {
   clock: 'Time · offload deadline',
   electronics: 'Wind · sea · fitted equipment',
   currentReadout: '↑ Current speed and bearing',
+  almanacPanel: 'Tide & current almanac',
   navigation: '↑ Harbour exit · distance',
   message: 'Recovery actions and pickup progress',
   help: 'Keyboard / controller commands',

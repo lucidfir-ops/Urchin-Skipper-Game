@@ -41,9 +41,7 @@ export function synthesize(kind, rate = 22050) {
         0.22 * Math.sin(t * Math.PI * 2 * 88) +
         0.08 * Math.sin(t * Math.PI * 2 * 132) +
         (kind === 'forward' ? 0.19 * noise + 0.11 * Math.sin(t * Math.PI * 2 * 176) : 0) +
-        (kind === 'reverse'
-          ? 0.18 * Math.sin(t * Math.PI * 2 * 264 + Math.sin(t * 2 * Math.PI * 8)) + noise * 0.14
-          : 0);
+        (kind === 'reverse' ? 0.055 * Math.sin(t * Math.PI * 2 * 176) + noise * 0.23 : 0);
     else if (kind === 'whistle') {
       const pulse = Math.sin(Math.PI * Math.min(1, (p % 0.5) * 2)) ** 2;
       value = 0.42 * pulse * Math.sin(t * 2 * Math.PI * 1850 + Math.sin(t * 24) * 0.65);

@@ -61,7 +61,7 @@ export function clearWater(terrain, level, point, { draft = 2, radius = 5 } = {}
   return true;
 }
 export function waterSegment(terrain, level, a, b, spec) {
-  const steps = Math.max(1, Math.ceil(Math.hypot(b.x - a.x, b.y - a.y) / 4));
+  const steps = Math.max(1, Math.ceil(Math.hypot(b.x - a.x, b.y - a.y)));
   for (let i = 0; i <= steps; i++)
     if (
       !clearWater(

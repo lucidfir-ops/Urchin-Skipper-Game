@@ -3,10 +3,13 @@ export const TRAFFIC = {
   tickSeconds: 0.1,
   inspectionMinutes: 6,
   sightMeters: 250,
+  nearbyRivalChance: 0.4,
+  mysteryChance: 0.02,
+  taxiWorkingChance: 0.3,
   taxi: [90, 210],
   tourist: [140, 280],
   dfo: [240, 420],
-  rival: [45, 120],
+  rival: [100, 240],
 };
 export function trafficSettings(w) {
   const saved = w.career?.trafficSettings || {};

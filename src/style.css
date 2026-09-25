@@ -1428,11 +1428,13 @@ body:has(.day-panel:not([hidden]))
   color: #e1c68d;
   margin-top: 12px;
 }
-#openAlmanac {
+#almanacPanel {
   position: fixed;
   left: 50%;
   top: 155px;
   transform: translateX(-50%);
+}
+#openAlmanac {
   min-height: 28px;
   background: #102e38e8;
   color: #d1d8b9;

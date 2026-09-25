@@ -1,10 +1,19 @@
-# Playtest guide — September 24 deployment and tablet feedback
+# Playtest guide — September 24 coasting and traffic feedback
 
 Player-facing release copy: [HOW_TO_PLAY.txt](HOW_TO_PLAY.txt). This guide below is the detailed testing checklist.
 
-Use [the new itch.io TEMP ZIP](exports/2026-09-24-deploy-and-tablet/UrchinSkipper-TEMP-ITCHIO.zip), or [the local/Wi-Fi TEMP ZIP](<exports/2026-09-24-deploy-and-tablet/Urchin Skipper TEMP.zip>). Confirm **TEMP · SEP 24 · DEPLOY & TABLET**. Older exports remain available. [Implementation and acceptance](docs/history/2026-09-24-deploy-and-tablet/README.md). Current approved design is in [bible.md](bible.md).
+Use [the new itch.io TEMP ZIP](exports/2026-09-24-traffic-and-coasting/UrchinSkipper-TEMP-ITCHIO.zip), or [the local/Wi-Fi TEMP ZIP](<exports/2026-09-24-traffic-and-coasting/Urchin Skipper TEMP.zip>). Confirm **TEMP · SEP 24 · COASTING & TRAFFIC**. Older exports remain available. [Implementation and acceptance](docs/history/2026-09-24-traffic-and-coasting/README.md). Current approved design is in [bible.md](bible.md).
 
 Keep testing the familiar 14-inch landscape setup. Portrait is enabled again. Open **Touchscreen Options** from the title, Settings or Pause. Try 70% Tiny controls and 40–60% opacity; UI Scale remains separate. Harbour fills the display. Physical phone/tablet/Deck performance, speakers and USB Xbox controls still need human playtesting.
+
+## Keyboard, coasting and traffic
+
+- Build speed at full ahead, put the helm fully to either side, then press Space. Expect a small coasting arc, not a large stern slide. Repeat loaded; check that low-current neutral steering still responds both ways.
+- Watch the keyboard throttle/rudder key fills: they retain the commanded setting after release; Space clears throttle and Enter centres the rudder. Click Menu in the centre key reference or press Escape. The floating Menu/help button should no longer cover the right-hand keys.
+- Arrange UI now names **Tide & current almanac button** directly. Move, resize or hide it independently of Live current. Reload and check the choice. Existing chart-only and diver-card layouts remain yours.
+- Zoom out occasionally during a full day. Expect at most one or two new working rivals, usually distant. They should approach marked grounds, stop with bubbles and accumulating bags, reduce the displayed remaining stock, then move on or leave. Nearby work is allowed on roughly 40% of seeded days, at most once; not every eligible day guarantees a visible close encounter. Previously saved visitors finish their existing day.
+- Watch taxis complete committed long routes. Some cross a working area, others pass elsewhere; they avoid hulls and retain the existing surfaced-diver collision risk. Check map corners and falling tide. Shy Hull Wood should be exceptionally uncommon.
+- Gently nudge a surfaced diver at the bow: the diver should slip aside without traveling stuck to the bow. Dangerous contacts retain consequences. Listen to the quieter, steadier reverse timbre on your speakers/headphones.
 
 ## Deployment and tablet follow-up
 

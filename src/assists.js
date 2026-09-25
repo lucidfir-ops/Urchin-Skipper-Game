@@ -30,6 +30,7 @@ export const ASSISTS = {
   reefClarity: 'Extended reef clarity',
   widePickup: 'Wide pickup tolerance',
   currentOverlay: 'Live current instruments',
+  almanacShortcut: 'Tide & current almanac button',
   actionPrompts: 'Context action prompts',
 };
 export const REALISTIC_ASSISTS = new Set([
@@ -94,7 +95,12 @@ export function normalizeAssists(c) {
   const defaults = presetAssists(c.assists.base || c.assists.preset);
   const fallback = c.assists.base === 'easy';
   for (const k of Object.keys(ASSISTS))
-    c.assists[k] ??= k === 'chartGrounds' ? !!c.assists.groundDots : (defaults[k] ?? fallback);
+    c.assists[k] ??=
+      k === 'almanacShortcut'
+        ? !!c.assists.currentOverlay
+        : k === 'chartGrounds'
+          ? !!c.assists.groundDots
+          : (defaults[k] ?? fallback);
 }
 export function setPreset(w, preset, { restore = false } = {}) {
   if (!w.career) return;

@@ -830,6 +830,20 @@ body.hud-hidden #keyboardHelm {
   background: #556c5b;
   border-color: #fff0bd;
 }
+.helm-key.command-level {
+  background: linear-gradient(
+    to top,
+    #668b61bb var(--command-level),
+    #13262cc7 var(--command-level)
+  );
+}
+#keyboardHelm button {
+  pointer-events: auto;
+  min-height: 0;
+}
+body:has(#keyboardHelm:not([hidden])) #touchMenu {
+  display: none;
+}
 .keyboard-extra {
   display: flex;
   gap: 3px;

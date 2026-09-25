@@ -1,3 +1,4 @@
+import { trafficCoastingChecks } from './traffic-coasting-checks.js';
 import { september21Checks } from './september21-checks.js';
 import { workingDayChecks } from './working-day-checks.js';
 import { crewCoastsChecks } from './crew-coasts-checks.js';
@@ -51,7 +52,8 @@ const launchOptions = {
 };
 let browser = await browserType.launch(launchOptions);
 try {
-  if (process.argv.includes('--tablet-feedback-only')) await tabletFeedbackChecks(browser);
+  if (process.argv.includes('--traffic-coasting-only')) await trafficCoastingChecks(browser);
+  else if (process.argv.includes('--tablet-feedback-only')) await tabletFeedbackChecks(browser);
   else if (process.argv.includes('--crew-coasts-only')) await crewCoastsChecks(browser);
   else if (process.argv.includes('--working-day-only')) await workingDayChecks(browser);
   else if (process.argv.includes('--audio-baseline-only'))

@@ -4,13 +4,14 @@ import { boatDefinition } from './boats.js';
 import { TAXI_ART, DFO_ART, NINE_ART } from './vessel-catalog.js';
 import { crewProfile } from './crew-roster.js';
 import { takeCatch } from './harvest-ground.js';
-import { waterEntries, waterRoute } from './water-route.js';
+import { clearWater, waterEntries, waterRoute } from './water-route.js';
 import { moveTraffic } from './traffic-motion.js';
 import { taxiRoute } from './taxi-route.js';
 import { TRAFFIC, trafficSettings } from './traffic-settings.js';
 import { stepPatrol } from './patrol.js';
 import { inspectionDue } from './inspection-schedule.js';
 import { recordFishingPressure, subAreaYield } from './quota-areas.js';
+import { fishingRoute, rivalDayPlan, rivalPatches, rivalWater, trafficHull } from './rival-plan.js';
 
 const pick = (values, random) => values[Math.floor(random() * values.length)];
 export function prepareTraffic(w) {
@@ -51,21 +52,23 @@ function* planTraffic(w, kind, { start, patchId, art, fleetId } = {}) {
   );
   const mystery = w.career.opponents.find((t) => t.hidden);
   let fleet;
+  const dayPlan = rivalDayPlan(w.career),
+    directed = !!(patchId || fleetId || trafficSettings(w).patchId),
+    seen = w.career.todayFleet.filter(
+      (r) => r.shipSeen || traffic.actors.some((a) => a.fleetId === r.id),
+    );
   if (kind === 'rival') {
+    if (!directed && seen.length >= dayPlan.limit) return null;
     const candidates = w.career.todayFleet.filter(
       (r) =>
         r.area === w.day.groundId &&
         !r.shipDone &&
+        (directed || (!r.shipSeen && (!r.hidden || dayPlan.mystery))) &&
         r.begin <= w.day.minute &&
         w.day.minute < r.end &&
         !traffic.actors.some((a) => a.fleetId === r.id),
     );
-    fleet = fleetId
-      ? candidates.find((r) => r.id === fleetId)
-      : pick(
-          candidates.filter((r) => !r.hidden || random() < 0.35),
-          random,
-        );
+    fleet = fleetId ? candidates.find((r) => r.id === fleetId) : pick(candidates, random);
     if (!fleet) return null;
   }
   const id = `traffic-${w.career.day}-${traffic.area}-${traffic.serial}`,
@@ -107,32 +110,56 @@ function* planTraffic(w, kind, { start, patchId, art, fleetId } = {}) {
       name: fleet?.hidden ? 'Shy Hull Wood' : fleet?.boat || null,
       subAreaId: fleet?.subAreaId || null,
       wildlifeCurious: kind === 'tourist' && random() < 0.65,
+      navigationVersion: 1,
     };
-  const spec = { draft: actor.draft, radius: 5 },
-    entries = waterEntries(w, spec),
+  const spec = trafficHull(actor),
+    navigation = kind === 'rival' ? rivalWater(w) : w,
+    entries = waterEntries(navigation, spec),
     starts = start ? [start] : kind === 'dfo' ? entries : entries.filter((p) => outsideView(w, p));
   if (!starts.length) return null;
   const desiredPatch = patchId || trafficSettings(w).patchId;
-  const patches = w.patches.filter(
-    (p) =>
-      p.remaining > 0 &&
-      (kind !== 'rival' || p.quality >= 0.6) &&
-      (!desiredPatch || p.id === desiredPatch),
-  );
+  const nearby = kind === 'rival' && dayPlan.nearby && !seen.some((r) => r.shipNearby),
+    patches =
+      kind === 'rival' && !desiredPatch
+        ? rivalPatches(w, nearby)
+        : w.patches.filter(
+            (p) =>
+              p.remaining > 0 &&
+              (kind !== 'rival' || p.quality >= 0.6) &&
+              (!desiredPatch || p.id === desiredPatch),
+          );
   const worked = workingPatches(w).filter((p) => patches.includes(p));
   const crossing =
     !desiredPatch &&
     worked.length &&
-    ((kind === 'rival' && actor.habit === 'encroaching' && random() < 0.8) ||
-      (kind === 'taxi' && random() < 0.65));
-  for (let attempt = 0; attempt < 12; attempt++) {
+    ((nearby && actor.habit === 'encroaching') ||
+      (kind === 'taxi' && random() < TRAFFIC.taxiWorkingChance));
+  // Randomize within each priority tier, then try every marked bed before any
+  // unmarked fallback. Other traffic keeps a bounded itinerary search.
+  const ordered = patches
+    .map((p) => ({ p, order: random() }))
+    .sort(
+      (a, b) =>
+        Number(a.p.charted === false) - Number(b.p.charted === false) ||
+        (nearby ? Number(!worked.includes(a.p)) - Number(!worked.includes(b.p)) : 0) ||
+        a.order - b.order,
+    )
+    .map(({ p }) => p);
+  for (
+    let attempt = 0;
+    attempt < (kind === 'rival' ? Math.min(80, ordered.length * 2) : 12);
+    attempt++
+  ) {
     const entry = pick(starts, random),
-      patch = pick(crossing && attempt < 6 ? worked : patches, random),
+      patch =
+        kind === 'rival'
+          ? ordered[Math.floor(attempt / 2)]
+          : pick(crossing && attempt < 6 ? worked : patches, random),
       end = pick(
         entries.filter((p) => Math.hypot(p.x - entry.x, p.y - entry.y) > w.terrain.size * 0.6),
         random,
       );
-    if (!entry || !end || !patch) {
+    if (!entry || !end || (!patch && kind !== 'taxi')) {
       yield;
       continue;
     }
@@ -140,11 +167,19 @@ function* planTraffic(w, kind, { start, patchId, art, fleetId } = {}) {
     // moving diver. Bubbles and floats do not trigger taxi avoidance.
     const sample =
       crossing && kind === 'taxi' ? w.divers.find((d) => d.patch?.id === patch.id) : null;
-    const working = sample ? { x: sample.x, y: sample.y } : { x: patch.x, y: patch.y },
+    const working = sample
+        ? { x: sample.x, y: sample.y }
+        : patch
+          ? { x: patch.x, y: patch.y }
+          : end,
       route =
         kind === 'taxi'
-          ? taxiRoute(w, entry, working, entries, spec)
-          : waterRoute(w, entry, kind === 'dfo' && !desiredPatch ? end : working, spec);
+          ? crossing || desiredPatch
+            ? taxiRoute(w, entry, working, entries, spec)
+            : waterRoute(w, entry, end, spec)
+          : kind === 'rival'
+            ? fishingRoute(navigation, entry, patch, actor)
+            : waterRoute(w, entry, kind === 'dfo' && !desiredPatch ? end : working, spec);
     if (!route.length) {
       yield;
       continue;
@@ -160,7 +195,7 @@ function* planTraffic(w, kind, { start, patchId, art, fleetId } = {}) {
     Object.assign(actor, entry, {
       route,
       routeStart: { ...entry },
-      patchId: patch.id,
+      patchId: kind === 'taxi' && !crossing && !desiredPatch ? null : patch?.id,
       heading: Math.atan2(route[0].x - entry.x, entry.y - route[0].y),
     });
     if (
@@ -172,15 +207,25 @@ function* planTraffic(w, kind, { start, patchId, art, fleetId } = {}) {
     )
       return null;
     traffic.actors.push(actor);
+    if (fleet) {
+      fleet.shipSeen = true;
+      fleet.shipNearby = nearby;
+    }
     return actor;
   }
   return null;
 }
 function setRoute(w, actor, target) {
   if (!target) return false;
-  const route = waterRoute(w, actor, target, { draft: actor.draft, radius: 5 });
+  const route = waterRoute(
+    actor.kind === 'rival' ? rivalWater(w) : w,
+    actor,
+    target,
+    trafficHull(actor),
+  );
   if (!route.length) return false;
   actor.route = route;
+  actor.routeStart = { x: actor.x, y: actor.y };
   actor.waypoint = 0;
   return true;
 }
@@ -191,10 +236,47 @@ function fish(w, actor, dt) {
     actor.done = true;
     return;
   }
+  // Saved pre-update boats may be chasing a bed centre on the shoal. Give them
+  // a reachable berth too, and count those existing visits against today's cap.
+  if (!actor.navigationVersion) {
+    actor.navigationVersion = 1;
+    fleet.shipSeen = true;
+    if (actor.phase !== 'leaving') {
+      let route = fishingRoute(rivalWater(w), actor, patch, actor);
+      if (!route.length) {
+        actor.shallowEscape = true;
+        route = fishingRoute(w, actor, patch, actor);
+      }
+      if (route.length) {
+        actor.route = route;
+        actor.routeStart = { x: actor.x, y: actor.y };
+        actor.waypoint = 0;
+        actor.phase = 'transit';
+        actor.divers = [];
+      }
+    }
+  }
+  if (
+    actor.shallowEscape &&
+    clearWater(
+      w.terrain,
+      rivalWater(w).environment.seaLevel || 0,
+      actor,
+      trafficHull({ ...actor, shallowEscape: false }),
+    )
+  ) {
+    const route = fishingRoute(rivalWater(w), actor, patch, { ...actor, shallowEscape: false });
+    if (route.length) {
+      actor.shallowEscape = false;
+      actor.route = route;
+      actor.routeStart = { x: actor.x, y: actor.y };
+      actor.waypoint = 0;
+    }
+  }
   if (actor.phase === 'transit' && w.day.minute >= fleet.end) {
     actor.phase = 'leaving';
     fleet.shipDone = true;
-    if (!waterEntries(w, { draft: actor.draft, radius: 5 }).some((p) => setRoute(w, actor, p)))
+    if (!waterEntries(rivalWater(w), trafficHull(actor)).some((p) => setRoute(w, actor, p)))
       actor.done = true;
   }
   if (actor.phase === 'transit') {
@@ -244,23 +326,33 @@ function fish(w, actor, dt) {
     recordFishingPressure(w.career, fleet.area, fleet.subAreaId, 'npc', amount);
   }
   actor.deckBags = Math.floor(fleet.gross / 300);
-  // Patrol between safe pickup positions alongside the bubble patches.
-  if (actor.workSeconds >= (actor.nextPickupMove || 0)) {
-    actor.nextPickupMove = actor.workSeconds + 25;
-    actor.pickupSide = -(actor.pickupSide || 1);
-    const target = { x: patch.drop.x + actor.pickupSide * 12, y: patch.drop.y + 18 };
-    setRoute(w, actor, target);
-  }
-  const passageSpeed = actor.knots;
-  actor.knots = 1.8;
-  moveTraffic(w, actor, dt);
-  actor.knots = passageSpeed;
+  // Hold the checked berth while divers pick. The previous patrol repeatedly
+  // steered through its own avoidance circles and could never reach a pickup.
+  actor.vx = actor.vy = actor.speed = 0;
   fleet.minute = Math.max(fleet.minute, w.day.minute);
   if (fleet.gross >= fleet.goal - 0.01 || patch.remaining <= 0.01 || w.day.minute >= fleet.end) {
     actor.divers = [];
+    if (
+      patch.remaining <= 0.01 &&
+      fleet.gross < fleet.goal - 0.01 &&
+      w.day.minute < fleet.end - 15
+    ) {
+      for (const next of rivalPatches(w).slice(0, 8)) {
+        const route = fishingRoute(rivalWater(w), actor, next, actor);
+        if (!route.length) continue;
+        Object.assign(actor, {
+          patchId: next.id,
+          route,
+          routeStart: { x: actor.x, y: actor.y },
+          waypoint: 0,
+          phase: 'transit',
+        });
+        return;
+      }
+    }
     fleet.shipDone = true;
     actor.phase = 'leaving';
-    const exits = waterEntries(w, { draft: actor.draft, radius: 5 }).sort(
+    const exits = waterEntries(rivalWater(w), trafficHull(actor)).sort(
       (a, b) => Math.hypot(a.x - actor.x, a.y - actor.y) - Math.hypot(b.x - actor.x, b.y - actor.y),
     );
     if (!exits.some((p) => setRoute(w, actor, p))) actor.done = true;

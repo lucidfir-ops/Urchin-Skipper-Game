@@ -4,6 +4,7 @@ import { roll } from './career-data.js';
 import { materializeSector, sectorDefinition } from './sectors.js';
 import { takeCatch } from './harvest-ground.js';
 import { COASTS, coastTier } from './coasts.js';
+import { rivalDayPlan } from './rival-plan.js';
 import {
   recoverQuotaAreas,
   recordFishingPressure,
@@ -41,8 +42,8 @@ export function prepareFleet(c) {
   }
   c.fleetDay = c.day;
   const rough = c.weatherPlan?.some((p) => p.kind === 'storm' || p.kind === 'squall');
-  const teams = c.opponents.filter(
-    (r, i) => r.hidden || roll(c.seed + c.day * 7951, 981 + i) < 0.78,
+  const teams = c.opponents.filter((r, i) =>
+    r.hidden ? rivalDayPlan(c).mystery : roll(c.seed + c.day * 7951, 981 + i) < 0.78,
   );
   c.todayFleet = teams.map((r, i) => {
     let area = rough && r.home === 'far' ? 'middle' : r.home;
@@ -114,8 +115,12 @@ export function advanceFleet(w, minute = w.day.minute) {
     if (requested <= 0) continue;
     const terrain = materializeSector(w, r.area),
       patches = terrain.patches;
-    for (let n = 0; n < patches.length && requested > 0.001; n++) {
-      const p = patches[(r.patchIndex + n) % patches.length];
+    const ordered = Array.from(
+      { length: patches.length },
+      (_, n) => patches[(r.patchIndex + n) % patches.length],
+    ).sort((a, b) => Number(a.charted === false) - Number(b.charted === false));
+    for (const p of ordered) {
+      if (requested <= 0.001) break;
       if (p.quality < 0.6) continue;
       for (const clump of p.clumps || []) {
         const amount = takeCatch(p, clump, requested);

@@ -172,9 +172,13 @@ export function renderHud(scene, world, input, lockReason) {
     tideButton.id = 'openAlmanac';
     setText(tideButton, 'Tide & current almanac');
     tideButton.onclick = () => ui.open('almanac');
-    document.body.append(tideButton);
+    const panel = document.createElement('aside');
+    panel.id = 'almanacPanel';
+    panel.append(tideButton);
+    document.body.append(panel);
   }
-  tideButton.hidden = !ui.started || !!ui.screen || !assist(world, 'currentOverlay', ui.realistic);
+  document.querySelector('#almanacPanel').hidden =
+    !ui.started || !!ui.screen || !assist(world, 'almanacShortcut', ui.realistic);
   const indicators = assist(world, 'diverIndicators', ui.realistic, ui.debug),
     portraits = assist(world, 'diverPortraits', ui.realistic, ui.debug),
     diverPanel = document.querySelector('#divers');

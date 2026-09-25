@@ -2,6 +2,7 @@
 // User layouts take precedence; these adapt without rewriting saved positions.
 function baselineHudRect(id, width, height, touch, tutorial = false) {
   const r = (left, top, w, h) => ({ left, top, width: w, height: h });
+  if (id === 'almanacPanel') return r(width / 2 - 95, 155, 190, 36);
   if (touch) {
     const short = height < 500,
       map = short ? 126 : Math.min(240, width * 0.21),

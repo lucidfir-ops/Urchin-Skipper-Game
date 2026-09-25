@@ -50,6 +50,7 @@ test('scheduled traffic spreads failed itinerary searches across ticks without m
     t = w.terrain,
     n = t.size / t.spacing + 1;
   w.career.trafficSettings.rate = 1;
+  w.career.trafficSettings.patchId = w.patches[0].id;
   for (const p of w.patches) {
     p.x = 250;
     p.y = 250;
