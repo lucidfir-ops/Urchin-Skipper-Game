@@ -36,7 +36,7 @@ test('nearby A recall selects physical bubbles, clangs once and waits 2–5 seco
   assert.equal(d.reason, 'Skipper recalled diver');
   assert.equal(d.timer, C.diver.warningSeconds);
 });
-test('a pinned recall cannot jump to another diver or reach beyond five metres', () => {
+test('a pinned recall cannot jump to another diver or reach beyond five metres from the hull', () => {
   const w = calm(),
     d = w.diver;
   Object.assign(d, { state: 'searching', x: 228, y: 238 });

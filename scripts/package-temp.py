@@ -5,7 +5,7 @@ import argparse, hashlib, json, re, shutil, tarfile, zipfile
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
 parser.add_argument('--output', required=True, help='New output folder; existing output is never replaced')
-parser.add_argument('--label', default='September 24 rotation and helm', help='Human-readable build identity')
+parser.add_argument('--label', default='September 24 deployment and tablet feedback', help='Human-readable build identity')
 args = parser.parse_args()
 out = Path(args.output).resolve()
 out.mkdir(parents=True, exist_ok=False)
@@ -109,9 +109,9 @@ UrchinSkipper-TEMP-ITCHIO.zip
    Allow any orientation; do not lock the itch embed to landscape.
    For an inline embed use 1280 x 800 and enable itch.io's Fullscreen button.
 4. Save and test the draft page, then publish the update as usual.
-5. Check the title reads TEMP · SEP 24 · ROTATION & HELM.
+5. Check the title reads TEMP · SEP 24 · DEPLOY & TABLET.
 
-The game's Fullscreen option is on the title, Settings and on-water pause menu
+The game's Fullscreen & Rotate screen option is on Title, Settings and Pause
 for every input mode. Browser restrictions can still require a tap/click or
 itch.io's own fullscreen launch. Portrait and landscape are both supported.
 Touchscreen Options is on the title, in Settings and in Pause. Set controls

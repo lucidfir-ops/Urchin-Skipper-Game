@@ -3,6 +3,7 @@ import { touchOpacity, setTouchOpacity } from './touch-opacity.js';
 import { boatDragActions } from './touch-boat.js';
 import { boatSpec } from './boats.js';
 import { installFullscreen } from './fullscreen.js';
+import { setText } from './dom-view.js';
 // DOM Pointer Events give each finger its own lifetime; Input resolves the same
 // abstract commands used by keyboard and controllers. No simulated key presses.
 export const TOUCH_LABELS = {
@@ -245,8 +246,10 @@ export class TouchControls {
         control.style.setProperty('--command', Math.min(1, Math.abs(value)));
         control.dataset.direction =
           value > 0.01 ? 'positive' : value < -0.01 ? 'negative' : 'neutral';
-        control.querySelector('.command-arrow').textContent =
-          Math.abs(value) < 0.01 ? '•' : value > 0 ? positive : negative;
+        setText(
+          control.querySelector('.command-arrow'),
+          Math.abs(value) < 0.01 ? '•' : value > 0 ? positive : negative,
+        );
         control.title = `${stick === 'helm' ? 'Throttle' : 'Rudder'} ${Math.round(Math.abs(value) * 100)}% ${Math.abs(value) < 0.01 ? 'neutral' : stick === 'helm' ? (value > 0 ? 'ahead' : 'astern') : value > 0 ? 'starboard' : 'port'}`;
       }
       const twin = boatSpec(this.ui.hooks.world()).pivotRate > 0,
@@ -263,10 +266,14 @@ export class TouchControls {
     document.body.classList.toggle('hud-hidden', !!show && this.hudHidden);
     document.body.classList.toggle('hud-locked', !!show && this.screenLocked);
     this.hudToggle.hidden = !show;
-    this.hudToggle.textContent = this.hudHidden ? 'Show UI' : 'Hide UI';
-    this.hudToggle.setAttribute('aria-pressed', String(this.hudHidden));
+    setText(this.hudToggle, this.hudHidden ? 'Show UI' : 'Hide UI');
+    const hidden = String(this.hudHidden);
+    if (this.hudToggle.getAttribute('aria-pressed') !== hidden)
+      this.hudToggle.setAttribute('aria-pressed', hidden);
     this.lockToggle.hidden = !show;
-    this.lockToggle.textContent = `Adjust UI: ${this.screenLocked ? 'OFF' : 'ON'}`;
-    this.lockToggle.setAttribute('aria-pressed', String(!this.screenLocked));
+    setText(this.lockToggle, `Adjust UI: ${this.screenLocked ? 'OFF' : 'ON'}`);
+    const unlocked = String(!this.screenLocked);
+    if (this.lockToggle.getAttribute('aria-pressed') !== unlocked)
+      this.lockToggle.setAttribute('aria-pressed', unlocked);
   }
 }

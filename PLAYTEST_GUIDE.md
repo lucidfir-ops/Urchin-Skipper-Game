@@ -1,20 +1,29 @@
-# Playtest guide — September 24 rotation and helm
+# Playtest guide — September 24 deployment and tablet feedback
 
 Player-facing release copy: [HOW_TO_PLAY.txt](HOW_TO_PLAY.txt). This guide below is the detailed testing checklist.
 
-Use [the new itch.io TEMP ZIP](exports/2026-09-24-rotation-and-helm/UrchinSkipper-TEMP-ITCHIO.zip), or [the local/Wi-Fi TEMP ZIP](<exports/2026-09-24-rotation-and-helm/Urchin Skipper TEMP.zip>). Confirm **TEMP · SEP 24 · ROTATION & HELM**. Older exports remain available. [Implementation and acceptance](docs/history/2026-09-24-rotation-and-helm/README.md). Current approved design is in [bible.md](bible.md).
+Use [the new itch.io TEMP ZIP](exports/2026-09-24-deploy-and-tablet/UrchinSkipper-TEMP-ITCHIO.zip), or [the local/Wi-Fi TEMP ZIP](<exports/2026-09-24-deploy-and-tablet/Urchin Skipper TEMP.zip>). Confirm **TEMP · SEP 24 · DEPLOY & TABLET**. Older exports remain available. [Implementation and acceptance](docs/history/2026-09-24-deploy-and-tablet/README.md). Current approved design is in [bible.md](bible.md).
 
 Keep testing the familiar 14-inch landscape setup. Portrait is enabled again. Open **Touchscreen Options** from the title, Settings or Pause. Try 70% Tiny controls and 40–60% opacity; UI Scale remains separate. Harbour fills the display. Physical phone/tablet/Deck performance, speakers and USB Xbox controls still need human playtesting.
 
+## Deployment and tablet follow-up
+
+- With one diver underwater and their portrait selected, press Deploy / board: the eligible diver aboard must deploy. Nearby recovery keeps priority; with both aboard, selection still chooses the diver.
+- Recall bubbles beside the bow/stern and working side, up to five metres from the hull. The clang retains its delayed response and never becomes a remote recall.
+- On a fresh Easy/Realistic career, Deck load starts on. Saved manual choices remain. On an older labelled minimap, tap **Chart only** below the map; Arrange UI → Chart minimap → Display still offers the labelled Graphic and Plain text alternatives. Reload to confirm the choice.
+- Use **Fullscreen & Rotate screen** on Title, Settings or Pause as the phone workaround. Tablet portrait startup and neutral-current helm were confirmed by the designer; phone automatic rotation remains unresolved.
+- Reproduce the recording's tutorial exit → starter purchase → Sail journey. The boat and coast should be visible after preparation. The reported blank scene has not yet been reproduced locally. Enable the existing troubleshooting log before a device replay; download it if the scene freezes.
+- Compare sustained tablet play near kelp at the same zoom, especially dawn/dusk. Weather shading now reuses unchanged frames and decorative foam updates less often. Keep rain, fog, night lights, collisions and both divers working. Desktop measurements do not establish physical tablet FPS.
+
 ## Rotation and helm checks
 
-- On the same Android/Firefox itch setup as the recording, launch normally and touch the game. Rotate between portrait and landscape several times, then background/restore the browser. The layout should follow the phone without visiting Fullscreen. Also check ordinary inline hosting and deliberate fullscreen exit. Report browser/version and download the troubleshooting log if it sticks; desktop automation cannot confirm the physical sensor/host behavior.
+- On the same Android/Firefox itch setup as the recording, launch normally and touch the game. Rotate between portrait and landscape several times, then background/restore the browser. Check whether automatic recovery works; if it sticks, use Fullscreen & Rotate screen. Also check ordinary inline hosting and deliberate fullscreen exit. Report browser/version and download the troubleshooting log if it sticks; desktop automation cannot confirm the physical sensor/host behavior.
 - Load the Coastal Workhorse to roughly 3,300 lb. In light current (about 0.6 knots), face upstream and neutralize the throttle. While water still passes the hull, hold either rudder direction: turning should be clear within several seconds. Once the hull exactly matches uniform drift, the rudder has no water flow to turn it. Compare ahead/reverse and jet/leg behavior with the previous export.
 - Compare bow thrust against the previous export, empty and loaded: the bow should swing more gently but remain useful alongside a float. Test factory and retrofitted thrusters and their equipment switch; twin-jet pivot is independent.
 
 ## Crew and coast checks
 
-- Select the other diver, then come alongside a float. Bag takes and replaces that one diver’s bag in one press; they descend as soon as the lift finishes if ready. Board collects the nearby diver regardless of selection. With two floats together, finish one exchange before the next. Confirm selecting a specialist still controls deployment and individual orders.
+- Select the other diver, then come alongside a float. Bag takes and replaces that one diver’s bag in one press; they descend as soon as the lift finishes if ready. Board collects the nearby diver regardless of selection. With two floats together, finish one exchange before the next. Confirm selecting a specialist chooses between eligible aboard divers and still controls individual orders.
 - Offer a bag to a diver with low air, exhausted ground, a nitrogen break, darkness without a torch, or a deck-capacity limit. The diver should explain why in a visible bubble. They keep their catch on deck and wait if the automatic replacement cannot proceed.
 - In Orders set 90% quality and a 45-second maximum bag time. Scout a poor unmarked area, then a slow patch. Expect actual sampled quality or a partial bag and a speed complaint, never distant hidden-bed facts. Bag time excludes scouting. Test keyboard, controller triggers, and touch controls in portrait, then reload and swap berths; orders belong to the person.
 - Return repeatedly to unchanged ground: ordinary crew should report once. New quality, slower picking, tiredness or a new problem should bring new information. Nell skips casual chatter; Milo and Roy occasionally repeat opinions. Even quiet crew answer a refused bag offer. A first report from a distant surfaced diver becomes readable when you approach.

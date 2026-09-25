@@ -2,9 +2,9 @@ HOW TO PLAY
 
 Skipper the boat while two autonomous divers collect urchins. Start with Frank's tutorial and Easy difficulty.
 
-Buy a boat, choose Sail and a nearby ground. Use the chart and sounder to find sheltered seabed around 5-20 m deep. Select each diver, set Orders, then deploy.
+Buy a boat, choose Sail and a nearby ground. Use the chart and sounder to find sheltered seabed around 5-20 m deep. Set each diver’s Orders, then press Deploy / board. An available diver aboard deploys even when the other portrait is selected.
 
-Watch bubbles and orange floats. Bring the boat's port side (left facing the bow) slowly alongside a float, clear of the hull and stern. Press Bag once and stay alongside: the catch comes aboard and a fresh bag sends that diver back down. If they cannot continue, their bubble tells you why. Deploy/board instead brings the nearby diver aboard with any bag. Neither pickup action needs portrait selection; selection still chooses your scout and their orders.
+Watch bubbles and orange floats. Bring the boat's port side (left facing the bow) slowly alongside a float, clear of the hull and stern. Press Bag once and stay alongside: the catch comes aboard and a fresh bag sends that diver back down. If they cannot continue, their bubble tells you why. Deploy/board instead brings the nearby diver aboard with any bag. Neither pickup action needs portrait selection; selection chooses between available aboard divers and sets individual orders.
 
 Recover both divers before leaving. Cross the harbour edge shown on the chart; follow its Leave by time to reach offload by 19:00. Catch sells automatically; refuel, rest and upgrade.
 

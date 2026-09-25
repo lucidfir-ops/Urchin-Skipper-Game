@@ -150,25 +150,27 @@ export function driftSurface(w, object, dt, flow = null) {
     object.y = ny;
   }
 }
-// Decorative foam retains swept wet-path checks, but refreshes its local flow
-// at 10 Hz in staggered cohorts. Physical logs/floats still query live flow.
+// Decorative foam integrates elapsed time in staggered 10 Hz cohorts. Keep
+// swept wet-path checks without doing them for every speck on every physics
+// step. Physical logs, divers and floats retain their full simulation cadence.
 const debrisFlows = new WeakMap();
 export function driftDebris(w, dt) {
   for (let i = 0; i < w.debris.length; i++) {
     const item = w.debris[i];
     let flow = debrisFlows.get(item);
-    if (!flow || flow.terrain !== w.terrain || w.time >= flow.next || w.time < flow.time) {
-      const c = currentAt(w, item.x, item.y);
-      if (!flow) debrisFlows.set(item, (flow = {}));
-      Object.assign(flow, {
-        x: c.x,
-        y: c.y,
-        next: w.time + 0.08 + (i % 5) * 0.01,
-        time: w.time,
-        terrain: w.terrain,
-      });
+    if (!flow || flow.terrain !== w.terrain || w.time < flow.time) {
+      flow = { elapsed: 0, next: w.time, terrain: w.terrain };
+      debrisFlows.set(item, flow);
     }
-    driftSurface(w, item, dt, flow);
+    flow.elapsed += dt;
+    flow.time = w.time;
+    if (w.time < flow.next) continue;
+    const c = currentAt(w, item.x, item.y);
+    flow.x = c.x;
+    flow.y = c.y;
+    driftSurface(w, item, flow.elapsed, flow);
+    flow.elapsed = 0;
+    flow.next = w.time + 0.08 + (i % 5) * 0.01;
   }
 }
 export const debrisCurrent = (w, item) => debrisFlows.get(item) || currentAt(w, item.x, item.y);

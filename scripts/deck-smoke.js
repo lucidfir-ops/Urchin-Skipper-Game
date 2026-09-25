@@ -221,6 +221,9 @@ try {
     aboard: false,
   });
   await action('recoverDiver');
+  await page.waitForFunction(() => urchinDebug.world.divers[1].state === 'deploying');
+  assert.equal(await page.evaluate(() => urchinDebug.world.selectedDiverId), 0);
+  await action('recoverDiver');
   assert.match(await page.locator('#actionFeedback').textContent(), /RECOVERY REJECTED/);
   await surfaced({ full: true, weight: 300 });
   await page.screenshot({ path: 'test-results/surfaced-diver.png' });

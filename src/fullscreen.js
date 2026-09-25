@@ -7,7 +7,7 @@ const activeFullscreen = () => document.fullscreenElement || document.webkitFull
 export const fullscreenLabel = () =>
   globalThis.document?.fullscreenElement || globalThis.document?.webkitFullscreenElement
     ? 'Exit fullscreen'
-    : 'Fullscreen';
+    : 'Fullscreen & Rotate screen';
 export function toggleFullscreen() {
   document.querySelector('#touchFullscreen')?.click();
 }
@@ -110,14 +110,14 @@ export function installFullscreen(input) {
     notice = document.createElement('div');
   button.id = 'touchFullscreen';
   button.hidden = true;
-  button.textContent = 'Fullscreen';
+  button.textContent = fullscreenLabel();
   notice.id = 'fullscreenNotice';
   notice.hidden = true;
   notice.setAttribute('role', 'status');
   document.body.append(button, notice);
   const active = activeFullscreen;
   const label = () => {
-    button.textContent = active() ? 'Exit fullscreen' : 'Fullscreen';
+    button.textContent = fullscreenLabel();
     document.querySelectorAll('[data-fullscreen]').forEach((el) => {
       el.textContent = `⛶ ${fullscreenLabel()}`;
     });

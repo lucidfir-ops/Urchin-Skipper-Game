@@ -105,13 +105,22 @@ export function nearestRecoveryTarget(w, action, tolerance = C.recovery.toleranc
     .sort((a, b) => a.d.id - b.d.id)[0].d;
 }
 export function actionTarget(w, action, tolerance = C.recovery.tolerance) {
-  // Finish one person's deck operation before starting the next. Selection is
-  // reserved for intentional deployment and orders, including a specialist scout.
+  // Finish deck work and nearby recovery first. Selection only chooses between
+  // available people aboard; an underwater portrait must not block deployment.
   const active = w.divers.find((d) => d.state === 'surface' && d.hooking);
   if (active) return active;
   const eligible = nearestRecoveryTarget(w, action, tolerance);
   if (eligible) return eligible;
-  return selectedDiver(w);
+  const selected = selectedDiver(w);
+  if (action === 'recoverDiver') {
+    if (deploymentStatus(w, selected).available) return selected;
+    return (
+      w.divers.find((d) => deploymentStatus(w, d).available) ||
+      (selected.state === 'ready' ? selected : w.divers.find((d) => d.state === 'ready')) ||
+      selected
+    );
+  }
+  return selected;
 }
 export function pinActionTargets(w, a, tolerance = C.recovery.tolerance) {
   const result = { ...a };

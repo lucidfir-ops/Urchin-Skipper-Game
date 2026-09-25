@@ -57,7 +57,6 @@ const DEFAULT_OFF_ASSISTS = new Set([
   'controlsHelp',
   'compassGauge',
   'hullGauge',
-  'loadGauge',
 ]);
 export const presetLabel = (preset) =>
   ({ easy: 'Easy', realistic: 'Realistic', off: 'All Off', custom: 'Custom' })[preset] || 'Custom';

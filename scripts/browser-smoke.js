@@ -1,6 +1,7 @@
 import { september21Checks } from './september21-checks.js';
 import { workingDayChecks } from './working-day-checks.js';
 import { crewCoastsChecks } from './crew-coasts-checks.js';
+import { tabletFeedbackChecks } from './tablet-feedback-checks.js';
 import { september23Checks } from './september23-checks.js';
 import { audioSchedulingChecks } from './audio-scheduling-checks.js';
 import { september22Checks, september22Performance } from './september22-checks.js';
@@ -50,7 +51,8 @@ const launchOptions = {
 };
 let browser = await browserType.launch(launchOptions);
 try {
-  if (process.argv.includes('--crew-coasts-only')) await crewCoastsChecks(browser);
+  if (process.argv.includes('--tablet-feedback-only')) await tabletFeedbackChecks(browser);
+  else if (process.argv.includes('--crew-coasts-only')) await crewCoastsChecks(browser);
   else if (process.argv.includes('--working-day-only')) await workingDayChecks(browser);
   else if (process.argv.includes('--audio-baseline-only'))
     await audioSchedulingChecks(browser, true);

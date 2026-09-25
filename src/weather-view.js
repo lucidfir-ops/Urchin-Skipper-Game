@@ -40,20 +40,44 @@ export class WeatherView {
       canvas.width = width;
       canvas.height = height;
     }
-    const ctx = canvas.getContext('2d'),
-      weather = w.weather;
+    const weather = w.weather;
     if (!weather) return;
-    ctx.clearRect(0, 0, width, height);
     const cx = width / 2,
       cy = height / 2,
-      r = visibilityRange(w) * C.pixelsPerMeter * zoom;
+      r = visibilityRange(w) * C.pixelsPerMeter * zoom,
+      lightning = lightningState(weather, w.time),
+      lights = weather.darkness && workLightsOn(w);
+    // A full-screen Canvas upload is expensive on mobile. Dry weather changes
+    // slowly: retain identical shading, including while the world is paused.
+    // Rain and lightning still animate; light cones follow the boat's heading.
+    const key = [
+      width,
+      height,
+      Math.round(r),
+      Math.round(weather.darkness * 255),
+      weather.visibility < 200,
+      weather.kind,
+      lights ? w.boat.heading.toFixed(3) : '',
+      lightning.flash,
+      weather.rain,
+      weather.rain ? `${w.environment.wind.x}/${w.environment.wind.y}` : '',
+      weather.rain ? w.time : 0,
+    ].join('/');
+    const dt =
+      this.lastWorld === w ? Math.max(0, Math.min(0.1, w.time - (this.lastTime ?? w.time))) : 0;
+    this.lastTime = w.time;
+    if (this.lastWorld === w && this.key === key) return;
+    this.lastWorld = w;
+    this.key = key;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, width, height);
     if (weather.darkness) {
       const light = ctx.createRadialGradient(cx, cy, Math.min(20, r * 0.2), cx, cy, r);
       light.addColorStop(0, `rgba(3,15,26,${weather.darkness * 0.18})`);
       light.addColorStop(1, `rgba(3,15,26,${weather.darkness})`);
       ctx.fillStyle = light;
       ctx.fillRect(0, 0, width, height);
-      if (workLightsOn(w)) {
+      if (lights) {
         ctx.save();
         ctx.translate(cx, cy);
         ctx.rotate(w.boat.heading);
@@ -72,16 +96,11 @@ export class WeatherView {
       ctx.fillStyle = fog;
       ctx.fillRect(0, 0, width, height);
     }
-    const lightning = lightningState(weather, w.time);
     if (lightning.flash) {
       ctx.fillStyle = `rgba(218,235,255,${lightning.flash * 0.58})`;
       ctx.fillRect(0, 0, width, height);
     }
     const motion = rainMotion(w.environment.wind);
-    const dt =
-      this.lastWorld === w ? Math.max(0, Math.min(0.1, w.time - (this.lastTime ?? w.time))) : 0;
-    this.lastWorld = w;
-    this.lastTime = w.time;
     this.rainX = (this.rainX || 0) + motion.x * dt;
     this.rainY = (this.rainY || 0) + motion.y * dt;
     const speed = Math.max(1, Math.hypot(motion.x, motion.y));

@@ -29,6 +29,8 @@ async function ready() {
   }
 }
 const suites = {
+  'tablet-feedback': ['--tablet-feedback-only'],
+  'tablet-feedback-firefox': ['--tablet-feedback-only'],
   'crew-coasts': ['--crew-coasts-only'],
   'crew-coasts-firefox': ['--crew-coasts-only'],
   'working-day': ['--working-day-only'],

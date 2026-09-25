@@ -408,9 +408,12 @@ test('action prompts only advertise valid context-dependent actions and obey ext
     ['Take + give bag · return to work', 'Recover Diver + Bag'],
   );
   w.diver.x = w.boat.x + 4;
-  assert.deepEqual(playState(w).actions, []);
+  assert.deepEqual(playState(w).actions, [
+    { action: 'recoverDiver', text: 'Deploy Diver', diverId: 1 },
+  ]);
   w.diver.state = 'searching';
   assert.deepEqual(playState(w).actions, [
+    { action: 'recoverDiver', text: 'Deploy Diver', diverId: 1 },
     { action: 'recall', text: 'Clang hull · summon diver', diverId: 0 },
   ]);
   w.diver.state = 'ready';

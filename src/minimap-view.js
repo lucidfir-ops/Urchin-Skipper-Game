@@ -1,4 +1,4 @@
-import { instrumentStyle } from './instruments.js';
+import { instrumentStyle, setInstrumentStyle } from './instruments.js';
 import { paintChartNotes } from './chart-notes.js';
 import { paintSectorMap, sectorChartSvg, vectorNotes } from './chart-art.js';
 import { chartMode, minimapViewport, stepChartZoom } from './chart-presentation.js';
@@ -17,6 +17,16 @@ export function renderNavigationWindows(ui, w) {
       '<div class="minimap-heading"><strong>CHART · N ↑</strong><div class="minimap-zoom" role="group" aria-label="Chart minimap zoom"><button type="button" data-minimap-open aria-label="Open enlarged chart">↗</button><button type="button" data-minimap-zoom="-1" aria-label="Zoom chart out">−</button><output aria-live="polite">1×</output><button type="button" data-minimap-zoom="1" aria-label="Zoom chart in">+</button></div></div><div class="minimap-chart" aria-label="Chart"><canvas width="240" height="240" aria-label="Current area chart: pink crosses are charted rocks, triangle is your boat"></canvas><svg class="minimap-vector" hidden aria-label="Current area vector chart"></svg></div><p class="minimap-text"></p><small>Pink × rocks · △ your boat · tap to fade</small>';
     panel.querySelector('[data-minimap-open]').onclick = () =>
       ui.open(ui.hooks.world().career ? 'knowledge' : 'chart');
+    const simple = document.createElement('button');
+    simple.type = 'button';
+    simple.dataset.minimapStyle = 'chart';
+    simple.textContent = 'Chart only';
+    simple.title = 'Hide the chart heading and legend. Change this in Arrange UI.';
+    simple.onclick = () => {
+      setInstrumentStyle('minimapPanel', 'chart');
+      panel.dataset.presentation = 'chart';
+    };
+    panel.querySelector('small').append(' · ', simple);
     panel.querySelectorAll('[data-minimap-zoom]').forEach((button) => {
       button.onclick = () => {
         ui.chartZoom = stepChartZoom(ui.chartZoom, Number(button.dataset.minimapZoom));
