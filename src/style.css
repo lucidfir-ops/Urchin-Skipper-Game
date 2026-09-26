@@ -2301,3 +2301,38 @@ body:has(#testInfo:not([hidden])) #groundLegend {
 .title-navigation .selected {
   outline: 2px solid #fff1cc;
 }
+/* Development feedback: visible state, independent of optional HUD windows. */
+#godmodeNotice {
+  position: fixed;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 140;
+  padding: 4px 10px;
+  border: 1px solid #ffc678;
+  border-radius: 5px;
+  color: #ffe5b5;
+  background: #38231de8;
+  font: 12px system-ui;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.coast-access-notice {
+  padding: 16px;
+  border: 2px solid #e7b46b;
+  background: #56332366;
+  line-height: 1.6;
+}
+.coast-access-notice h3 {
+  color: #ffd48c;
+}
+/* Keep the physical aftermath visible while retaining mandatory rescue actions. */
+body #playtest.panel[data-screen='emergency'] {
+  top: auto;
+  bottom: calc((12px + env(safe-area-inset-bottom, 0px)) / var(--ui-scale, 1));
+  height: auto;
+  max-height: calc(42dvh / var(--ui-scale, 1));
+  display: block;
+  padding: 12px 16px;
+  overflow: auto;
+}

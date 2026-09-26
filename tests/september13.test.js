@@ -164,7 +164,7 @@ test('mixed-quality ground obeys the diver threshold at clump selection and harv
   const old = createCareer();
   old.groundVersion = 3;
   const upgraded = nextCareerDay(careerWorld(old));
-  assert.equal(upgraded.career.groundVersion, 6);
+  assert.equal(upgraded.career.groundVersion, 7);
 });
 test('awareness crew chart an actual worked patch remotely; other crew still report at recovery', () => {
   const w = careerWorld();

@@ -1,4 +1,5 @@
 import { clearVesselPose } from './vessel-contact.js';
+import { godmode } from './godmode.js';
 import { clamp } from './math.js';
 import { engineState } from './operating-state.js';
 import { C } from './config.js';
@@ -231,17 +232,18 @@ export function stepBoat(w, a, dt) {
   const fuelRate = w.career
     ? (boatSpec(w).travelBurn * C.day.minutesPerSecond) / 60
     : spec.fuelBurn * definition.cost;
-  const fuel = powered
-    ? Math.min(
-        b.fuel,
-        ((w.career ? 0.07 : 0) +
-          Math.abs(b.throttle) * (w.career ? 0.93 : 1) * drive +
-          Math.abs(b.pivot) * (spec.pivotRate ? 0.3 : 0) +
-          Math.abs(b.thruster) * (spec.bowThrusterStrength ? 0.08 : 0)) *
-          fuelRate *
-          dt,
-      )
-    : 0;
+  const fuel =
+    powered && !godmode(w)
+      ? Math.min(
+          b.fuel,
+          ((w.career ? 0.07 : 0) +
+            Math.abs(b.throttle) * (w.career ? 0.93 : 1) * drive +
+            Math.abs(b.pivot) * (spec.pivotRate ? 0.3 : 0) +
+            Math.abs(b.thruster) * (spec.bowThrusterStrength ? 0.08 : 0)) *
+            fuelRate *
+            dt,
+        )
+      : 0;
   b.fuel = Math.max(0, b.fuel - fuel);
   b.fuelUsed = (b.fuelUsed || 0) + fuel;
   if (w.costs)

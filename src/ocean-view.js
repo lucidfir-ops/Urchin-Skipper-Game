@@ -15,6 +15,7 @@ import { departureBoat } from './departure-transition.js';
 import { introActive } from './career-intro.js';
 import { workLightsOn } from './equipment-controls.js';
 import { recoveryStatus } from './diver-recovery.js';
+import { drawSeaCues } from './sea-cues.js';
 
 export class OceanView {
   constructor(scene) {
@@ -121,7 +122,7 @@ export class OceanView {
     this.speechGraphics.clear();
     this.deckGraphics.setAlpha(b.alpha);
     this.lessonCues.draw(world, ui);
-    const waterKey = `${Math.floor(t * this.surfaceRefreshHz)}/${zoom.toFixed(3)}/${Math.floor(b.x / 4)}/${Math.floor(b.y / 4)}/${width}/${height}/${ui.debug}/${ui.realistic}/${ui.revealUrchins}/${world.career?.assists.currentOverlay}/${Math.round(world.environment.waves * 100)}/${Math.round((world.weather?.sunlight || 0) * 100)}`;
+    const waterKey = `${Math.floor(t * this.surfaceRefreshHz)}/${zoom.toFixed(3)}/${Math.floor(b.x / 4)}/${Math.floor(b.y / 4)}/${width}/${height}/${ui.debug}/${ui.realistic}/${ui.revealUrchins}/${world.career?.assists.currentArrows}/${Math.round(world.environment.waves * 100)}/${Math.round((world.weather?.sunlight || 0) * 100)}`;
     if (this.waterWorld !== world || this.waterKey !== waterKey) {
       this.waterWorld = world;
       this.waterKey = waterKey;
@@ -174,6 +175,7 @@ export class OceanView {
     }
     if (this.surfaceCache && this.surfaceGraphics.commandBuffer.length) this.surfaceCache.finish();
     drawHazards(g, world, { p, zoom, rangeX, rangeY });
+    drawSeaCues(g, world, p);
     if (t >= (this.nextWake || 0) && Math.abs(b.speed) > 0.3) {
       this.wake.push({
         x: b.x,

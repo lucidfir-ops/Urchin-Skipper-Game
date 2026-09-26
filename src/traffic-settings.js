@@ -5,7 +5,7 @@ export const TRAFFIC = {
   sightMeters: 250,
   nearbyRivalChance: 0.4,
   mysteryChance: 0.02,
-  taxiWorkingChance: 0.3,
+  taxiWorkingChance: 1,
   taxi: [90, 210],
   tourist: [140, 280],
   dfo: [240, 420],

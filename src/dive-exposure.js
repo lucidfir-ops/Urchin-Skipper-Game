@@ -4,6 +4,7 @@ import { depthAt } from './terrain.js';
 import { seededRandom } from './math.js';
 import { diverSpec } from './crew.js';
 import { gear } from './assists.js';
+import { godmode } from './godmode.js';
 
 // Fictional game balance, NOT US Navy tables or real-world dive guidance.
 // All durations below are accelerated game minutes. See docs/DIVE_EXPOSURE.md.
@@ -131,11 +132,13 @@ export function stepDiveExposure(w, d, dt) {
   h.load = Math.min(6, h.load + amount);
   h.strain = Math.min(6, h.strain + amount * (0.25 + Math.max(0, d.fatigue || 0) * 0.1));
   const excess = Math.max(0, effective(h) - 0.95);
-  h.hazard += minutes * (excess * excess * 0.012 + Math.max(0, h.strain - 0.5) * 0.00025);
-  if (h.hazard >= h.threshold) h.pending = true;
+  if (!godmode(w))
+    h.hazard += minutes * (excess * excess * 0.012 + Math.max(0, h.strain - 0.5) * 0.00025);
+  if (!godmode(w) && h.hazard >= h.threshold) h.pending = true;
   return effective(h) >= limitFor(d);
 }
 export function applyDiveInjury(w, d) {
+  if (godmode(w)) return false;
   const record = w.career?.people[d.crewId],
     h = record?.diveHealth;
   if (!h?.pending || !['surface', 'ready'].includes(d.state) || d.condition === 'deceased')

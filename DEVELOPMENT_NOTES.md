@@ -2,6 +2,10 @@
 
 Current design: [bible.md](bible.md). Build state: [PROJECT_STATUS.md](PROJECT_STATUS.md#design-authority). These notes describe implementation, not a separate design specification. [v1.7 development](docs/V17_DEVELOPMENT.md), earlier [prototype notes](docs/history/2026-09-11-v17/DEVELOPMENT_NOTES.md) and feedback records linked below are historical implementation evidence only. Dated references to authority or current decisions below describe that increment; approved current design is consolidated in the living Bible.
 
+## September 25 coasts and safety
+
+[Implementation and acceptance](docs/history/2026-09-25-coasts-and-safety/README.md). Ground recipe v7 preserves existing stock/geometry and remaps local quality; later maps gain hidden contour-following infill. `taxi-steering.js` uses predictive, stable-side hull clearance while retaining swept collision checks. `sea-cues.js` only renders observed conditions and saved impact records. Shared transient confirmations protect departure/day skips. Live `godmode.js` is an explicitly approved development exception, with a visible saved flag; unlimited cumulative $5,000 borrowing retains debt accounting. Run `npm run verify -- --browsers-only --suite=september25` and `september25-firefox`, plus controller/performance regressions.
+
 ## September 24 rotation and helm
 
 [Acceptance and limits](docs/history/2026-09-24-rotation-and-helm/README.md). `rotation-policy.js` deduplicates explicit `lock('any')`, caches success through ordinary resizes, retries on context changes and prevents stale failures from unlocking a newer context. `fullscreen.js` uses the next trusted touch to claim child fullscreen only inside an already-fullscreen host. Inline views, mouse play and deliberate exits keep their behavior. The embed checks model mobile orientation permission while exercising real cross-origin fullscreen/touch in Chromium and Firefox; physical phone rotation still needs a device check.

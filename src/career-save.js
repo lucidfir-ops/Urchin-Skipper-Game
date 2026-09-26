@@ -51,7 +51,7 @@ export function careerWorld(c = createCareer()) {
   c.preferences.arrivals ??= {};
   c.preferences.subAreas ??= {};
   normalizeQuotaAreas(c);
-  if (c.groundVersion >= 2 && c.groundVersion < 6) c.groundVersion = 6;
+  if (c.groundVersion >= 2 && c.groundVersion < 7) c.groundVersion = 7;
   if (!c.balanceVersion) {
     for (const [id, v] of Object.entries(c.fleet))
       if (v.equipment.includes('tank'))

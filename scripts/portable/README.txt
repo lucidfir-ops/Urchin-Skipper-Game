@@ -41,7 +41,7 @@ Do not open dist/index.html directly; the browser needs the included local serve
 Only one copy can use port 5197 at once. URCHIN_PORT can choose another free port.
 
 WHAT TO TEST IN THIS UPDATE
-- Confirm TEMP · SEP 24 · ROTATION & HELM on the title.
+- Confirm TEMP · SEP 25 · COASTS & SAFETY on the title.
 - Neutral, forward and reverse have different engine sounds. Throttle strongly
   increases volume/pitch and visible wake/wash. Surfacing divers whistle, with
   distance reducing volume. Test on the speakers/headphones you normally use.

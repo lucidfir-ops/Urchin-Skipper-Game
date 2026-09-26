@@ -11,6 +11,7 @@ export const ECONOMY = {
   interest: 0.003,
   creditBase: 15000,
   creditPerRank: 25000,
+  developmentCredit: true,
   dockWage: 420,
   restRecovery: 0.6,
   restDayRecovery: 0.22,

@@ -1,12 +1,25 @@
-# Playtest guide — September 24 coasting and traffic feedback
+# Playtest guide — September 25 coasts and safety feedback
 
 Player-facing release copy: [HOW_TO_PLAY.txt](HOW_TO_PLAY.txt). This guide below is the detailed testing checklist.
 
-Use [the new itch.io TEMP ZIP](exports/2026-09-24-traffic-and-coasting/UrchinSkipper-TEMP-ITCHIO.zip), or [the local/Wi-Fi TEMP ZIP](<exports/2026-09-24-traffic-and-coasting/Urchin Skipper TEMP.zip>). Confirm **TEMP · SEP 24 · COASTING & TRAFFIC**. Older exports remain available. [Implementation and acceptance](docs/history/2026-09-24-traffic-and-coasting/README.md). Current approved design is in [bible.md](bible.md).
+Use [the new itch.io TEMP ZIP](exports/2026-09-25-coasts-and-safety-release/UrchinSkipper-TEMP-ITCHIO.zip), or [the local/Wi-Fi TEMP ZIP](<exports/2026-09-25-coasts-and-safety-release/Urchin Skipper TEMP.zip>). Confirm **TEMP · SEP 25 · COASTS & SAFETY**. Older exports remain available. [Implementation and acceptance](docs/history/2026-09-25-coasts-and-safety/README.md). Current approved design is in [bible.md](bible.md).
 
 Keep testing the familiar 14-inch landscape setup. Portrait is enabled again. Open **Touchscreen Options** from the title, Settings or Pause. Try 70% Tiny controls and 40–60% opacity; UI Scale remains separate. Harbour fills the display. Physical phone/tablet/Deck performance, speakers and USB Xbox controls still need human playtesting.
 
-## Keyboard, coasting and traffic
+## September 25 acceptance
+
+- Sail with one unavailable/injured diver assigned. The confirmation names them, explains they cannot work and starts on Cancel. Cancel keeps you at harbour; explicit Yes allows the otherwise valid trip. Neither confirmation nor Godmode makes an unavailable person fit to dive.
+- Sleep from the departure plan or Rest from the office. Cancel keeps the same day, money and crew state; Yes advances once. Dock work also confirms before skipping the fishing day. Test keyboard Enter, controller A/B and touch.
+- Each map now has 65 beds. Home Coast retains 13 marks; coasts 2–5 have 5/4/3/2 marks and 60/61/62/63 unmarked beds. Quality ranges are 60–85%, 65–90%, 70–95%, 80–100%, 90–100%, including mixed clumps. Existing empty beds stay empty, recovered catch and historical chart samples retain their old values. Explore hidden ground; old reports are not live stock promises.
+- Observe stronger aggregate Home Coast landings over several days, with the same one/two physical visitors and occasional nearby work. Later maps retain their richer stock.
+- Watch taxis commit to straight runs at sampled bubbles, then curve around the boat without stopping to turn. They do not track a moving diver. Terrain can force another safe route. Keep surfaced divers sheltered by the boat and recover promptly; actual full-speed strikes remain fatal and leave a large red pool. Underwater bubbles are not hit targets.
+- Disable Live current instruments: water arrows remain in Easy. Toggle Current arrows on the water independently, switch to Realistic, revisit a later coast and reload. Physical kelp, drift and wake cues remain in both modes.
+- Buy a new coast permit. Expect a large ACCESS PURCHASED receipt and Frank’s tale with explicit advice to upgrade. Review stronger boats or go straight to voyage planning. The permit and warning never require an upgrade. Maelstrom storms and Knifepoint current retain their strength.
+- Borrow $5,000 repeatedly from Accounts, even beyond the former credit limit. Debt and interest still accrue; repay through the ordinary confirmation.
+- Pause → Debug mode → Godmode prevents new boat damage/diver injuries and fuel expenditure, displays a visible banner and survives reload. Turn it off to test ordinary consequences. Existing injuries/losses remain; collision geometry, weather, current, fatigue and dive readiness still apply.
+- Compare factory/retrofit bow thrust: roughly 20% gentler, still useful alongside. Look for grounding silt, small injury stains, damaged-boat sheen and bow spray in rough water; these are visual cues, not new simulation rules.
+
+## Earlier keyboard, coasting and traffic checks
 
 - Build speed at full ahead, put the helm fully to either side, then press Space. Expect a small coasting arc, not a large stern slide. Repeat loaded; check that low-current neutral steering still responds both ways.
 - Watch the keyboard throttle/rudder key fills: they retain the commanded setting after release; Space clears throttle and Enter centres the rudder. Click Menu in the centre key reference or press Escape. The floating Menu/help button should no longer cover the right-hand keys.

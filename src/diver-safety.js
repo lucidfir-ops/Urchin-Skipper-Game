@@ -3,6 +3,7 @@ import { currentAt } from './environment.js';
 import { boatDefinition, boatSpec } from './boats.js';
 import { hullDistance, sweptPoses, toHull, fromHull } from './collision-geometry.js';
 import { engineState } from './operating-state.js';
+import { godmode } from './godmode.js';
 export function closingImpact(pose, diver, spec, vx, vy) {
   const q = toHull(pose, diver.x, diver.y);
   const sideGap = Math.abs(q.side) - spec.width / 2;
@@ -48,8 +49,10 @@ export function checkDiverSafety(w, previous, source = {}) {
         (source.boat ? b.speed > 0 : engineState(w).powered) &&
         local.fore < -spec.length / 2 + 0.8;
       const fatal =
-        speed >= cfg.fatalSpeed || (exposed && relativeSpeed >= cfg.propellerFatalSpeed);
+        !godmode(w) &&
+        (speed >= cfg.fatalSpeed || (exposed && relativeSpeed >= cfg.propellerFatalSpeed));
       const injured =
+        !godmode(w) &&
         !fatal &&
         (speed >= cfg.injurySpeed ||
           (source.boat?.kind === 'taxi' && relativeSpeed > 0.2) ||
@@ -60,6 +63,10 @@ export function checkDiverSafety(w, previous, source = {}) {
         minute: w.day.minute,
         speed,
         outcome,
+        x: d.x,
+        y: d.y,
+        time: w.time,
+        sector: w.day.groundId,
         cause:
           source.boat?.kind === 'taxi'
             ? 'water taxi strike'

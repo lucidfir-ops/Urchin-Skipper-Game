@@ -23,7 +23,8 @@ const VIEW_FIELDS = [
   'starterCandidate',
   'equipmentCandidate',
 ];
-const transient = (screen) => ['purchase', 'buyboat', 'instructions', 'exit'].includes(screen);
+const transient = (screen) =>
+  ['purchase', 'coast-access', 'buyboat', 'instructions', 'exit'].includes(screen);
 const validPoint = (point, world) =>
   point &&
   (!point.world || point.world === world) &&

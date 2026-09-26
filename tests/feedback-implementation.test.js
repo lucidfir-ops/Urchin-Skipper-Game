@@ -165,6 +165,14 @@ test('harbour rest and dock-work choices advance a day with the intended operati
       open: (s) => (screen = s),
     };
     assert(careerActivate(ui, w));
+    assert.equal(options, undefined, 'day does not advance before confirmation');
+    assert.equal(screen, 'purchase');
+    ui.screen = 'purchase';
+    ui.index = 1;
+    ui.previous = () => {
+      ui.screen = 'office';
+    };
+    assert(careerActivate(ui, w));
     assert.equal(options.dockWork, index === 4);
     assert.equal(screen, 'harbour');
   }

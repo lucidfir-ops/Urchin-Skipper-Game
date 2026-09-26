@@ -38,6 +38,8 @@ export function validateSnapshot(data) {
         new Set(c.coastAccess).size === c.coastAccess.length,
       'coastal access',
     );
+  if (c.debugConditions?.godmode !== undefined)
+    assert(typeof c.debugConditions.godmode === 'boolean', 'godmode flag');
   if (c.intro && c.intro.status !== 'complete')
     assert(
       c.day === 0 && Number.isInteger(c.intro.step) && c.intro.step >= 0 && c.intro.step <= 9,

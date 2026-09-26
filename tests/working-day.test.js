@@ -263,9 +263,13 @@ test('selfish rival identity is persistent; ordinary routes increasingly cross w
   for (let i = 0; i < 16; i++) {
     if (w.traffic) w.traffic.actors = [];
     const taxi = spawnTraffic(w, 'taxi', { start: { x: 20, y: 250 } });
-    if (taxi?.patchId === p.id) crosses++;
+    if (taxi?.crossingPoint?.x === p.x && taxi?.crossingPoint?.y === p.y) crosses++;
   }
-  assert(crosses >= 5 && crosses < 16, String(crosses));
+  assert.equal(
+    crosses,
+    16,
+    'September 25: prioritize committed bubble passes when safely routable',
+  );
   const fleet = w.career.todayFleet.find((f) => !f.hidden);
   Object.assign(fleet, { area: 'near', begin: 0, end: 1100, shipDone: false });
   w.traffic.actors = [];

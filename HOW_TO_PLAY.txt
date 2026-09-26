@@ -8,6 +8,11 @@ Watch bubbles and orange floats. Bring the boat's port side (left facing the bow
 
 Recover both divers before leaving. Cross the harbour edge shown on the chart; follow its Leave by time to reach offload by 19:00. Catch sells automatically; refuel, rest and upgrade.
 
+Sailing with an unavailable diver and sleeping/resting away today now ask for confirmation. Later coasts offer better quality and more unmarked ground; Frank warns you to upgrade your boat when you buy access. Taxis make straight runs at bubbles, so keep surfaced divers close and recover promptly.
+
+DEVELOPMENT TOOLS
+Accounts → Borrow up to $5,000 can be repeated without a total cap while the game is in development; debt and interest still apply. Pause → Debug mode → Godmode prevents new boat damage, diver injuries and fuel use. It starts off, saves your choice and shows a banner when enabled. Existing losses, current, weather and diving readiness still apply.
+
 DEFAULT KEYBOARD
 W/S throttle; A/D rudder; Space neutral; Enter centre rudder.
 Tab select diver; O orders; 1 deploy/board; 2 bag/send down; 3 recall near bubbles.

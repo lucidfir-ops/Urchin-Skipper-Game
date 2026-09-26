@@ -1,6 +1,7 @@
 import { boatDefinition, boatSpec } from './boats.js';
 import { C } from './config.js';
 import { clamp } from './terrain.js';
+import { godmode } from './godmode.js';
 export function incidentRoll(seed) {
   let n = (seed ^ 0x9e3779b9) >>> 0;
   n = Math.imul(n ^ (n >>> 16), 0x21f0aaad);
@@ -16,7 +17,7 @@ export function collisionDamage(
   const b = w.boat,
     def = boatDefinition(b.configuration),
     t = C.damage;
-  if (speed <= t.safeSpeed) return { hull: 0, propulsion: 0, catastrophic: false };
+  if (godmode(w) || speed <= t.safeSpeed) return { hull: 0, propulsion: 0, catastrophic: false };
   b.impactCount = (b.impactCount || 0) + 1;
   const seed = (w.terrain.provenance?.seed || 1606) + b.impactCount * 997,
     energy = ((speed - t.safeSpeed) ** 2 * severity) / (boatSpec(w).durability ?? 1);

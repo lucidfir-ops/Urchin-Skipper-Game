@@ -29,6 +29,8 @@ async function ready() {
   }
 }
 const suites = {
+  september25: ['--september25-only'],
+  'september25-firefox': ['--september25-only'],
   'traffic-coasting': ['--traffic-coasting-only'],
   'traffic-coasting-firefox': ['--traffic-coasting-only'],
   'tablet-feedback': ['--tablet-feedback-only'],

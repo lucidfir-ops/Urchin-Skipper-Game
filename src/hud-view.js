@@ -36,6 +36,8 @@ import {
   renderStandaloneInstruments,
 } from './instruments.js';
 export function renderHud(scene, world, input, lockReason) {
+  document.querySelector('#godmodeNotice').hidden =
+    !world.career?.debugConditions?.godmode || !scene.playtest.started;
   renderStandaloneInstruments(scene.playtest, world);
   renderKeyboardHelm(scene.playtest, world);
   const hud = document.querySelector('#hud'),

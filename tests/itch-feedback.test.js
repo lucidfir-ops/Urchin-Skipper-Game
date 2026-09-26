@@ -96,7 +96,7 @@ test('a v5 career migrates without replenishing worked stock or moving its diver
   // Reload a genuine old layout so captureStock cannot mask the old record.
   w.sectors = {};
   const restored = decode(encode(w));
-  assert.equal(restored.career.groundVersion, 6);
+  assert.equal(restored.career.groundVersion, 7);
   assert.equal(restored.patches.find((p) => p.id === 'hidden-v5-0').remaining, 123);
   assert.equal(restored.diver.x, w.diver.x);
 });

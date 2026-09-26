@@ -4,6 +4,7 @@ import { environmentMinute, updateEnvironment } from './environment.js';
 import { step } from './simulation.js';
 import { spawnTraffic } from './traffic.js';
 import { updateWeather, WEATHER } from './weather.js';
+import { godmode, toggleGodmode } from './godmode.js';
 
 const DEBUG_SCREENS = new Set(['debug-mode', 'debug-time', 'debug-weather', 'debug-tide']);
 const TIME_TARGETS = [360, 420, 480, 540, 600, 720, 900, 1080, 1260, 1380];
@@ -134,6 +135,7 @@ export function debugChoices(ui, w) {
     'Spawn tourist boat',
     'Spawn DFO patrol',
     'Restore natural weather and tide',
+    `Godmode: ${godmode(w) ? 'ON' : 'OFF'} · invulnerability & free fuel`,
     ...(w.career.sandbox ? ['More isolated training tools', 'Developer conditions'] : []),
     'Back / Close',
   ];
@@ -159,6 +161,7 @@ export function debugActivate(ui, w) {
   else if (choice.startsWith('Set time')) ui.open('debug-time');
   else if (choice.startsWith('Set weather')) ui.open('debug-weather');
   else if (choice.startsWith('Set tide height')) ui.open('debug-tide');
+  else if (choice.startsWith('Godmode:')) result = toggleGodmode(w);
   else if (choice === 'Restore natural weather and tide') {
     setDebugWeather(w, 'natural');
     result = setDebugTide(w, null);

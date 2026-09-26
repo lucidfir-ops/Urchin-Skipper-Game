@@ -35,7 +35,7 @@ export function createCareer(seed = 171709, { chooseStarter = false } = {}) {
     version: 1,
     difficulty: 'easy',
     balanceVersion: 2,
-    groundVersion: 6,
+    groundVersion: 7,
     seed,
     starterPending: chooseStarter,
     day: 1,
@@ -238,7 +238,9 @@ export function credit(w, repay = false) {
   const limit = ECONOMY.creditBase + rankOf(c) * ECONOMY.creditPerRank;
   const amount = repay
     ? Math.min(5000, c.debt, Math.max(0, c.cash))
-    : Math.min(5000, limit - c.debt);
+    : ECONOMY.developmentCredit
+      ? 5000
+      : Math.min(5000, limit - c.debt);
   if (amount <= 0)
     return { ok: false, reason: repay ? 'Nothing available to repay.' : 'Credit limit reached.' };
   c.debt = cents(c.debt + (repay ? -amount : amount));
@@ -271,7 +273,8 @@ export function startCareerTrip(w) {
     licenceValid: c.licenceThrough >= c.day,
     startedMinute: w.day.minute,
   };
-  w.day.assisted ||= Object.values(c.assists).some((v) => v === true);
+  w.day.assisted ||=
+    c.debugConditions?.godmode === true || Object.values(c.assists).some((v) => v === true);
   if (w.day.minute < 420)
     for (const d of w.divers) d.fatigue = Math.min(1, (d.fatigue || 0) + ECONOMY.earlyFatigue);
   earlyPassageStrike(w);
@@ -281,7 +284,7 @@ export function startCareerTrip(w) {
   }
 }
 export function chargeTransit(w, minutes) {
-  if (!w.career) return;
+  if (!w.career || w.career.debugConditions?.godmode) return;
   const litres = Math.min(w.boat.fuel, (minutes / 60) * FLEET[w.boat.configuration].travelBurn);
   w.boat.fuel -= litres;
   w.boat.fuelUsed += litres;

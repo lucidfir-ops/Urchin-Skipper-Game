@@ -9,6 +9,7 @@ import { changeDepartureTime } from './career-state.js';
 import { updateWeather } from './weather.js';
 import { markPosition, markReport, markBearing } from './knowledge.js';
 import { selectedSubArea } from './quota-areas.js';
+import { confirmAction } from './purchase.js';
 
 export const EXPEDITION_SCREENS = ['departure', 'knowledge', 'conditions', 'assists'];
 export function expeditionActions(ui, w) {
@@ -83,13 +84,26 @@ export function expeditionActions(ui, w) {
                     ui.open(null);
                     return;
                   }
-                  const result = chooseGround(w, area(), {
-                    arrivalLane: w.career.preferences?.arrivals?.[area()] || 0,
-                    subAreaId: selectedSubArea(w.career, area()),
-                  });
-                  if (result.ok) ui.open(null);
-                  else if (remedy) ui.index = 1;
-                  return result;
+                  const sail = () => {
+                    const result = chooseGround(w, area(), {
+                      arrivalLane: w.career.preferences?.arrivals?.[area()] || 0,
+                      subAreaId: selectedSubArea(w.career, area()),
+                    });
+                    if (result.ok) ui.open(null);
+                    else if (remedy) ui.index = 1;
+                    return result;
+                  };
+                  const unfit = w.divers.filter((d) => d.condition && d.condition !== 'fit');
+                  if (trip.ok && unfit.length)
+                    return confirmAction(
+                      ui,
+                      'Yes · sail with this crew',
+                      sail,
+                      unfit.map((d) => `${d.name}: ${d.condition}.`).join(' ') +
+                        ' They cannot work today. You can change crew at the harbour before sailing.',
+                      'Cancel · review my crew',
+                    );
+                  return sail();
                 },
               ),
             ]
@@ -113,8 +127,16 @@ export function expeditionActions(ui, w) {
                   ]
                 : []),
               action('sleep', 'Sleep · fish next day', () => {
-                ui.hooks.nextDay({});
-                ui.open('harbour');
+                confirmAction(
+                  ui,
+                  'Yes · sleep until tomorrow',
+                  () => {
+                    ui.hooks.nextDay({});
+                    ui.open('harbour');
+                  },
+                  'This skips the rest of today. Crew recover and daily debt interest still applies.',
+                  'Cancel · keep today',
+                );
               }),
               open('accounts', 'Fuel, repairs & accounts'),
             ]

@@ -129,11 +129,13 @@ function* planTraffic(w, kind, { start, patchId, art, fleetId } = {}) {
               (!desiredPatch || p.id === desiredPatch),
           );
   const worked = workingPatches(w).filter((p) => patches.includes(p));
+  const bubbleTargets = w.divers.filter((d) =>
+    ['deploying', 'searching', 'harvesting', 'surfacing', 'surface'].includes(d.state),
+  );
   const crossing =
     !desiredPatch &&
-    worked.length &&
-    ((nearby && actor.habit === 'encroaching') ||
-      (kind === 'taxi' && random() < TRAFFIC.taxiWorkingChance));
+    ((worked.length && nearby && actor.habit === 'encroaching') ||
+      (kind === 'taxi' && bubbleTargets.length && random() < TRAFFIC.taxiWorkingChance));
   // Randomize within each priority tier, then try every marked bed before any
   // unmarked fallback. Other traffic keeps a bounded itinerary search.
   const ordered = patches
@@ -154,7 +156,7 @@ function* planTraffic(w, kind, { start, patchId, art, fleetId } = {}) {
       patch =
         kind === 'rival'
           ? ordered[Math.floor(attempt / 2)]
-          : pick(crossing && attempt < 6 ? worked : patches, random),
+          : pick(crossing && worked.length && attempt < 6 ? worked : patches, random),
       end = pick(
         entries.filter((p) => Math.hypot(p.x - entry.x, p.y - entry.y) > w.terrain.size * 0.6),
         random,
@@ -165,8 +167,7 @@ function* planTraffic(w, kind, { start, patchId, art, fleetId } = {}) {
     }
     // Taxi routes are committed across a working bed, never retargeted at a
     // moving diver. Bubbles and floats do not trigger taxi avoidance.
-    const sample =
-      crossing && kind === 'taxi' ? w.divers.find((d) => d.patch?.id === patch.id) : null;
+    const sample = crossing && kind === 'taxi' && attempt < 6 ? pick(bubbleTargets, random) : null;
     const working = sample
         ? { x: sample.x, y: sample.y }
         : patch
@@ -174,7 +175,7 @@ function* planTraffic(w, kind, { start, patchId, art, fleetId } = {}) {
           : end,
       route =
         kind === 'taxi'
-          ? crossing || desiredPatch
+          ? sample || desiredPatch
             ? taxiRoute(w, entry, working, entries, spec)
             : waterRoute(w, entry, end, spec)
           : kind === 'rival'
@@ -184,6 +185,7 @@ function* planTraffic(w, kind, { start, patchId, art, fleetId } = {}) {
       yield;
       continue;
     }
+    if (kind === 'taxi' && sample) actor.crossingPoint = { ...working };
     if (kind === 'tourist' || (kind === 'dfo' && desiredPatch)) {
       const exit = waterRoute(w, working, end, spec);
       if (!exit.length) {

@@ -414,7 +414,8 @@ export function updateWildlifeInteractions(w) {
         }
         w.events.push(`WHALE STRIKE · $${fine.toLocaleString()} FINE · DFO WILL BE WATCHING`);
         w.effects.push({ type: 'warning', x, y });
-        w.boat.hullHealth = Math.max(0.05, w.boat.hullHealth - 0.12);
+        if (!w.career?.debugConditions?.godmode)
+          w.boat.hullHealth = Math.max(0.05, w.boat.hullHealth - 0.12);
       }
     if (encounter.species === 'seaLion')
       for (const d of w.divers) {

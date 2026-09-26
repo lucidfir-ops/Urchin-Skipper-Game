@@ -16,8 +16,8 @@ import {
 
 export const FLEET_LIFE = {
   rareRadioChance: 1 / 750,
-  // Near-shore rivals leave room for a new skipper; offshore specialists land more.
-  catchByArea: Object.freeze({ near: 0.62, middle: 0.82, far: 1 }),
+  // Aggregate landings increase Home Coast pressure independently of encounters.
+  catchByArea: Object.freeze({ near: 0.85, middle: 1.05, far: 1.2 }),
 };
 export function prepareFleet(c) {
   prepareRosters(c);

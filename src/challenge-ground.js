@@ -1,6 +1,6 @@
 import { bedDepthAt } from './terrain.js';
 // Rich but unmarked habitat. Positions are additive; never relocate old reefs.
-export function addChallengeGround(base, patches) {
+export function addChallengeGround(base, patches, richCoast = false) {
   const b = base.tidalBasin;
   const places = [];
   if (b) {
@@ -72,7 +72,7 @@ export function addChallengeGround(base, patches) {
       features: { depth: bedDepthAt(base, p.x, p.y) },
     });
   }
-  if (base.deepGround)
+  if (base.deepGround && !richCoast)
     for (const p of patches)
       if (!p.id.startsWith('challenge-bed-') && p.features?.depth < 17) {
         p.quality = Math.min(p.quality, 0.65);

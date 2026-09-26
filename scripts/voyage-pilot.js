@@ -146,7 +146,8 @@ export async function careerVoyage(w, observe = async () => {}) {
   // own discovery/scouting regressions and must not silently change its route.
   const p = w.patches
     .filter(
-      (p) => p.charted !== false && p.rate >= 10 && p.quality >= 0.8 && p.y < w.terrain.size - 110,
+      // Home Coast's former 80% class maps to 77% in the approved 60–85% band.
+      (p) => p.charted !== false && p.rate >= 10 && p.quality >= 0.75 && p.y < w.terrain.size - 110,
     )
     .sort(
       (a, b) =>
@@ -184,7 +185,10 @@ export async function careerVoyage(w, observe = async () => {}) {
   notes.push(`Diver surfaced with ${Math.round(w.diver.bag)} lb`);
   await observe('surface');
   const diver = w.diver;
-  await sail({ x: diver.x + 6, y: diver.y + 24 }, 1.4);
+  // A nearby float needs a direct slow pickup. Sailing a full staging circuit
+  // leaves the surfaced diver exposed to the newly committed taxi passes.
+  if (Math.hypot(diver.x - w.boat.x, diver.y - w.boat.y) > 25)
+    await sail({ x: diver.x + 6, y: diver.y + 24 }, 1.4);
   let recovered = false;
   for (let i = 0; i < 800; i++) {
     check();

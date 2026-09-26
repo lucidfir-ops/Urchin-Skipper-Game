@@ -6,6 +6,7 @@ import { roll } from './career-data.js';
 import { addHiddenGround } from './hidden-ground.js';
 import { addCoastalGround } from './coastal-ground.js';
 import { coastTier } from './coasts.js';
+import { balanceCoastGround } from './coast-ground-balance.js';
 const cache = new WeakMap();
 // Author shoreline-following strips on the immutable exported bed. This does
 // not alter physics terrain or the established kelp/ground renderer.
@@ -136,18 +137,20 @@ export function careerTerrain(definition, version = 3) {
     for (const p of patches) {
       p.initialStock *= 1 + tier * 0.3;
       p.remaining *= 1 + tier * 0.3;
-      p.quality = Math.min(0.95, p.quality + tier * 0.03);
+      if (version < 7) p.quality = Math.min(0.95, p.quality + tier * 0.03);
       for (const clump of p.clumps || []) {
         clump.initialStock *= 1 + tier * 0.3;
         clump.remaining *= 1 + tier * 0.3;
-        if (clump.quality != null) clump.quality = Math.min(0.95, clump.quality + tier * 0.03);
+        if (version < 7 && clump.quality != null)
+          clump.quality = Math.min(0.95, clump.quality + tier * 0.03);
       }
     }
   if (tier) {
     // Sparse chart marks do not imply scarce catch. Preserve all bed identities.
     for (const [i, p] of patches.entries()) if (i % (tier + 2) !== 0) p.charted = false;
   }
-  if (tier >= 3) addChallengeGround(base, patches);
+  if (tier >= 3) addChallengeGround(base, patches, version >= 7);
+  if (version >= 7) balanceCoastGround(base, patches, tier);
   const terrain = { ...base, patches, careerGroundVersion: version };
   const versions = cache.get(base) || {};
   versions[version] = terrain;

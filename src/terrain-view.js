@@ -286,7 +286,7 @@ export class TerrainView {
       this.legend.innerHTML = legendMarkup(exact);
     }
     this.info.hidden = this.map.hidden = !reveal || (!!w.career && !w.career.sandbox);
-    if (!assist(w, 'currentOverlay', realistic, reveal)) return;
+    if (!assist(w, 'currentArrows', realistic, reveal)) return;
     for (
       let y = Math.max(0, Math.floor((b.y - ry) / 25) * 25);
       y < Math.min(w.terrain.size, b.y + ry);

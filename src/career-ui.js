@@ -8,6 +8,7 @@ import { portrait } from './crew-portrait.js';
 import { buyerNotice } from './buyer.js';
 import { areaStatus, seasonStatus } from './season.js';
 import { COASTS } from './coasts.js';
+import { coastWarning } from './frank-advice.js';
 import { FLEET, UPGRADES, RANKS, ECONOMY, rankOf, money } from './career-data.js';
 import { boatDefinition, boatSpec } from './boats.js';
 import { diverSpec, crewProgress } from './crew.js';
@@ -98,8 +99,13 @@ export function renderCareer(ui, w, bind) {
     detail = workingDayDetail(w, ui.screen);
   }
   if (ui.screen === 'purchase') {
-    title = 'Confirm purchase';
-    detail = `<h3>${ui.pendingPurchase?.label || 'No purchase selected'}</h3><p>${ui.pendingPurchase?.detail || ''}</p><p>Available: ${money(c.cash)}</p>`;
+    title = ui.pendingPurchase?.title || 'Confirm purchase';
+    detail = `<h3>${ui.pendingPurchase?.label || 'No action selected'}</h3><p>${ui.pendingPurchase?.detail || ''}</p>${ui.pendingPurchase?.title ? '' : `<p>Available: ${money(c.cash)}</p>`}`;
+  }
+  if (ui.screen === 'coast-access') {
+    const coast = COASTS.find((a) => a.id === ui.permitCoastId) || COASTS[1];
+    title = `${coast.name.toUpperCase()} · ACCESS PURCHASED`;
+    detail = `<div class="coast-access-notice"><h3>PERMANENT PERMIT NOW HELD</h3><p>All three destinations are yours to visit on their season opening days: 1, 3 and 5.</p><h3>FRANK’S WARNING · UPGRADE BEFORE YOU GO</h3><p>${coastWarning(coast)}</p><p>You can sail with your current boat. Review the forecast and boatyard before committing.</p></div>`;
   }
   if (ui.screen === 'starter') {
     title = 'Your first working boat.';
@@ -149,7 +155,7 @@ export function renderCareer(ui, w, bind) {
   }
   if (ui.screen === 'accounts') {
     title = 'Keep the boat working.';
-    detail = `<h3>${money(c.cash)} available</h3><p>Debt ${money(c.debt)} · credit limit ${money(ECONOMY.creditBase + rankOf(c) * ECONOMY.creditPerRank)}<br>Daily interest ${(ECONOMY.interest * 100).toFixed(2)}% · ${money(c.debt * ECONOMY.interest)} today · ~${money(c.debt * ECONOMY.interest * seasonStatus(c).length)} per season at this balance</p><p>Area licence valid through day ${c.licenceThrough}. This is a fictional simplified fishery.</p><p>${[
+    detail = `<h3>${money(c.cash)} available</h3><p>Debt ${money(c.debt)} · ${ECONOMY.developmentCredit ? 'development credit: repeat $5,000 loans, no total cap' : 'credit limit ' + money(ECONOMY.creditBase + rankOf(c) * ECONOMY.creditPerRank)}<br>Daily interest ${(ECONOMY.interest * 100).toFixed(2)}% · ${money(c.debt * ECONOMY.interest)} today · ~${money(c.debt * ECONOMY.interest * seasonStatus(c).length)} per season at this balance</p><p>Area licence valid through day ${c.licenceThrough}. This is a fictional simplified fishery.</p><p>${[
       ...COASTS,
     ]
       .map((area) => {

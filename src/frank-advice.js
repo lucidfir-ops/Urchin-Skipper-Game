@@ -15,6 +15,19 @@ const HANDLING = {
   twinjet:
     'Select neutral, then hold right stick up to pivot port or down to pivot starboard. Release to coast. Left stick sideways operates a fitted bow thruster independently.',
 };
+export function coastWarning(coast) {
+  const tales = {
+    storm:
+      'I watched a little wooden boat leave in sunshine. The wind swung across Stormbreak that afternoon. We found her empty fish boxes a week later.',
+    frontier:
+      'Two brothers took a tired old hull past Wreck Teeth. A shallow rock opened her seams, then the weather turned. Neither came home.',
+    maelstrom:
+      'A skipper I knew tried Knifepoint in an underpowered boat. The race set him onto shallow rocks before the next squall arrived. We never found the crew.',
+    outer:
+      'Out there, a calm morning can turn savage before you have the bags aboard. A weak boat went down beyond the shelf last season; the search boats came home alone.',
+  };
+  return `Frank: “${tales[coast.id] || tales.storm} Upgrade to a stronger, more capable boat before you go to ${coast.name}. Watch the shallow rocks, check the changing weather and leave yourself power to get clear. The permit lets you sail; it does not make your boat safe. The choice is yours.”`;
+}
 export function frankAdvice(w, bind) {
   const boat = boatDefinition(w.boat.configuration),
     family = boatFamily(boat.id),
@@ -34,7 +47,7 @@ When diver readouts are enabled, check the surfacing reason: full bag, air reser
 
 Sometimes your divers pick undersize and there’s nothing you can do.
 
-The Home Coast gets only weak storms. Later coasts have worse conditions; the fifth coast can get vicious. Check the forecast before you fish. If you ground on a falling tide, reverse into deeper water while you can. Once stranded, you can wait at sea for rising water or radio for a paid tow through Pause.
+The Home Coast gets only weak storms. Later coasts have worse conditions; the fifth coast can get vicious. I have known fishermen lost when weak boats met shallow rocks and a sudden change of weather. Upgrade to a stronger boat before you go. Check the forecast before you fish. If you ground on a falling tide, reverse into deeper water while you can. Once stranded, you can wait at sea for rising water or radio for a paid tow through Pause.
 
 Fatigue builds through the working day, slowing picking, swimming and current holding. A normal night clears most of it; very long days can leave a little behind.
 

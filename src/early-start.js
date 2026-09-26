@@ -1,6 +1,7 @@
 import { boatFamily } from './vessel-catalog.js';
 import { gear } from './assists.js';
 import { roll } from './career-data.js';
+import { godmode } from './godmode.js';
 export function earlyStartNotice(w) {
   const exposed = ['outboard', 'sterndrive'].includes(boatFamily(w.boat.configuration));
   return (
@@ -11,6 +12,7 @@ export function earlyStartNotice(w) {
   );
 }
 export function earlyPassageStrike(w) {
+  if (godmode(w)) return false;
   if (!w.career || w.day.minute >= 420 || w.day.earlyStrikeChecked) return false;
   w.day.earlyStrikeChecked = true;
   if (!['outboard', 'sterndrive'].includes(boatFamily(w.boat.configuration))) return false;

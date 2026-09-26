@@ -4,7 +4,8 @@ import { enabledEquipment, toggleEquipment } from './equipment-controls.js';
 import { startDump } from './deck-work.js';
 import { fullscreenLabel, toggleFullscreen } from './fullscreen.js';
 import { uiScale, changeUiScale, setUiScale } from './ui-scale.js';
-import { confirmPurchase, purchaseActions } from './purchase.js';
+import { confirmAction, confirmPurchase, purchaseActions } from './purchase.js';
+import { coastWarning } from './frank-advice.js';
 import { shopActions } from './shop-actions.js';
 import { setTimeIncrease, timeIncrease } from './time-speed.js';
 import { boatArtLabel, toggleBoatArtMode } from './boat-art-mode.js';
@@ -36,6 +37,7 @@ export const CAREER_SCREENS = [
   'deck-catch',
   'equipment-controls',
   'purchase',
+  'coast-access',
   'starter',
   'harbour',
   'office',
@@ -149,9 +151,23 @@ export function careerActions(ui, w) {
         open('accounts', 'Fuel, repairs & accounts'),
         open('logbook', 'Skipper logbook & saves'),
         open('fleetboard', 'Fleet landings'),
-        action('rest', 'Rest a day · recover crew', () => nextDay(false)),
+        action('rest', 'Rest a day · recover crew', () =>
+          confirmAction(
+            ui,
+            'Yes · rest until tomorrow',
+            () => nextDay(false),
+            'This skips the rest of today. Crew recover and daily debt interest still applies.',
+            'Cancel · keep today',
+          ),
+        ),
         action('dockwork', `Work a day on the dock · ${money(ECONOMY.dockWage)}`, () =>
-          nextDay(true),
+          confirmAction(
+            ui,
+            'Yes · work the dock today',
+            () => nextDay(true),
+            `This skips today’s fishing and earns ${money(ECONOMY.dockWage)}. Daily debt interest still applies.`,
+            'Cancel · keep today',
+          ),
         ),
         open('market', 'Buyer market · choose today’s goal'),
         back,
@@ -357,13 +373,27 @@ export function careerActions(ui, w) {
                 : confirmPurchase(
                     ui,
                     `Buy ${area.name} access · ${money(area.accessCost)}`,
-                    () => buyAreaAccess(w, id),
-                    'One permanent coast permit. Its three physical subareas open on season days 1, 3 and 5.',
+                    () => {
+                      const result = buyAreaAccess(w, id);
+                      if (result.ok) {
+                        ui.permitCoastId = id;
+                        ui.open('coast-access');
+                      }
+                      return result;
+                    },
+                    'One permanent coast permit. Its three physical subareas open on season days 1, 3 and 5.<br><br>' +
+                      coastWarning(area),
                   ),
           );
         }),
         action('borrow', 'Borrow up to $5,000', () => credit(w)),
         action('repay', 'Repay up to $5,000', () => credit(w, true)),
+        back,
+      ];
+    case 'coast-access':
+      return [
+        open('boatshop', 'Review stronger boats', 'boatshop'),
+        open('chart', 'Understood · plan a voyage', 'chart'),
         back,
       ];
     case 'fleetboard':

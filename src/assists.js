@@ -30,6 +30,7 @@ export const ASSISTS = {
   reefClarity: 'Extended reef clarity',
   widePickup: 'Wide pickup tolerance',
   currentOverlay: 'Live current instruments',
+  currentArrows: 'Current arrows on the water',
   almanacShortcut: 'Tide & current almanac button',
   actionPrompts: 'Context action prompts',
 };

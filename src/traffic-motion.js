@@ -7,8 +7,10 @@ import { rivalWater, trafficHull } from './rival-plan.js';
 import { checkDiverSafety } from './diver-safety.js';
 import { hullDistance, fromHull } from './collision-geometry.js';
 import { surfacedWildlifePoints } from './wildlife.js';
+import { taxiSteering } from './taxi-steering.js';
 
 export function moveTraffic(w, actor, dt) {
+  actor.speed ??= actor.knots / C.knotsPerMps;
   let target = actor.route[actor.waypoint];
   const navigation = actor.kind === 'rival' && !actor.shallowEscape ? rivalWater(w) : w,
     level = navigation.environment.seaLevel || 0;
@@ -75,7 +77,8 @@ export function moveTraffic(w, actor, dt) {
         ['deploying', 'searching', 'harvesting', 'surfacing', 'surface'].includes(d.state)
       )
         avoid.push({ ...d, radius: 17 });
-  for (const obstacle of avoid) {
+  if (actor.kind === 'taxi') ({ dx, dy } = taxiSteering(actor, avoid, dx, dy));
+  for (const obstacle of actor.kind === 'taxi' ? [] : avoid) {
     const x = actor.x - obstacle.x,
       y = actor.y - obstacle.y,
       d = Math.hypot(x, y),
@@ -89,9 +92,15 @@ export function moveTraffic(w, actor, dt) {
   const desired = actor.detourUntil > w.time ? actor.detourHeading : Math.atan2(dx, -dy),
     delta = angleDelta(desired, actor.heading),
     heading = actor.heading + clamp(delta, -actor.turnRate * dt, actor.turnRate * dt),
+    desiredSpeed =
+      actor.kind === 'taxi'
+        ? (actor.knots / C.knotsPerMps) * Math.max(0.45, Math.cos(delta))
+        : Math.min(actor.knots / C.knotsPerMps, length / (actor.docking ? 0.5 : 2)) *
+          (!actor.docking && Math.abs(delta) > 0.35 ? 0 : Math.max(0, Math.cos(delta))),
     speed =
-      Math.min(actor.knots / C.knotsPerMps, length / (actor.docking ? 0.5 : 2)) *
-      (!actor.docking && Math.abs(delta) > 0.35 ? 0 : Math.max(0, Math.cos(delta))),
+      actor.kind === 'taxi'
+        ? actor.speed + clamp(desiredSpeed - actor.speed, -5 * dt, 3 * dt)
+        : desiredSpeed,
     next = {
       x: actor.x + Math.sin(heading) * speed * dt,
       y: actor.y - Math.cos(heading) * speed * dt,

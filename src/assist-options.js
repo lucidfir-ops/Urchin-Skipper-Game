@@ -111,7 +111,11 @@ export const DIFFICULTY_OPTIONS = {
   ],
   currentOverlay: [
     'Live current instruments',
-    'A separate arrow and numerical speed/bearing for current at the boat. Works even with Boat instruments hidden. Also enables the tide/almanac shortcut.',
+    'The dashboard current arrow and numerical speed/bearing at the boat. Independent of current arrows on the water and the almanac shortcut.',
+  ],
+  currentArrows: [
+    'Current arrows on the water',
+    'Shows local flow across the water in Easy. Independent of the dashboard current instrument; off in Realistic on every coast.',
   ],
 };
 export const OPTION_DETAILS = { ...UI_OPTIONS, ...DIFFICULTY_OPTIONS };

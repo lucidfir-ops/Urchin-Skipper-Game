@@ -24,7 +24,7 @@ test('basic package preserves every confirmed baseline helm parameter', () => {
 test('bow thruster pushes the bow and turns from rest; released control does not latch', () => {
   const w = calm('thruster');
   tick(w, 5, { thruster: 1 });
-  assert(w.boat.heading > 0.3);
+  assert(w.boat.heading > 0.22 && w.boat.heading < 0.28, 'September 25 gentler bow thrust');
   assert(w.boat.x > 251);
   assert(w.boat.y < 251);
   const turn = w.boat.turn;
@@ -58,7 +58,7 @@ test('bow thrust still adds useful turning authority at modest ahead speed', () 
   for (const w of [withThrust, without]) Object.assign(w.boat, { throttle: 0.3, vy: -1.7 });
   tick(withThrust, 3, { thruster: 1 });
   tick(without, 3);
-  assert(withThrust.boat.heading > without.boat.heading + 0.15);
+  assert(withThrust.boat.heading > without.boat.heading + 0.11);
   assert(Math.abs(withThrust.boat.heading) < 0.7);
 });
 test('single stern jet sweeps a wider circle; twin jets pivot with opposed thrust', () => {
